@@ -432,6 +432,28 @@ function useTypewriterRotation(
   return { roleText: displayText, roleIndex };
 }
 
+function TypingIndicator({ elapsed, size = "md" }) {
+  const isSmall = size === "sm";
+  return (
+    <div className="flex flex-row gap-2">
+      <ClawbotAvatar size={isSmall ? "h-6 w-6" : "h-8 w-8"} className="mt-1 shrink-0 rounded-xl" />
+      <div className={`rounded-2xl rounded-tl-none border border-primary/20 bg-primary/10 ${isSmall ? "px-3 py-2" : "px-4 py-3"}`}>
+        <div className="flex items-center gap-2">
+          <span className="typing-dot inline-block h-2 w-2 rounded-full bg-primary" />
+          <span className="typing-dot inline-block h-2 w-2 rounded-full bg-primary" style={{ animationDelay: "0.2s" }} />
+          <span className="typing-dot inline-block h-2 w-2 rounded-full bg-primary" style={{ animationDelay: "0.4s" }} />
+          {elapsed >= 3 && (
+            <span className="ml-1 font-mono text-xs text-muted-foreground">{elapsed}s</span>
+          )}
+        </div>
+        <p className={`mt-1 text-muted-foreground ${isSmall ? "text-[10px]" : "text-xs"}`}>
+          Lunaria is typing…
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function HomeToc({ sections, activeId }) {
   const [open, setOpen] = useState(false);
 
@@ -619,11 +641,14 @@ function App() {
   const [chatOpen, setChatOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState(initialMessages);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingElapsed, setTypingElapsed] = useState(0);
   const [gatewayState, setGatewayState] = useState("checking");
   const [chatSource, setChatSource] = useState("connecting");
   const [visitorSessionId, setVisitorSessionId] = useState("");
   const [activeSection, setActiveSection] = useState("about");
   const latestMessages = useMemo(() => messages.slice(-4), [messages]);
+  const typingTimerRef = useRef(null);
   const reduceMotion = useReducedMotion();
   const { roleText, roleIndex } = useTypewriterRotation(heroRoles);
   const scrambledName = useScramble("@AdrianTriSetiawan", { duration: 1200, stagger: 400 });
@@ -711,11 +736,17 @@ function App() {
 
   async function submitQuestion(question) {
     const trimmed = question.trim();
-    if (!trimmed) return;
+    if (!trimmed || isTyping) return;
 
     setMessages((current) => [...current, { role: "user", text: trimmed }]);
     setInput("");
     setChatOpen(true);
+    setIsTyping(true);
+    setTypingElapsed(0);
+
+    typingTimerRef.current = setInterval(() => {
+      setTypingElapsed((s) => s + 1);
+    }, 1000);
 
     try {
       const response = await fetch("/api/portfolio-chat", {
@@ -738,6 +769,10 @@ function App() {
           text: "I can still guide you through Adrian's portfolio, but the live backend is temporarily degraded.",
         },
       ]);
+    } finally {
+      clearInterval(typingTimerRef.current);
+      setIsTyping(false);
+      setTypingElapsed(0);
     }
   }
 
@@ -1293,6 +1328,16 @@ function App() {
                         </div>
                       </motion.article>
                     ))}
+                    {isTyping && (
+                      <motion.div
+                        key="typing-inline"
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                      >
+                        <TypingIndicator elapsed={typingElapsed} />
+                      </motion.div>
+                    )}
                   </AnimatePresence>
                 </div>
               </div>
@@ -1500,6 +1545,7 @@ function App() {
                     </div>
                   </div>
                 ))}
+                {isTyping && <TypingIndicator elapsed={typingElapsed} size="sm" />}
               </div>
 
               <div className="border-t border-border/60 px-3 py-3">
@@ -1507,12 +1553,14 @@ function App() {
                   <input
                     value={input}
                     onChange={(event) => setInput(event.target.value)}
-                    placeholder="Ask about Adrian or his projects…"
-                    className="h-10 min-w-0 flex-1 rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary/40"
+                    placeholder={isTyping ? "Lunaria is responding…" : "Ask about Adrian or his projects…"}
+                    disabled={isTyping}
+                    className="h-10 min-w-0 flex-1 rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary/40 disabled:opacity-50"
                   />
                   <button
                     type="submit"
-                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-theme text-white transition hover:brightness-110 active:scale-95"
+                    disabled={isTyping}
+                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-theme text-white transition hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Send className="h-4 w-4" />
                   </button>
