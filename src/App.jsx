@@ -9,7 +9,9 @@ import {
   CheckCircle2,
   ChevronRight,
   Code,
+  Eye,
   FolderGit2,
+  Gamepad2,
   GraduationCap,
   List,
   Mail,
@@ -23,6 +25,49 @@ import {
   Workflow,
   Zap,
 } from "lucide-react";
+import {
+  SiCss,
+  SiDart,
+  SiDiscord,
+  SiFastapi,
+  SiFlutter,
+  SiGo,
+  SiHtml5,
+  SiJavascript,
+  SiNextdotjs,
+  SiNuxt,
+  SiPhp,
+  SiPython,
+  SiReact,
+  SiSteam,
+  SiTailwindcss,
+  SiVite,
+  SiVuedotjs,
+} from "react-icons/si";
+
+const techIconMap = {
+  "React": SiReact,
+  "Next.js": SiNextdotjs,
+  "Vue": SiVuedotjs,
+  "Nuxt.js": SiNuxt,
+  "JavaScript": SiJavascript,
+  "HTML": SiHtml5,
+  "CSS": SiCss,
+  "Tailwind CSS": SiTailwindcss,
+  "Vite": SiVite,
+  "Python": SiPython,
+  "PHP": SiPhp,
+  "Go": SiGo,
+  "FastAPI": SiFastapi,
+  "Flutter": SiFlutter,
+  "Dart": SiDart,
+  "Machine Learning": Brain,
+  "Deep Learning": Brain,
+  "Computer Vision": Eye,
+  "OpenClaw": Bot,
+  "Assistant Design": Sparkles,
+  "Turbopack": Zap,
+};
 
 const stackGroups = [
   {
@@ -90,6 +135,19 @@ const timeline = [
 
 const projects = [
   {
+    name: "InsightFace — Attendance & Recognition",
+    tag: "Computer Vision · Private",
+    summary:
+      "Sistem absensi otomatis berbasis face recognition menggunakan CCTV dan InsightFace (512-dimensi). Anti-spoofing, dual camera RTSP, auto-reconnect watchdog, attendance logging, dan web interface realtime.",
+    detail:
+      "Versi PTI-Absensi adalah monorepo: backend FastAPI, web React + Vite, dan mobile Expo React Native — digunakan operasional nyata di lingkungan institutional.",
+    stack: ["Python", "InsightFace", "FastAPI", "Flask", "OpenCV", "React", "Expo", "PostgreSQL"],
+    image: "/projects/testing1.jpg",
+    highlight: true,
+    link: null,
+    private: true,
+  },
+  {
     name: "Lady Lunaria Eldharia",
     tag: "AI Identity System",
     summary:
@@ -98,29 +156,61 @@ const projects = [
       "Presented here through the Clawbot visual layer, Lunaria is the public AI face that turns assistant behavior into something memorable and usable.",
     stack: ["OpenClaw", "Assistant Design", "Automation", "Discord"],
     image: "/projects/clawbot-avatar.svg",
-    highlight: true,
+    highlight: false,
+    link: null,
+    private: false,
   },
   {
-    name: "PIRA",
-    tag: "Helpdesk and Customer Service AI",
+    name: "EZVIZ Camera Monitoring",
+    tag: "Python Desktop · CCTV",
     summary:
-      "Piramida Inteligence Response Assistant is an AI chatbot direction for support, helpdesk, and customer-service interaction.",
+      "Aplikasi desktop Python untuk monitoring dan controlling kamera EZVIZ dengan live RTSP streaming, PTZ, alarm, snapshot, IR LED, dan privacy mode.",
     detail:
-      "The visual layer is aligned with Clawbot, positioning PIRA as a more productized AI service system instead of a generic bot concept.",
-    stack: ["AI Chatbot", "Helpdesk", "Customer Service", "Automation"],
-    image: "/projects/clawbot-avatar.svg",
-    highlight: true,
-  },
-  {
-    name: "Recognition CCTV",
-    tag: "Computer Vision Case Study",
-    summary:
-      "A face recognition system using CCTV-based input to identify people in a practical operational setting.",
-    detail:
-      "The implementation is private, so it is presented as a capability case study rather than a public repository.",
-    stack: ["Python", "FastAPI", "Computer Vision"],
+      "Dibangun dengan pyezvizapi, customtkinter, dan opencv-python. Cross-platform, keamanan login berbasis sesi.",
+    stack: ["Python", "OpenCV", "customtkinter", "pyezvizapi"],
     image: "/projects/testing1.jpg",
     highlight: false,
+    link: "https://github.com/AdrianTriSetiawan/EZVIZ-Camera-Controling-and-Monitoring",
+    private: false,
+  },
+  {
+    name: "Procurement Charting Suite",
+    tag: "Vue 3 · Private Dashboard",
+    summary:
+      "Suite charting untuk visualisasi data procurement pabrik gula. Frontend Vue 3 + Vite, backend Node.js + Express + PostgreSQL.",
+    detail:
+      "Dashboard builder, charting, data source manager, export PNG/CSV. Digunakan internal untuk kebutuhan pabrik manufaktur.",
+    stack: ["Vue 3", "Vite", "Node.js", "Express", "PostgreSQL"],
+    image: "/projects/testing1.jpg",
+    highlight: false,
+    link: null,
+    private: true,
+  },
+  {
+    name: "ASTREAM — Anime Streaming",
+    tag: "Web App · Public",
+    summary:
+      "Website streaming anime tanpa iklan menggunakan Consumet API dan gogoanime provider. Live di Cloudflare Pages.",
+    detail:
+      "Dibangun hanya dengan HTML, CSS, dan JavaScript murni tanpa framework. Live di astream.pages.dev.",
+    stack: ["HTML", "CSS", "JavaScript", "Consumet API"],
+    image: "/projects/testing1.jpg",
+    highlight: false,
+    link: "https://github.com/AdrianTriSetiawan/Anime-Stream",
+    private: false,
+  },
+  {
+    name: "VS Code Extensions",
+    tag: "Developer Tools · TypeScript",
+    summary:
+      "4 VS Code extensions: env-bridge, k8s-port-forward-profiles, trustlens, dan Bubblegums theme — semua tersedia publik.",
+    detail:
+      "env-bridge sync .env ke launch.json/tasks.json. k8s-port-forward manage kubectl dari sidebar. trustlens scan risk extension. Bubblegums adalah dark theme pink/purple.",
+    stack: ["TypeScript", "VS Code API", "Node.js"],
+    image: "/projects/clawbot-avatar.svg",
+    highlight: false,
+    link: "https://github.com/AdrianTriSetiawan/",
+    private: false,
   },
 ];
 
@@ -136,6 +226,18 @@ const contactLinks = [
     value: "github.com/AdrianTriSetiawan",
     href: "https://github.com/AdrianTriSetiawan/",
     icon: FolderGit2,
+  },
+  {
+    label: "Steam",
+    value: "finnngck",
+    href: "https://steamcommunity.com/id/finnngck/",
+    icon: SiSteam,
+  },
+  {
+    label: "Discord",
+    value: "luzwellsclauka",
+    href: null,
+    icon: SiDiscord,
   },
 ];
 
@@ -873,20 +975,20 @@ function App() {
               <div className="relative">
                 <div className="mb-6 flex items-start gap-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold/20 text-gold">
-                    <Bot className="h-6 w-6" />
+                    <Eye className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-display text-2xl font-bold text-foreground">AI Agent Infrastructure</h3>
+                    <h3 className="font-display text-2xl font-bold text-foreground">InsightFace — Attendance System</h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Adrian&apos;s strongest public project narrative currently sits around assistant systems, helpdesk AI, and computer-vision implementation.
+                      Flagship private work: face recognition attendance via CCTV with anti-spoofing, dual camera, and a full web + mobile monorepo.
                     </p>
                   </div>
                 </div>
                 <div className="grid gap-3 md:grid-cols-3">
                   {[
-                    "Lunaria serves as the AI identity layer.",
-                    "PIRA covers structured support and customer-service flows.",
-                    "Recognition CCTV shows applied ML and CV capability.",
+                    "InsightFace 512-dim + anti-spoofing untuk deteksi foto/video palsu.",
+                    "Dual RTSP camera support dengan auto-reconnect watchdog.",
+                    "Monorepo: FastAPI backend, React web, Expo React Native mobile.",
                   ].map((line) => (
                     <div key={line} className="rounded-xl border border-gold/20 bg-background/50 p-4 text-sm text-muted-foreground">
                       {line}
@@ -923,7 +1025,7 @@ function App() {
                       <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                     </div>
                   </div>
-                  <div className="mt-5 flex items-center gap-3">
+                  <div className="mt-5 flex flex-wrap items-center gap-2">
                     <span
                       className={`rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.22em] ${
                         project.highlight ? "bg-accent/10 text-accent" : "bg-primary/10 text-primary"
@@ -931,22 +1033,38 @@ function App() {
                     >
                       {project.tag}
                     </span>
-                    {project.highlight ? (
-                      <span className="rounded-full bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-primary">
-                        Building
+                    {project.private ? (
+                      <span className="rounded-full border border-muted-foreground/20 bg-muted px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                        Private
                       </span>
                     ) : null}
                   </div>
-                  <h3 className="mt-4 font-display text-2xl font-bold text-foreground">{project.name}</h3>
+                  <h3 className="mt-4 font-display text-xl font-bold text-foreground">{project.name}</h3>
                   <p className="mt-3 text-sm leading-7 text-muted-foreground">{project.summary}</p>
                   <p className="mt-3 text-sm leading-7 text-muted-foreground">{project.detail}</p>
                   <div className="mt-5 flex flex-wrap gap-2">
-                    {project.stack.map((item) => (
-                      <span key={item} className="rounded-md bg-muted px-2 py-1 text-xs text-foreground">
-                        {item}
-                      </span>
-                    ))}
+                    {project.stack.map((item) => {
+                      const TechIcon = techIconMap[item];
+                      return (
+                        <span key={item} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-xs text-foreground">
+                          {TechIcon && <TechIcon className="h-3 w-3 shrink-0 opacity-70" />}
+                          {item}
+                        </span>
+                      );
+                    })}
                   </div>
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-4 inline-flex items-center gap-2 text-sm text-primary transition hover:text-primary/80"
+                    >
+                      <FolderGit2 className="h-3.5 w-3.5" />
+                      View on GitHub
+                      <ArrowUpRight className="h-3 w-3" />
+                    </a>
+                  )}
                 </div>
               </AnimatedSection>
             ))}
@@ -988,11 +1106,15 @@ function App() {
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-theme opacity-40" />
                     <span className="text-xs font-semibold uppercase tracking-wide text-primary">{group.name}</span>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {group.items.map((item) => (
-                        <span key={item} className="rounded-md border border-border bg-muted px-2 py-1 text-xs text-muted-foreground transition hover:border-primary/30 hover:text-foreground">
-                          {item}
-                        </span>
-                      ))}
+                      {group.items.map((item) => {
+                        const TechIcon = techIconMap[item];
+                        return (
+                          <span key={item} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-2 py-1 text-xs text-muted-foreground transition hover:border-primary/30 hover:text-foreground">
+                            {TechIcon && <TechIcon className="h-3.5 w-3.5 shrink-0" />}
+                            {item}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}
@@ -1135,13 +1257,15 @@ function App() {
                   <div className="mt-4 space-y-3">
                     {contactLinks.map((item) => {
                       const Icon = item.icon;
+                      const isExternal = item.href && item.href.startsWith("http");
+                      const Wrapper = item.href ? "a" : "div";
                       return (
-                        <a
+                        <Wrapper
                           key={item.label}
-                          href={item.href}
-                          target={item.label === "GitHub" ? "_blank" : undefined}
-                          rel="noreferrer"
-                          className="flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3 transition hover:border-primary/40 hover:bg-primary/5"
+                          href={item.href || undefined}
+                          target={isExternal ? "_blank" : undefined}
+                          rel={isExternal ? "noreferrer" : undefined}
+                          className={`flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3 transition ${item.href ? "hover:border-primary/40 hover:bg-primary/5 cursor-pointer" : "opacity-80"}`}
                         >
                           <div className="flex items-center gap-3">
                             <Icon className="h-4 w-4 text-muted-foreground" />
@@ -1150,10 +1274,48 @@ function App() {
                               <p className="text-sm text-foreground">{item.value}</p>
                             </div>
                           </div>
-                          <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
-                        </a>
+                          {item.href && <ArrowUpRight className="h-4 w-4 text-muted-foreground" />}
+                        </Wrapper>
                       );
                     })}
+                  </div>
+                </div>
+              </AnimatedSection>
+
+              <AnimatedSection delay={0.24}>
+                <div className="rounded-2xl border border-border bg-card p-5">
+                  <div className="flex items-center gap-2">
+                    <Gamepad2 className="h-4 w-4 text-accent" />
+                    <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">Beyond the keyboard</p>
+                  </div>
+                  <div className="mt-4 space-y-3">
+                    <a
+                      href="https://steamcommunity.com/id/finnngck/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3 transition hover:border-primary/40 hover:bg-primary/5"
+                    >
+                      <SiSteam className="h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Steam</p>
+                        <p className="text-sm text-foreground">finnngck</p>
+                      </div>
+                      <ArrowUpRight className="ml-auto h-4 w-4 text-muted-foreground" />
+                    </a>
+                    <div className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3">
+                      <SiDiscord className="h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Discord</p>
+                        <p className="text-sm text-foreground">luzwellsclauka</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {["CS2", "Dota 2", "Anime"].map((tag) => (
+                      <span key={tag} className="inline-flex items-center gap-1.5 rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs text-accent">
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </AnimatedSection>
@@ -1172,7 +1334,7 @@ function App() {
             </p>
           </AnimatedSection>
           <AnimatedSection delay={0.08}>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
                 href="mailto:adriansetiawan26@gmail.com"
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-theme px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/20"
@@ -1188,6 +1350,15 @@ function App() {
               >
                 <FolderGit2 className="h-4 w-4" />
                 GitHub
+              </a>
+              <a
+                href="https://steamcommunity.com/id/finnngck/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5"
+              >
+                <SiSteam className="h-4 w-4" />
+                Steam
               </a>
             </div>
           </AnimatedSection>

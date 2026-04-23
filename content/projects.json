@@ -1,96 +1,74 @@
 [
   {
+    "id": "insightface",
+    "name": "InsightFace — Attendance & Recognition System",
+    "tag": "Computer Vision · Private",
+    "summary": "Sistem absensi otomatis berbasis face recognition menggunakan CCTV dan InsightFace (512-dimensi). Anti-spoofing, dual camera RTSP, auto-reconnect watchdog, attendance logging otomatis, dan web interface realtime.",
+    "detail": "Versi PTI-Absensi adalah monorepo mencakup backend FastAPI, web React + Vite, dan mobile Expo React Native — digunakan operasional nyata di lingkungan institutional.",
+    "stack": ["Python", "InsightFace", "FastAPI", "Flask", "OpenCV", "React", "Expo", "PostgreSQL"],
+    "image": "/projects/testing1.jpg",
+    "highlight": true,
+    "link": null,
+    "private": true
+  },
+  {
     "id": "lunaria",
-    "filter": "public",
-    "arcana": "I",
-    "sigil": "Moon Familiar",
-    "subtitle": "Discord assistant / live product spell",
-    "tier": "Live familiar",
-    "title": "Lady Lunaria Eldharia",
-    "summary": "Discord assistant dengan lore kuat, typing-first flow, guardrail tool, dan ritme jawaban yang tetap hidup.",
-    "details": [
-      "Anime, cuaca, VPS, GitHub, email, dan tasking dalam satu persona",
-      "Tone lembut yang tetap disiplin saat menangani tool dan fallback",
-      "Routing model hemat untuk chat ringan dan pekerjaan berbasis internet"
-    ]
+    "name": "Lady Lunaria Eldharia",
+    "tag": "AI Identity System",
+    "summary": "A personality-driven assistant system that combines identity consistency, practical utility, and operator-facing interaction.",
+    "detail": "Presented here through the Clawbot visual layer, Lunaria is the public AI face that turns assistant behavior into something memorable and usable.",
+    "stack": ["OpenClaw", "Assistant Design", "Automation", "Discord"],
+    "image": "/projects/clawbot-avatar.svg",
+    "highlight": false,
+    "link": null,
+    "private": false
   },
   {
-    "id": "openclaw",
-    "filter": "systems",
-    "arcana": "II",
-    "sigil": "Relay Archive",
-    "subtitle": "Automation backbone / OpenClaw-style parity",
-    "tier": "Foundation",
-    "title": "OpenClaw-style Foundation on PicoClaw",
-    "summary": "Lapisan automation modular untuk menjadikan assistant terasa seperti sistem hidup, bukan sekadar chatbot yang menjawab.",
-    "details": [
-      "Event bridge, webhook ingress, standup report, dan state manager",
-      "GitHub, email, cron, dan relay event yang tetap ringan di VPS",
-      "Fondasi automation yang cocok untuk operasi assistant, observability, dan workflow personal"
-    ]
-  },
-  {
-    "id": "watchtower",
-    "filter": "public",
-    "arcana": "III",
-    "sigil": "Camera Ward",
-    "subtitle": "EZVIZ CCTV monitoring and control",
-    "tier": "Live system",
-    "title": "EZVIZ Camera Monitoring & Controlling",
-    "summary": "Aplikasi desktop Python untuk monitoring dan controlling kamera EZVIZ dengan live RTSP streaming dan camera control yang lengkap.",
+    "id": "ezviz",
+    "name": "EZVIZ Camera Monitoring & Controlling",
+    "tag": "Python Desktop · CCTV",
+    "summary": "Aplikasi desktop Python untuk monitoring dan controlling kamera EZVIZ dengan live RTSP streaming, PTZ, alarm, snapshot, IR LED, dan privacy mode.",
+    "detail": "Dibangun dengan pyezvizapi, customtkinter, dan opencv-python. Cross-platform dan mengutamakan keamanan lewat login sesi tanpa hardcoded credentials.",
+    "stack": ["Python", "OpenCV", "customtkinter", "pyezvizapi"],
+    "image": "/projects/testing1.jpg",
+    "highlight": false,
     "link": "https://github.com/AdrianTriSetiawan/EZVIZ-Camera-Controling-and-Monitoring",
-    "details": [
-      "Dibangun dengan Python, pyezvizapi, customtkinter, dan opencv-python",
-      "Mencakup live RTSP streaming, snapshot capture, PTZ, audio, IR LED, privacy mode, dan reboot camera",
-      "Mengutamakan keamanan lewat login berbasis sesi tanpa hardcoded credentials"
-    ]
+    "private": false
   },
   {
-    "id": "relay",
-    "filter": "systems",
-    "arcana": "IV",
-    "sigil": "Gate of Signals",
-    "subtitle": "Inbox, repo, and webhook convergence",
-    "tier": "Signal relay",
-    "title": "GitHub + Email + Webhook Relay",
-    "summary": "Jalur integrasi yang menyatukan inbox, repo, dan event masuk ke satu assistant operasional yang punya konteks.",
-    "link": "https://github.com/AdrianTriSetiawan/env-bridge",
-    "details": [
-      "Webhook domain permanen, Gmail digest, GitHub MCP, env bridge, dan event inbox",
-      "Membantu review lebih cepat tanpa buka terlalu banyak panel",
-      "Cocok untuk workflow personal sampai semi-profesional"
-    ]
+    "id": "procurement",
+    "name": "Procurement Charting Suite",
+    "tag": "Vue 3 · Private Dashboard",
+    "summary": "Suite charting untuk visualisasi data procurement pabrik gula (manufaktur). Frontend Vue 3 + Vite, backend Node.js + Express + PostgreSQL.",
+    "detail": "Mencakup dashboard builder, procurement charting, data source manager, export PNG/CSV, dan template. Digunakan internal untuk kebutuhan pabrik gula.",
+    "stack": ["Vue 3", "Vite", "Node.js", "Express", "PostgreSQL"],
+    "image": "/projects/testing1.jpg",
+    "highlight": false,
+    "link": null,
+    "private": true
   },
   {
-    "id": "face",
-    "filter": "private",
-    "arcana": "V",
-    "sigil": "Sealed Vision",
-    "subtitle": "Flagship private work / CCTV vision pipeline",
-    "tier": "Featured private work",
-    "title": "Face Recognition via CCTV",
-    "summary": "Project private yang saya tonjolkan untuk attendance dan identifikasi berbasis CCTV pada environment yang lebih sensitif.",
-    "link": "https://github.com/AdrianTriSetiawan/FaceRecognitionYOLO",
-    "details": [
-      "Menggabungkan jalur face recognition internal berbasis InsightFace dengan eksplorasi YOLOv8 dari repo publik",
-      "Berorientasi attendance CCTV, operasional internal, dan deployment tertutup",
-      "Capability yang ditampilkan menekankan computer vision pipeline tanpa membocorkan inti sensitif repo private"
-    ]
+    "id": "astream",
+    "name": "ASTREAM — Anime Streaming",
+    "tag": "Web App · Public",
+    "summary": "Website streaming anime tanpa iklan menggunakan Consumet API dan gogoanime provider. Dihosting di Cloudflare Pages.",
+    "detail": "Dibangun hanya dengan HTML, CSS, dan JavaScript murni tanpa framework. Live di astream.pages.dev.",
+    "stack": ["HTML", "CSS", "JavaScript", "Consumet API"],
+    "image": "/projects/testing1.jpg",
+    "highlight": false,
+    "link": "https://github.com/AdrianTriSetiawan/Anime-Stream",
+    "private": false
   },
   {
-    "id": "internal",
-    "filter": "systems",
-    "arcana": "VI",
-    "sigil": "Procurement Lens",
-    "subtitle": "Industrial charting and dashboard suite",
-    "tier": "Private dashboard",
-    "title": "Procurement Charting Suite",
-    "summary": "Suite charting untuk visualisasi data procurement perusahaan manufaktur dengan frontend Vue 3 + Vite dan backend Node.js + Express.",
-    "link": "https://github.com/PTI-Absensi/chart",
-    "details": [
-      "Mencakup procurement charting, dashboard builder, data source manager, template, dan export PNG/CSV",
-      "Tech stack utamanya Vue 3, Vite, Vue Router, Lightweight Charts v5, Node.js, Express, dan PostgreSQL",
-      "Digunakan untuk kebutuhan charting internal pabrik gula dan workflow data procurement"
-    ]
+    "id": "vscode",
+    "name": "VS Code Extensions",
+    "tag": "Developer Tools · TypeScript",
+    "summary": "Koleksi 4 VS Code extensions: env-bridge, k8s-port-forward-profiles, trustlens, dan Bubblegums theme — semuanya tersedia publik.",
+    "detail": "env-bridge sync .env ke launch.json/tasks.json otomatis. k8s-port-forward-profiles manage kubectl port-forward dari sidebar. trustlens scan risk level extension yang terinstall. Bubblegums adalah dark theme pink/purple.",
+    "stack": ["TypeScript", "VS Code API", "Node.js"],
+    "image": "/projects/clawbot-avatar.svg",
+    "highlight": false,
+    "link": "https://github.com/AdrianTriSetiawan/",
+    "private": false
   }
 ]
