@@ -868,7 +868,7 @@ function App() {
           >
             {[
               ["Base", "Jakarta - Surabaya", MapPin],
-              ["Audience", "Employers + freelance clients", Users],
+              ["Audience", "Available for freelance", Users],
               ["Runtime", chatSource === "website-subagent" ? "OpenClaw sub-agent" : "Fallback mode", Zap],
             ].map(([label, value, Icon]) => (
               <div key={label} className="rounded-2xl border border-border/80 bg-card/60 p-5 backdrop-blur-sm">
