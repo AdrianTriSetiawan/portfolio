@@ -1,0 +1,29 @@
+{
+  "name": "Adrian Setiawan",
+  "role": "Fullstack Engineer, Machine Learning Engineer, AI & Deep Learning Engineer, Research and Development",
+  "hobby": "Teknologi, automation, worldbuilding, dan eksplorasi project baru",
+  "base": "Jakarta / Surabaya",
+  "focus": "Assistant systems, internal tools, monitoring flow, dan web yang punya karakter",
+  "style": "Clarity, low overhead, operational usefulness, dan rasa yang tidak hambar",
+  "motto": "Kami tidak pernah meragukan client, meskipun permintaannya aneh-aneh. Jack of all trades, master of none.",
+  "intro": "Saya bergerak di persimpangan fullstack engineering, machine learning, AI, deep learning, dan R&D. Saya suka merangkai sistem yang terasa hidup, cepat beradaptasi pada domain baru, dan tetap rapi meskipun problem yang datang tidak biasa.",
+  "stack": [
+    "Python",
+    "JavaScript",
+    "TypeScript",
+    "Vue",
+    "React",
+    "Next.js",
+    "FastAPI",
+    "Tailwind CSS",
+    "Turbopack",
+    "Go",
+    "Jupyter Notebook",
+    "Solidity"
+  ],
+  "highlights": [
+    "Bisa bekerja fullstack secara solo maupun dalam tim",
+    "Mudah beradaptasi dan cepat masuk ke domain problem yang baru",
+    "Terbuka belajar hal-hal baru, termasuk requirement yang aneh sekalipun"
+  ]
+}

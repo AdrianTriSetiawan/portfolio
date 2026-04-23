@@ -1,0 +1,96 @@
+[
+  {
+    "id": "lunaria",
+    "filter": "public",
+    "arcana": "I",
+    "sigil": "Moon Familiar",
+    "subtitle": "Discord assistant / live product spell",
+    "tier": "Live familiar",
+    "title": "Lady Lunaria Eldharia",
+    "summary": "Discord assistant dengan lore kuat, typing-first flow, guardrail tool, dan ritme jawaban yang tetap hidup.",
+    "details": [
+      "Anime, cuaca, VPS, GitHub, email, dan tasking dalam satu persona",
+      "Tone lembut yang tetap disiplin saat menangani tool dan fallback",
+      "Routing model hemat untuk chat ringan dan pekerjaan berbasis internet"
+    ]
+  },
+  {
+    "id": "openclaw",
+    "filter": "systems",
+    "arcana": "II",
+    "sigil": "Relay Archive",
+    "subtitle": "Automation backbone / OpenClaw-style parity",
+    "tier": "Foundation",
+    "title": "OpenClaw-style Foundation on PicoClaw",
+    "summary": "Lapisan automation modular untuk menjadikan assistant terasa seperti sistem hidup, bukan sekadar chatbot yang menjawab.",
+    "details": [
+      "Event bridge, webhook ingress, standup report, dan state manager",
+      "GitHub, email, cron, dan relay event yang tetap ringan di VPS",
+      "Fondasi automation yang cocok untuk operasi assistant, observability, dan workflow personal"
+    ]
+  },
+  {
+    "id": "watchtower",
+    "filter": "public",
+    "arcana": "III",
+    "sigil": "Camera Ward",
+    "subtitle": "EZVIZ CCTV monitoring and control",
+    "tier": "Live system",
+    "title": "EZVIZ Camera Monitoring & Controlling",
+    "summary": "Aplikasi desktop Python untuk monitoring dan controlling kamera EZVIZ dengan live RTSP streaming dan camera control yang lengkap.",
+    "link": "https://github.com/AdrianTriSetiawan/EZVIZ-Camera-Controling-and-Monitoring",
+    "details": [
+      "Dibangun dengan Python, pyezvizapi, customtkinter, dan opencv-python",
+      "Mencakup live RTSP streaming, snapshot capture, PTZ, audio, IR LED, privacy mode, dan reboot camera",
+      "Mengutamakan keamanan lewat login berbasis sesi tanpa hardcoded credentials"
+    ]
+  },
+  {
+    "id": "relay",
+    "filter": "systems",
+    "arcana": "IV",
+    "sigil": "Gate of Signals",
+    "subtitle": "Inbox, repo, and webhook convergence",
+    "tier": "Signal relay",
+    "title": "GitHub + Email + Webhook Relay",
+    "summary": "Jalur integrasi yang menyatukan inbox, repo, dan event masuk ke satu assistant operasional yang punya konteks.",
+    "link": "https://github.com/AdrianTriSetiawan/env-bridge",
+    "details": [
+      "Webhook domain permanen, Gmail digest, GitHub MCP, env bridge, dan event inbox",
+      "Membantu review lebih cepat tanpa buka terlalu banyak panel",
+      "Cocok untuk workflow personal sampai semi-profesional"
+    ]
+  },
+  {
+    "id": "face",
+    "filter": "private",
+    "arcana": "V",
+    "sigil": "Sealed Vision",
+    "subtitle": "Flagship private work / CCTV vision pipeline",
+    "tier": "Featured private work",
+    "title": "Face Recognition via CCTV",
+    "summary": "Project private yang saya tonjolkan untuk attendance dan identifikasi berbasis CCTV pada environment yang lebih sensitif.",
+    "link": "https://github.com/AdrianTriSetiawan/FaceRecognitionYOLO",
+    "details": [
+      "Menggabungkan jalur face recognition internal berbasis InsightFace dengan eksplorasi YOLOv8 dari repo publik",
+      "Berorientasi attendance CCTV, operasional internal, dan deployment tertutup",
+      "Capability yang ditampilkan menekankan computer vision pipeline tanpa membocorkan inti sensitif repo private"
+    ]
+  },
+  {
+    "id": "internal",
+    "filter": "systems",
+    "arcana": "VI",
+    "sigil": "Procurement Lens",
+    "subtitle": "Industrial charting and dashboard suite",
+    "tier": "Private dashboard",
+    "title": "Procurement Charting Suite",
+    "summary": "Suite charting untuk visualisasi data procurement perusahaan manufaktur dengan frontend Vue 3 + Vite dan backend Node.js + Express.",
+    "link": "https://github.com/PTI-Absensi/chart",
+    "details": [
+      "Mencakup procurement charting, dashboard builder, data source manager, template, dan export PNG/CSV",
+      "Tech stack utamanya Vue 3, Vite, Vue Router, Lightweight Charts v5, Node.js, Express, dan PostgreSQL",
+      "Digunakan untuk kebutuhan charting internal pabrik gula dan workflow data procurement"
+    ]
+  }
+]

@@ -1,0 +1,54 @@
+<svg width="960" height="960" viewBox="0 0 960 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="104" y1="96" x2="842" y2="866" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101816"/>
+      <stop offset="0.5" stop-color="#0E1314"/>
+      <stop offset="1" stop-color="#090A0C"/>
+    </linearGradient>
+    <linearGradient id="stroke" x1="194" y1="184" x2="760" y2="768" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8F7EE"/>
+      <stop offset="0.38" stop-color="#8CEBC0"/>
+      <stop offset="0.7" stop-color="#CFB061"/>
+      <stop offset="1" stop-color="#FFF1C2"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(480 454) rotate(90) scale(248)">
+      <stop stop-color="#93F5C9" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#93F5C9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="960" height="960" rx="80" fill="url(#bg)"/>
+  <rect x="32" y="32" width="896" height="896" rx="56" stroke="white" stroke-opacity="0.08"/>
+  <rect x="62" y="62" width="836" height="836" rx="46" stroke="url(#stroke)" stroke-opacity="0.18"/>
+
+  <circle cx="480" cy="480" r="246" fill="url(#glow)"/>
+  <path d="M380 238L412 190H548L580 238" stroke="url(#stroke)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="240" y="238" width="480" height="372" rx="92" fill="#0B0F11" stroke="url(#stroke)" stroke-width="8"/>
+  <rect x="304" y="302" width="352" height="220" rx="48" fill="#101819"/>
+
+  <circle cx="386" cy="404" r="34" fill="#A6F6D1"/>
+  <circle cx="574" cy="404" r="34" fill="#A6F6D1"/>
+  <circle cx="386" cy="404" r="16" fill="#0B1111"/>
+  <circle cx="574" cy="404" r="16" fill="#0B1111"/>
+
+  <path d="M392 502C417 522 448 532 480 532C512 532 543 522 568 502" stroke="url(#stroke)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M240 348L178 382V466L240 500" stroke="url(#stroke)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M720 348L782 382V466L720 500" stroke="url(#stroke)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M330 610L294 714" stroke="url(#stroke)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M630 610L666 714" stroke="url(#stroke)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M396 610V740" stroke="url(#stroke)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M564 610V740" stroke="url(#stroke)" stroke-width="10" stroke-linecap="round"/>
+
+  <g opacity="0.82">
+    <path d="M168 178L184 212L218 228L184 244L168 278L152 244L118 228L152 212L168 178Z" fill="#F6E7B4"/>
+    <path d="M792 696L806 726L836 740L806 754L792 784L778 754L748 740L778 726L792 696Z" fill="#F6E7B4" fill-opacity="0.72"/>
+  </g>
+
+  <text x="116" y="114" fill="#D4D4D8" fill-opacity="0.55" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" letter-spacing="0.26em">
+    CLAWBOT ICON
+  </text>
+  <text x="116" y="840" fill="#F3F4F6" fill-opacity="0.9" font-family="system-ui, sans-serif" font-size="52" font-weight="700" letter-spacing="-0.04em">
+    OpenClaw visual avatar
+  </text>
+</svg>

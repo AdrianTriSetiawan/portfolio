@@ -1,0 +1,28 @@
+<svg width="720" height="1080" viewBox="0 0 720 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tarotGold" x1="78" y1="56" x2="648" y2="1016" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF0C0"/>
+      <stop offset="0.45" stop-color="#D9A74B"/>
+      <stop offset="1" stop-color="#FFF5D8"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="688" height="1048" rx="44" stroke="url(#tarotGold)" stroke-opacity="0.12" stroke-width="2"/>
+  <rect x="34" y="34" width="652" height="1012" rx="36" stroke="url(#tarotGold)" stroke-opacity="0.22" stroke-width="2"/>
+  <rect x="58" y="58" width="604" height="964" rx="28" stroke="url(#tarotGold)" stroke-opacity="0.14" stroke-width="2"/>
+
+  <circle cx="360" cy="540" r="164" stroke="url(#tarotGold)" stroke-opacity="0.14" stroke-width="2"/>
+  <circle cx="360" cy="540" r="116" stroke="url(#tarotGold)" stroke-opacity="0.1" stroke-width="2" stroke-dasharray="5 8"/>
+
+  <path d="M360 82L368.5 101.5L388 110L368.5 118.5L360 138L351.5 118.5L332 110L351.5 101.5L360 82Z" fill="#F6E2A9" fill-opacity="0.92"/>
+  <path d="M360 942L366.2 956.1L380.3 962.3L366.2 968.5L360 982.6L353.8 968.5L339.7 962.3L353.8 956.1L360 942Z" fill="#F6E2A9" fill-opacity="0.92"/>
+
+  <circle cx="104" cy="106" r="34" stroke="url(#tarotGold)" stroke-opacity="0.4" stroke-width="2"/>
+  <circle cx="616" cy="974" r="34" stroke="url(#tarotGold)" stroke-opacity="0.4" stroke-width="2"/>
+  <path d="M103 83C113.493 83 122 91.5066 122 102C122 112.493 113.493 121 103 121C96.5712 121 90.8882 117.785 87.4811 112.881C92.4014 114.95 98.2397 114.246 102.602 110.738C106.965 107.23 109.28 101.664 108.781 96.088C108.415 92.0097 106.578 88.1837 103.66 85.2836C103.44 85.0647 103.218 84.847 102.994 84.6306C102.996 84.087 102.998 83.5435 103 83Z" fill="#EEC97A"/>
+  <path d="M617 951C627.493 951 636 959.507 636 970C636 980.493 627.493 989 617 989C610.571 989 604.888 985.785 601.481 980.881C606.401 982.95 612.24 982.246 616.602 978.738C620.965 975.23 623.28 969.664 622.781 964.088C622.415 960.01 620.578 956.184 617.66 953.284C617.44 953.065 617.218 952.847 616.994 952.631C616.996 952.087 616.998 951.544 617 951Z" fill="#EEC97A"/>
+
+  <path d="M114 136H198" stroke="url(#tarotGold)" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round"/>
+  <path d="M522 946H606" stroke="url(#tarotGold)" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round"/>
+  <path d="M198 136L210 129" stroke="url(#tarotGold)" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round"/>
+  <path d="M510 953L522 946" stroke="url(#tarotGold)" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "name": "AdrianDev Portfolio",
+  "short_name": "AdrianDev",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08111f",
+  "theme_color": "#08111f",
+  "icons": [
+    {
+      "src": "/branding/celestial-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
