@@ -1,0 +1,41 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGlow" x1="18" y1="18" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#20152D"/>
+      <stop offset="1" stop-color="#0E0A1D"/>
+    </linearGradient>
+    <linearGradient id="goldLine" x1="23" y1="23" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F9E7B4"/>
+      <stop offset="0.45" stop-color="#E7B45A"/>
+      <stop offset="1" stop-color="#FFF4CF"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(64 64) rotate(90) scale(34)">
+      <stop stop-color="#F9E7B4" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#C58A31" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#C58A31" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="6" y="6" width="116" height="116" rx="34" fill="url(#bgGlow)"/>
+  <rect x="14" y="14" width="100" height="100" rx="28" stroke="url(#goldLine)" stroke-opacity="0.16"/>
+
+  <circle cx="64" cy="64" r="39" stroke="url(#goldLine)" stroke-width="1.8" stroke-opacity="0.75"/>
+  <circle cx="64" cy="64" r="28" stroke="url(#goldLine)" stroke-width="1.2" stroke-opacity="0.42" stroke-dasharray="3 5"/>
+  <circle cx="64" cy="64" r="16" fill="url(#centerGlow)"/>
+
+  <path d="M64 25V40" stroke="url(#goldLine)" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M64 88V103" stroke="url(#goldLine)" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M25 64H40" stroke="url(#goldLine)" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M88 64H103" stroke="url(#goldLine)" stroke-width="1.8" stroke-linecap="round"/>
+
+  <path d="M64 34L68.4 47.6L82 52L68.4 56.4L64 70L59.6 56.4L46 52L59.6 47.6L64 34Z" stroke="url(#goldLine)" stroke-width="1.5" fill="#140E22"/>
+
+  <path d="M79 65.5C79 74.06 72.06 81 63.5 81C58.22 81 53.55 78.36 50.75 74.33C54.79 76.03 59.58 75.45 63.16 72.57C66.74 69.69 68.64 65.12 68.23 60.54C67.93 57.19 66.42 54.05 64.02 51.67C72.36 51.95 79 58.77 79 65.5Z" fill="url(#goldLine)"/>
+
+  <path d="M64 14L66.2 18.8L71 21L66.2 23.2L64 28L61.8 23.2L57 21L61.8 18.8L64 14Z" fill="#F9E7B4"/>
+  <path d="M64 100L65.6 103.8L69.4 105.4L65.6 107L64 110.8L62.4 107L58.6 105.4L62.4 103.8L64 100Z" fill="#F9E7B4" fill-opacity="0.9"/>
+  <path d="M100 28L101.4 31.1L104.5 32.5L101.4 33.9L100 37L98.6 33.9L95.5 32.5L98.6 31.1L100 28Z" fill="#F9E7B4" fill-opacity="0.82"/>
+  <path d="M28 91L29.4 94.1L32.5 95.5L29.4 96.9L28 100L26.6 96.9L23.5 95.5L26.6 94.1L28 91Z" fill="#F9E7B4" fill-opacity="0.82"/>
+
+  <path d="M64 16L112 64L64 112L16 64L64 16Z" stroke="url(#goldLine)" stroke-opacity="0.18"/>
+</svg>
