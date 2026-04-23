@@ -299,14 +299,87 @@ function AnimatedSection({ children, delay = 0, className = "" }) {
   const reduceMotion = useReducedMotion();
   return (
     <motion.div
-      initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 24 }}
-      whileInView={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 20, filter: "blur(6px)" }}
+      whileInView={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.12 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay }}
       className={className}
     >
       {children}
     </motion.div>
+  );
+}
+
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@_-";
+
+function useScramble(target, { duration = 900, stagger = 30 } = {}) {
+  const [display, setDisplay] = useState(target);
+  const frameRef = useRef(null);
+
+  useEffect(() => {
+    let start = null;
+    const len = target.length;
+
+    function tick(now) {
+      if (!start) start = now;
+      const elapsed = now - start;
+      const revealed = Math.min(len, Math.floor((elapsed / duration) * len));
+      let result = "";
+      for (let i = 0; i < len; i++) {
+        if (i < revealed) {
+          result += target[i];
+        } else if (i < revealed + 4) {
+          result += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+        } else {
+          result += target[i];
+        }
+      }
+      setDisplay(result);
+      if (revealed < len) frameRef.current = requestAnimationFrame(tick);
+      else setDisplay(target);
+    }
+
+    const delay = setTimeout(() => {
+      frameRef.current = requestAnimationFrame(tick);
+    }, stagger);
+
+    return () => {
+      clearTimeout(delay);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, [target, duration, stagger]);
+
+  return display;
+}
+
+const wordVariants = {
+  hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { delay: i * 0.08, duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+function StaggeredWords({ text, className = "" }) {
+  const reduceMotion = useReducedMotion();
+  const words = text.split(" ");
+  return (
+    <span className={className} aria-label={text}>
+      {words.map((word, i) => (
+        <motion.span
+          key={`${word}-${i}`}
+          custom={i}
+          variants={wordVariants}
+          initial={reduceMotion ? "visible" : "hidden"}
+          animate="visible"
+          className="inline-block mr-[0.25em] last:mr-0"
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
   );
 }
 
@@ -553,6 +626,7 @@ function App() {
   const latestMessages = useMemo(() => messages.slice(-4), [messages]);
   const reduceMotion = useReducedMotion();
   const { roleText, roleIndex } = useTypewriterRotation(heroRoles);
+  const scrambledName = useScramble("@AdrianTriSetiawan", { duration: 1200, stagger: 400 });
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -719,9 +793,15 @@ function App() {
               transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
               className="text-center md:text-left"
             >
-              <p className="mb-2 text-lg text-muted-foreground">
-                Hi, I&apos;m <span className="font-semibold text-gradient-theme">@AdrianTriSetiawan</span>,
-              </p>
+              <motion.p
+                initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
+                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.15 }}
+                className="mb-3 text-base text-muted-foreground"
+              >
+                Hi, I&apos;m{" "}
+                <span className="font-semibold text-gradient-theme font-mono">{scrambledName}</span>
+              </motion.p>
               <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
                 <span className="text-gradient-theme">{roleText}</span>
                 <span
@@ -729,15 +809,20 @@ function App() {
                   style={{ animation: "blink 1s step-end infinite" }}
                 />
                 <br />
-                building AI systems
+                <StaggeredWords text="building AI systems" className="block mt-1" />
                 <br />
-                with <span className="text-foreground">OpenClaw + ML + CV</span>
+                <StaggeredWords text="with OpenClaw + ML + CV" className="block mt-1 text-foreground" />
               </h1>
-              <p className="mt-5 max-w-3xl text-base leading-8 text-muted-foreground">
+              <motion.p
+                initial={reduceMotion ? undefined : { opacity: 0, y: 8, filter: "blur(4px)" }}
+                animate={reduceMotion ? undefined : { opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.5, delay: 0.55 }}
+                className="mt-5 max-w-3xl text-base leading-8 text-muted-foreground"
+              >
                 Adrian focuses on AI research, machine learning, deep learning,
                 assistant systems, and fullstack product execution for real
                 operational environments rather than static demos.
-              </p>
+              </motion.p>
 
               <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
                 {["Fullstack", "AI R&D", "Machine Learning", "OpenClaw", "Computer Vision"].map(
@@ -1002,7 +1087,8 @@ function App() {
           <div className="grid gap-6 md:grid-cols-2">
             {projects.map((project, index) => (
               <AnimatedSection key={project.name} delay={0.08 + index * 0.05}>
-                <div
+                <motion.div
+                  whileHover={{ y: -6, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
                   className={`card-glow h-full rounded-2xl border p-6 transition ${
                     project.highlight
                       ? "border-accent/40 bg-gradient-to-br from-accent/5 to-transparent"
@@ -1065,7 +1151,7 @@ function App() {
                       <ArrowUpRight className="h-3 w-3" />
                     </a>
                   )}
-                </div>
+                </motion.div>
               </AnimatedSection>
             ))}
           </div>
