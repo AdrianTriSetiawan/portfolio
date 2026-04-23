@@ -168,7 +168,7 @@ const projects = [
     detail:
       "Dibangun dengan pyezvizapi, customtkinter, dan opencv-python. Cross-platform, keamanan login berbasis sesi.",
     stack: ["Python", "OpenCV", "customtkinter", "pyezvizapi"],
-    image: "/projects/testing1.jpg",
+    image: "/projects/ezviz-preview.svg",
     highlight: false,
     link: "https://github.com/AdrianTriSetiawan/EZVIZ-Camera-Controling-and-Monitoring",
     private: false,
@@ -181,7 +181,7 @@ const projects = [
     detail:
       "Dashboard builder, charting, data source manager, export PNG/CSV. Digunakan internal untuk kebutuhan pabrik manufaktur.",
     stack: ["Vue 3", "Vite", "Node.js", "Express", "PostgreSQL"],
-    image: "/projects/testing1.jpg",
+    image: "/projects/procurement-preview.svg",
     highlight: false,
     link: null,
     private: true,
@@ -194,7 +194,7 @@ const projects = [
     detail:
       "Dibangun hanya dengan HTML, CSS, dan JavaScript murni tanpa framework. Live di astream.pages.dev.",
     stack: ["HTML", "CSS", "JavaScript", "Consumet API"],
-    image: "/projects/testing1.jpg",
+    image: "/projects/astream-preview.svg",
     highlight: false,
     link: "https://github.com/AdrianTriSetiawan/Anime-Stream",
     private: false,

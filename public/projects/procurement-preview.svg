@@ -1,0 +1,165 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" font-family="'Space Grotesk', 'DM Sans', system-ui, sans-serif">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#0f1117"/>
+
+  <!-- Sidebar -->
+  <rect x="0" y="0" width="170" height="500" fill="#141824"/>
+  <rect x="170" y="0" width="1" height="500" fill="#1e2330"/>
+
+  <!-- Sidebar logo area -->
+  <rect x="16" y="18" width="138" height="36" rx="8" fill="#191e2b"/>
+  <text x="85" y="41" text-anchor="middle" fill="#00d4ff" font-size="12" font-weight="700" letter-spacing="1">PROCURE</text>
+
+  <!-- Sidebar nav -->
+  <rect x="16" y="72" width="138" height="32" rx="6" fill="#00d4ff" opacity="0.12"/>
+  <rect x="30" y="83" width="10" height="10" rx="2" fill="#00d4ff" opacity="0.8"/>
+  <text x="50" y="93" fill="#00d4ff" font-size="11" font-weight="600">Dashboard</text>
+
+  <rect x="30" y="120" width="10" height="10" rx="2" fill="#6b7280"/>
+  <text x="50" y="130" fill="#6b7280" font-size="11">Procurement</text>
+  <rect x="30" y="148" width="10" height="10" rx="2" fill="#6b7280"/>
+  <text x="50" y="158" fill="#6b7280" font-size="11">Data Sources</text>
+  <rect x="30" y="176" width="10" height="10" rx="2" fill="#6b7280"/>
+  <text x="50" y="186" fill="#6b7280" font-size="11">Templates</text>
+  <rect x="30" y="204" width="10" height="10" rx="2" fill="#6b7280"/>
+  <text x="50" y="214" fill="#6b7280" font-size="11">Export</text>
+
+  <!-- Sidebar divider -->
+  <line x1="16" y1="240" x2="154" y2="240" stroke="#1e2330" stroke-width="1"/>
+  <text x="85" y="262" text-anchor="middle" fill="#374151" font-size="10" letter-spacing="2">SETTINGS</text>
+
+  <!-- Main content area -->
+  <!-- Header bar -->
+  <rect x="170" y="0" width="630" height="52" fill="#141824"/>
+  <line x1="170" y1="52" x2="800" y2="52" stroke="#1e2330" stroke-width="1"/>
+  <text x="210" y="31" fill="#e5e7eb" font-size="15" font-weight="700">Procurement Dashboard</text>
+  <text x="210" y="46" fill="#4a5568" font-size="10">Sugar Factory — January 2024</text>
+
+  <!-- Export button -->
+  <rect x="692" y="14" width="88" height="28" rx="6" fill="#00d4ff" opacity="0.15" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+  <text x="736" y="32" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="600">Export PNG</text>
+
+  <!-- KPI Cards row -->
+  <rect x="186" y="68" width="138" height="72" rx="8" fill="#141824" stroke="#1e2330" stroke-width="1"/>
+  <text x="204" y="88" fill="#6b7280" font-size="10" letter-spacing="1">TOTAL ORDERS</text>
+  <text x="204" y="114" fill="#e5e7eb" font-size="22" font-weight="700">1,284</text>
+  <text x="204" y="130" fill="#22c55e" font-size="10">▲ 12.4% vs last month</text>
+
+  <rect x="338" y="68" width="138" height="72" rx="8" fill="#141824" stroke="#1e2330" stroke-width="1"/>
+  <text x="356" y="88" fill="#6b7280" font-size="10" letter-spacing="1">TOTAL SPEND</text>
+  <text x="356" y="114" fill="#e5e7eb" font-size="22" font-weight="700">Rp 4.2M</text>
+  <text x="356" y="130" fill="#ef4444" font-size="10">▼ 3.1% vs last month</text>
+
+  <rect x="490" y="68" width="138" height="72" rx="8" fill="#141824" stroke="#1e2330" stroke-width="1"/>
+  <text x="508" y="88" fill="#6b7280" font-size="10" letter-spacing="1">SUPPLIERS</text>
+  <text x="508" y="114" fill="#e5e7eb" font-size="22" font-weight="700">47</text>
+  <text x="508" y="130" fill="#22c55e" font-size="10">▲ 5 new this month</text>
+
+  <rect x="642" y="68" width="138" height="72" rx="8" fill="#141824" stroke="#1e2330" stroke-width="1"/>
+  <text x="660" y="88" fill="#6b7280" font-size="10" letter-spacing="1">PENDING</text>
+  <text x="660" y="114" fill="#e5e7eb" font-size="22" font-weight="700">23</text>
+  <text x="660" y="130" fill="#f59e0b" font-size="10">● 8 urgent</text>
+
+  <!-- Main chart area -->
+  <rect x="186" y="156" width="420" height="200" rx="8" fill="#141824" stroke="#1e2330" stroke-width="1"/>
+  <text x="206" y="178" fill="#e5e7eb" font-size="12" font-weight="600">Monthly Spend Trend</text>
+  <text x="206" y="192" fill="#4a5568" font-size="10">Jan – Dec 2024</text>
+
+  <!-- Chart grid lines -->
+  <line x1="206" y1="330" x2="592" y2="330" stroke="#1e2330" stroke-width="1"/>
+  <line x1="206" y1="310" x2="592" y2="310" stroke="#1e2330" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="206" y1="290" x2="592" y2="290" stroke="#1e2330" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="206" y1="270" x2="592" y2="270" stroke="#1e2330" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="206" y1="250" x2="592" y2="250" stroke="#1e2330" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="206" y1="230" x2="592" y2="230" stroke="#1e2330" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="206" y1="210" x2="592" y2="210" stroke="#1e2330" stroke-width="0.5" stroke-dasharray="3 3"/>
+
+  <!-- Y axis labels -->
+  <text x="200" y="333" text-anchor="end" fill="#374151" font-size="9">0</text>
+  <text x="200" y="313" text-anchor="end" fill="#374151" font-size="9">1M</text>
+  <text x="200" y="293" text-anchor="end" fill="#374151" font-size="9">2M</text>
+  <text x="200" y="273" text-anchor="end" fill="#374151" font-size="9">3M</text>
+  <text x="200" y="253" text-anchor="end" fill="#374151" font-size="9">4M</text>
+  <text x="200" y="233" text-anchor="end" fill="#374151" font-size="9">5M</text>
+
+  <!-- Area chart fill -->
+  <defs>
+    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+  <polygon points="206,295 238,275 270,285 302,260 334,270 366,240 398,255 430,235 462,248 494,230 526,242 558,220 590,228 590,330 206,330" fill="url(#chartGrad)"/>
+  <!-- Line -->
+  <polyline points="206,295 238,275 270,285 302,260 334,270 366,240 398,255 430,235 462,248 494,230 526,242 558,220 590,228" fill="none" stroke="#00d4ff" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Dots -->
+  <circle cx="302" cy="260" r="3" fill="#00d4ff"/>
+  <circle cx="430" cy="235" r="3" fill="#00d4ff"/>
+  <circle cx="558" cy="220" r="3" fill="#00d4ff"/>
+
+  <!-- X axis labels -->
+  <text x="216" y="344" fill="#374151" font-size="9">Jan</text>
+  <text x="248" y="344" fill="#374151" font-size="9">Feb</text>
+  <text x="280" y="344" fill="#374151" font-size="9">Mar</text>
+  <text x="312" y="344" fill="#374151" font-size="9">Apr</text>
+  <text x="344" y="344" fill="#374151" font-size="9">May</text>
+  <text x="376" y="344" fill="#374151" font-size="9">Jun</text>
+  <text x="408" y="344" fill="#374151" font-size="9">Jul</text>
+  <text x="440" y="344" fill="#374151" font-size="9">Aug</text>
+  <text x="472" y="344" fill="#374151" font-size="9">Sep</text>
+  <text x="504" y="344" fill="#374151" font-size="9">Oct</text>
+  <text x="536" y="344" fill="#374151" font-size="9">Nov</text>
+  <text x="568" y="344" fill="#374151" font-size="9">Dec</text>
+
+  <!-- Pie / donut chart right -->
+  <rect x="622" y="156" width="158" height="200" rx="8" fill="#141824" stroke="#1e2330" stroke-width="1"/>
+  <text x="701" y="178" text-anchor="middle" fill="#e5e7eb" font-size="12" font-weight="600">By Category</text>
+
+  <!-- Donut chart -->
+  <circle cx="701" cy="260" r="52" fill="none" stroke="#1e2330" stroke-width="20"/>
+  <circle cx="701" cy="260" r="52" fill="none" stroke="#00d4ff" stroke-width="20" stroke-dasharray="82 245" stroke-dashoffset="0" transform="rotate(-90 701 260)"/>
+  <circle cx="701" cy="260" r="52" fill="none" stroke="#8b5cf6" stroke-width="20" stroke-dasharray="62 245" stroke-dashoffset="-82" transform="rotate(-90 701 260)"/>
+  <circle cx="701" cy="260" r="52" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="52 245" stroke-dashoffset="-144" transform="rotate(-90 701 260)"/>
+  <circle cx="701" cy="260" r="52" fill="none" stroke="#22c55e" stroke-width="20" stroke-dasharray="49 245" stroke-dashoffset="-196" transform="rotate(-90 701 260)"/>
+  <text x="701" y="264" text-anchor="middle" fill="#e5e7eb" font-size="14" font-weight="700">100%</text>
+  <text x="701" y="278" text-anchor="middle" fill="#6b7280" font-size="9">Total</text>
+
+  <!-- Legend -->
+  <circle cx="636" cy="336" r="4" fill="#00d4ff"/>
+  <text x="646" y="340" fill="#9ca3af" font-size="9">Raw Mat. 33%</text>
+  <circle cx="636" cy="350" r="4" fill="#8b5cf6"/>
+  <text x="646" y="354" fill="#9ca3af" font-size="9">Equipment 25%</text>
+
+  <!-- Bottom table -->
+  <rect x="186" y="366" width="594" height="110" rx="8" fill="#141824" stroke="#1e2330" stroke-width="1"/>
+  <text x="206" y="386" fill="#e5e7eb" font-size="12" font-weight="600">Recent Orders</text>
+
+  <!-- Table header -->
+  <rect x="186" y="394" width="594" height="22" fill="#191e2b"/>
+  <text x="210" y="409" fill="#4a5568" font-size="10" font-weight="600">SUPPLIER</text>
+  <text x="360" y="409" fill="#4a5568" font-size="10" font-weight="600">ITEM</text>
+  <text x="510" y="409" fill="#4a5568" font-size="10" font-weight="600">AMOUNT</text>
+  <text x="640" y="409" fill="#4a5568" font-size="10" font-weight="600">STATUS</text>
+
+  <!-- Table rows -->
+  <text x="210" y="428" fill="#9ca3af" font-size="10">PT Sumber Manis</text>
+  <text x="360" y="428" fill="#9ca3af" font-size="10">Raw Sugar 50T</text>
+  <text x="510" y="428" fill="#e5e7eb" font-size="10">Rp 480.000</text>
+  <rect x="636" y="418" width="60" height="16" rx="4" fill="#0c2918"/>
+  <text x="666" y="430" text-anchor="middle" fill="#22c55e" font-size="9">Delivered</text>
+
+  <text x="210" y="448" fill="#9ca3af" font-size="10">CV Teknik Jaya</text>
+  <text x="360" y="448" fill="#9ca3af" font-size="10">Pump Parts x3</text>
+  <text x="510" y="448" fill="#e5e7eb" font-size="10">Rp 125.000</text>
+  <rect x="636" y="438" width="60" height="16" rx="4" fill="#1a1400"/>
+  <text x="666" y="450" text-anchor="middle" fill="#f59e0b" font-size="9">Pending</text>
+
+  <text x="210" y="468" fill="#9ca3af" font-size="10">UD Kimia Prima</text>
+  <text x="360" y="468" fill="#9ca3af" font-size="10">Lime 10 bags</text>
+  <text x="510" y="468" fill="#e5e7eb" font-size="10">Rp 38.500</text>
+  <rect x="636" y="458" width="60" height="16" rx="4" fill="#0c2918"/>
+  <text x="666" y="470" text-anchor="middle" fill="#22c55e" font-size="9">Delivered</text>
+
+  <!-- Stack label -->
+  <text x="400" y="492" text-anchor="middle" fill="#1e2330" font-size="11" letter-spacing="3">VUE 3 + VITE + NODE.JS + POSTGRESQL</text>
+</svg>
