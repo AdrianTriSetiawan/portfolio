@@ -2,7 +2,7 @@
 
 Personal portfolio website built with React, Vite, and Tailwind CSS. Features an AI chatbot persona (Lady Lunaria Eldharia) powered by the OpenClaw agent runtime.
 
-**Live site:** [adriansetiawan.dev](https://adriansetiawan.dev) *(or wherever you host it)*
+**Live site:** [adriandev.online](https://adriandev.online)
 
 ---
 
