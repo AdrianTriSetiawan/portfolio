@@ -2,6 +2,7 @@
 import json
 import os
 import subprocess
+import threading
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -190,6 +191,11 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def send_sse(self, event: str, data: dict):
+        line = f"event: {event}\ndata: {json.dumps(data)}\n\n"
+        self.wfile.write(line.encode("utf-8"))
+        self.wfile.flush()
+
     def do_GET(self):
         if self.path == "/api/health":
             gateway = check_gateway()
@@ -220,24 +226,50 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
         if not message:
             return self.end_json({"ok": False, "error": "Message is required"}, HTTPStatus.BAD_REQUEST)
 
-        gateway = check_gateway()
-        agent_run = run_openclaw_agent_with_session(message, session_id)
-        reply = agent_run["reply"] if agent_run["ok"] else build_reply(message)
-        return self.end_json(
-            {
-                "ok": True,
-                "reply": reply,
-                "persona": AGENT["displayName"],
-                "agentId": OPENCLAW_AGENT_ID,
-                "source": "openclaw-subagent" if agent_run["ok"] else "portfolio-backend-fallback",
-                "gateway": "live" if gateway["ok"] else "unreachable",
+        # SSE response headers
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Accel-Buffering", "no")
+        self.end_headers()
+
+        # Run agent in background thread, collect result
+        result_box = {}
+        def run_agent():
+            agent_run = run_openclaw_agent_with_session(message, session_id)
+            reply = agent_run["reply"] if agent_run["ok"] else build_reply(message)
+            result_box["reply"] = reply
+            result_box["agent_run"] = agent_run
+
+        thread = threading.Thread(target=run_agent, daemon=True)
+        thread.start()
+
+        # Send heartbeat while agent is running
+        try:
+            while thread.is_alive():
+                self.send_sse("heartbeat", {"ok": True})
+                thread.join(timeout=1.0)
+        except (BrokenPipeError, ConnectionResetError):
+            return
+
+        reply = result_box.get("reply", "")
+        agent_run = result_box.get("agent_run", {})
+
+        # Stream reply word by word
+        try:
+            words = reply.split(" ")
+            for i, word in enumerate(words):
+                chunk = word if i == 0 else " " + word
+                self.send_sse("token", {"text": chunk})
+            self.send_sse("done", {
+                "sessionId": agent_run.get("sessionId"),
                 "model": agent_run.get("model"),
                 "provider": agent_run.get("provider"),
-                "sessionId": agent_run.get("sessionId"),
                 "durationMs": agent_run.get("durationMs"),
-                "fallbackUsed": not agent_run["ok"],
-            }
-        )
+                "fallbackUsed": not agent_run.get("ok", False),
+            })
+        except (BrokenPipeError, ConnectionResetError):
+            return
 
     def log_message(self, format, *args):
         return super().log_message(format, *args)

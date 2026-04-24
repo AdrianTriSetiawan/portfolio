@@ -766,6 +766,9 @@ function App() {
       setTypingElapsed((s) => s + 1);
     }, 1000);
 
+    // Placeholder message index for streaming into
+    let assistantIndex = null;
+
     try {
       const response = await fetch("/api/portfolio-chat", {
         method: "POST",
@@ -773,20 +776,69 @@ function App() {
         body: JSON.stringify({ message: trimmed, sessionId: visitorSessionId }),
       });
       if (!response.ok) throw new Error("chat failed");
-      const data = await response.json();
-      setGatewayState(data.gateway === "live" ? "live" : "degraded");
-      setChatSource(data.source === "openclaw-subagent" ? "website-subagent" : "fallback");
-      setMessages((current) => [...current, { role: "assistant", text: data.reply }]);
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        const parts = buffer.split("\n\n");
+        buffer = parts.pop();
+
+        for (const part of parts) {
+          const eventMatch = part.match(/^event: (\w+)/m);
+          const dataMatch = part.match(/^data: (.+)/m);
+          if (!eventMatch || !dataMatch) continue;
+          const event = eventMatch[1];
+          let data;
+          try { data = JSON.parse(dataMatch[1]); } catch { continue; }
+
+          if (event === "token") {
+            if (assistantIndex === null) {
+              // First token — stop typing indicator, add streaming message
+              clearInterval(typingTimerRef.current);
+              setIsTyping(false);
+              setTypingElapsed(0);
+              setMessages((current) => {
+                assistantIndex = current.length;
+                return [...current, { role: "assistant", text: data.text, streaming: true }];
+              });
+            } else {
+              setMessages((current) =>
+                current.map((m, i) =>
+                  i === assistantIndex ? { ...m, text: m.text + data.text } : m
+                )
+              );
+            }
+          } else if (event === "done") {
+            setMessages((current) =>
+              current.map((m, i) =>
+                i === assistantIndex ? { ...m, streaming: false } : m
+              )
+            );
+            setChatSource(data.fallbackUsed ? "fallback" : "website-subagent");
+          }
+        }
+      }
+
+      if (assistantIndex === null) throw new Error("no response");
+      setGatewayState("live");
     } catch (_error) {
       setGatewayState("degraded");
       setChatSource("fallback");
-      setMessages((current) => [
-        ...current,
-        {
-          role: "assistant",
-          text: "I can still guide you through Adrian's portfolio, but the live backend is temporarily degraded.",
-        },
-      ]);
+      if (assistantIndex === null) {
+        setMessages((current) => [
+          ...current,
+          {
+            role: "assistant",
+            text: "I can still guide you through Adrian's portfolio, but the live backend is temporarily degraded.",
+          },
+        ]);
+      }
     } finally {
       clearInterval(typingTimerRef.current);
       setIsTyping(false);
