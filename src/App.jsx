@@ -667,6 +667,7 @@ function App() {
   const [activeSection, setActiveSection] = useState("about");
   const latestMessages = useMemo(() => messages.slice(-4), [messages]);
   const typingTimerRef = useRef(null);
+  const streamingIndexRef = useRef(null);
   const reduceMotion = useReducedMotion();
   const { roleText, roleIndex } = useTypewriterRotation(heroRoles);
   const scrambledName = useScramble("@AdrianTriSetiawan", { duration: 1200, stagger: 400 });
@@ -766,8 +767,7 @@ function App() {
       setTypingElapsed((s) => s + 1);
     }, 1000);
 
-    // Placeholder message index for streaming into
-    let assistantIndex = null;
+    streamingIndexRef.current = null;
 
     try {
       const response = await fetch("/api/portfolio-chat", {
@@ -798,26 +798,28 @@ function App() {
           try { data = JSON.parse(dataMatch[1]); } catch { continue; }
 
           if (event === "token") {
-            if (assistantIndex === null) {
-              // First token — stop typing indicator, add streaming message
+            if (streamingIndexRef.current === null) {
+              // First token — stop typing indicator, insert streaming message
               clearInterval(typingTimerRef.current);
               setIsTyping(false);
               setTypingElapsed(0);
               setMessages((current) => {
-                assistantIndex = current.length;
+                streamingIndexRef.current = current.length;
                 return [...current, { role: "assistant", text: data.text, streaming: true }];
               });
             } else {
+              const idx = streamingIndexRef.current;
               setMessages((current) =>
                 current.map((m, i) =>
-                  i === assistantIndex ? { ...m, text: m.text + data.text } : m
+                  i === idx ? { ...m, text: m.text + data.text } : m
                 )
               );
             }
           } else if (event === "done") {
+            const idx = streamingIndexRef.current;
             setMessages((current) =>
               current.map((m, i) =>
-                i === assistantIndex ? { ...m, streaming: false } : m
+                i === idx ? { ...m, streaming: false } : m
               )
             );
             setChatSource(data.fallbackUsed ? "fallback" : "website-subagent");
@@ -825,12 +827,12 @@ function App() {
         }
       }
 
-      if (assistantIndex === null) throw new Error("no response");
+      if (streamingIndexRef.current === null) throw new Error("no response");
       setGatewayState("live");
     } catch (_error) {
       setGatewayState("degraded");
       setChatSource("fallback");
-      if (assistantIndex === null) {
+      if (streamingIndexRef.current === null) {
         setMessages((current) => [
           ...current,
           {
