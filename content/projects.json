@@ -1,13 +1,40 @@
 [
   {
-    "id": "insightface",
-    "name": "InsightFace — Attendance & Recognition System",
+    "id": "facegate",
+    "name": "FaceGate — Attendance & Recognition System",
     "tag": "Computer Vision · Private",
-    "summary": "Sistem absensi otomatis berbasis face recognition menggunakan CCTV dan InsightFace (512-dimensi). Anti-spoofing, dual camera RTSP, auto-reconnect watchdog, attendance logging otomatis, dan web interface realtime.",
+    "summary": "Sistem absensi otomatis berbasis face recognition menggunakan CCTV dengan face embedding 512-dimensi. Anti-spoofing, dual camera RTSP, auto-reconnect watchdog, attendance logging otomatis, dan web interface realtime.",
     "detail": "Versi PTI-Absensi adalah monorepo mencakup backend FastAPI, web React + Vite, dan mobile Expo React Native — digunakan operasional nyata di lingkungan institutional.",
-    "stack": ["Python", "InsightFace", "FastAPI", "Flask", "OpenCV", "React", "Expo", "PostgreSQL"],
+    "stack": [
+      "Python",
+      "FastAPI",
+      "Flask",
+      "OpenCV",
+      "React",
+      "Expo",
+      "PostgreSQL"
+    ],
     "image": "/projects/testing1.jpg",
     "highlight": true,
+    "link": null,
+    "private": true
+  },
+  {
+    "id": "eprocmon",
+    "name": "EProcMon — BUMN Tender Intelligence",
+    "tag": "SvelteKit · Bun · Live",
+    "summary": "Sistem monitoring tender pengadaan BUMN Indonesia 24/7. Scrapes ratusan portal LPSE/SPSE secara otomatis, klasifikasi tender IT via keyword matching, dan kirim notifikasi real-time ke Discord.",
+    "detail": "Monorepo: Elysia.js API + SvelteKit dashboard + scraper worker. Data disimpan di Supabase + Realtime WebSocket. Live di ai.adriandev.online/tender-ai.",
+    "stack": [
+      "Bun",
+      "SvelteKit",
+      "Supabase",
+      "PostgreSQL",
+      "Automation",
+      "AI Agents"
+    ],
+    "image": "/projects/testing1.jpg",
+    "highlight": false,
     "link": null,
     "private": true
   },
@@ -17,7 +44,11 @@
     "tag": "AI Identity System",
     "summary": "A personality-driven assistant system that combines identity consistency, practical utility, and operator-facing interaction.",
     "detail": "Presented here through the Clawbot visual layer, Lunaria is the public AI face that turns assistant behavior into something memorable and usable.",
-    "stack": ["OpenClaw", "Assistant Design", "Automation", "Discord"],
+    "stack": [
+      "Assistant Design",
+      "Automation",
+      "Discord"
+    ],
     "image": "/projects/clawbot-avatar.svg",
     "highlight": false,
     "link": null,
@@ -29,7 +60,12 @@
     "tag": "Python Desktop · CCTV",
     "summary": "Aplikasi desktop Python untuk monitoring dan controlling kamera EZVIZ dengan live RTSP streaming, PTZ, alarm, snapshot, IR LED, dan privacy mode.",
     "detail": "Dibangun dengan pyezvizapi, customtkinter, dan opencv-python. Cross-platform dan mengutamakan keamanan lewat login sesi tanpa hardcoded credentials.",
-    "stack": ["Python", "OpenCV", "customtkinter", "pyezvizapi"],
+    "stack": [
+      "Python",
+      "OpenCV",
+      "customtkinter",
+      "pyezvizapi"
+    ],
     "image": "/projects/testing1.jpg",
     "highlight": false,
     "link": "https://github.com/AdrianTriSetiawan/EZVIZ-Camera-Controling-and-Monitoring",
@@ -41,34 +77,16 @@
     "tag": "Vue 3 · Private Dashboard",
     "summary": "Suite charting untuk visualisasi data procurement pabrik gula (manufaktur). Frontend Vue 3 + Vite, backend Node.js + Express + PostgreSQL.",
     "detail": "Mencakup dashboard builder, procurement charting, data source manager, export PNG/CSV, dan template. Digunakan internal untuk kebutuhan pabrik gula.",
-    "stack": ["Vue 3", "Vite", "Node.js", "Express", "PostgreSQL"],
+    "stack": [
+      "Vue 3",
+      "Vite",
+      "Node.js",
+      "Express",
+      "PostgreSQL"
+    ],
     "image": "/projects/testing1.jpg",
     "highlight": false,
     "link": null,
     "private": true
-  },
-  {
-    "id": "astream",
-    "name": "ASTREAM — Anime Streaming",
-    "tag": "Web App · Public",
-    "summary": "Website streaming anime tanpa iklan menggunakan Consumet API dan gogoanime provider. Dihosting di Cloudflare Pages.",
-    "detail": "Dibangun hanya dengan HTML, CSS, dan JavaScript murni tanpa framework. Live di astream.pages.dev.",
-    "stack": ["HTML", "CSS", "JavaScript", "Consumet API"],
-    "image": "/projects/testing1.jpg",
-    "highlight": false,
-    "link": "https://github.com/AdrianTriSetiawan/Anime-Stream",
-    "private": false
-  },
-  {
-    "id": "vscode",
-    "name": "VS Code Extensions",
-    "tag": "Developer Tools · TypeScript",
-    "summary": "Koleksi 4 VS Code extensions: env-bridge, k8s-port-forward-profiles, trustlens, dan Bubblegums theme — semuanya tersedia publik.",
-    "detail": "env-bridge sync .env ke launch.json/tasks.json otomatis. k8s-port-forward-profiles manage kubectl port-forward dari sidebar. trustlens scan risk level extension yang terinstall. Bubblegums adalah dark theme pink/purple.",
-    "stack": ["TypeScript", "VS Code API", "Node.js"],
-    "image": "/projects/clawbot-avatar.svg",
-    "highlight": false,
-    "link": "https://github.com/AdrianTriSetiawan/",
-    "private": false
   }
 ]

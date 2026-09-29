@@ -9,9 +9,9 @@ import {
   CheckCircle2,
   ChevronRight,
   Code,
+  Download,
   Eye,
   FolderGit2,
-  Gamepad2,
   GraduationCap,
   List,
   Mail,
@@ -29,7 +29,6 @@ import {
   SiBun,
   SiCss,
   SiDart,
-  SiDiscord,
   SiExpress,
   SiFastapi,
   SiFlutter,
@@ -45,9 +44,9 @@ import {
   SiPostgresql,
   SiPython,
   SiReact,
-  SiSteam,
   SiSupabase,
   SiTailwindcss,
+  SiTypescript,
   SiVite,
   SiVuedotjs,
 } from "react-icons/si";
@@ -78,9 +77,9 @@ const techIconMap = {
   "Machine Learning": Brain,
   "Deep Learning": Brain,
   "Computer Vision": Eye,
-  "OpenClaw": Bot,
   "Assistant Design": Sparkles,
   "Turbopack": Zap,
+  "TypeScript": SiTypescript,
 };
 
 const stackGroups = [
@@ -98,7 +97,7 @@ const stackGroups = [
   },
   {
     name: "AI / ML",
-    items: ["Machine Learning", "Deep Learning", "Computer Vision", "OpenClaw", "Assistant Design"],
+    items: ["Machine Learning", "Deep Learning", "Computer Vision", "Assistant Design"],
   },
   {
     name: "Other",
@@ -153,16 +152,29 @@ const timeline = [
 
 const projects = [
   {
-    name: "InsightFace — Attendance & Recognition",
+    name: "FaceGate — Attendance & Recognition",
     tag: "Computer Vision · Private",
     summary:
-      "Sistem absensi otomatis berbasis face recognition menggunakan CCTV dan InsightFace (512-dimensi). Anti-spoofing, dual camera RTSP, auto-reconnect watchdog, attendance logging, dan web interface realtime.",
+      "Sistem absensi otomatis berbasis face recognition menggunakan CCTV dengan face embedding 512-dimensi. Anti-spoofing, dual camera RTSP, auto-reconnect watchdog, attendance logging, dan web interface realtime.",
     detail:
       "Versi PTI-Absensi adalah monorepo: backend FastAPI, web React + Vite, dan mobile Expo React Native — digunakan operasional nyata di lingkungan institutional.",
-    stack: ["Python", "InsightFace", "FastAPI", "Flask", "OpenCV", "React", "Expo", "PostgreSQL"],
+    stack: ["Python", "FastAPI", "Flask", "OpenCV", "React", "Expo", "PostgreSQL"],
     image: "/projects/testing1.jpg",
     highlight: true,
     link: null,
+    private: true,
+  },
+  {
+    name: "MyWajah — Face Attendance & HR Dashboard",
+    tag: "Mobile · React Native",
+    summary:
+      "Aplikasi absensi karyawan berbasis face recognition dari mobile: scan wajah on-device dengan liveness check, verifikasi lokasi GPS saat check-in/out, dan dashboard admin realtime.",
+    detail:
+      "Backend Node.js + Supabase memverifikasi kecocokan wajah via cosine similarity di server — client tidak bisa memalsukan status verifikasi. Source code privat, APK publik bisa didownload.",
+    stack: ["React Native", "Expo", "Supabase", "Node.js", "Express", "React", "TypeScript", "PostgreSQL"],
+    image: "/projects/mywajah-preview.svg",
+    highlight: false,
+    link: "https://github.com/AdrianTriSetiawan/MyWajah-releases/releases/latest",
     private: true,
   },
   {
@@ -172,7 +184,7 @@ const projects = [
       "A personality-driven assistant system that combines identity consistency, practical utility, and operator-facing interaction.",
     detail:
       "Presented here through the Clawbot visual layer, Lunaria is the public AI face that turns assistant behavior into something memorable and usable.",
-    stack: ["OpenClaw", "Assistant Design", "Automation", "Discord"],
+    stack: ["Assistant Design", "Automation", "Discord"],
     image: "/projects/clawbot-avatar.svg",
     highlight: false,
     link: null,
@@ -204,32 +216,6 @@ const projects = [
     link: null,
     private: true,
   },
-  {
-    name: "ASTREAM — Anime Streaming",
-    tag: "Web App · Public",
-    summary:
-      "Website streaming anime tanpa iklan menggunakan Consumet API dan gogoanime provider. Live di Cloudflare Pages.",
-    detail:
-      "Dibangun hanya dengan HTML, CSS, dan JavaScript murni tanpa framework. Live di astream.pages.dev.",
-    stack: ["HTML", "CSS", "JavaScript", "Consumet API"],
-    image: "/projects/astream-preview.svg",
-    highlight: false,
-    link: "https://github.com/AdrianTriSetiawan/Anime-Stream",
-    private: false,
-  },
-  {
-    name: "VS Code Extensions",
-    tag: "Developer Tools · TypeScript",
-    summary:
-      "4 VS Code extensions: env-bridge, k8s-port-forward-profiles, trustlens, dan Bubblegums theme — semua tersedia publik.",
-    detail:
-      "env-bridge sync .env ke launch.json/tasks.json. k8s-port-forward manage kubectl dari sidebar. trustlens scan risk extension. Bubblegums adalah dark theme pink/purple.",
-    stack: ["TypeScript", "VS Code API", "Node.js"],
-    image: "/projects/clawbot-avatar.svg",
-    highlight: false,
-    link: "https://github.com/AdrianTriSetiawan/",
-    private: false,
-  },
 ];
 
 const contactLinks = [
@@ -244,18 +230,6 @@ const contactLinks = [
     value: "github.com/AdrianTriSetiawan",
     href: "https://github.com/AdrianTriSetiawan/",
     icon: FolderGit2,
-  },
-  {
-    label: "Steam",
-    value: "finnngck",
-    href: "https://steamcommunity.com/id/finnngck/",
-    icon: SiSteam,
-  },
-  {
-    label: "Discord",
-    value: "luzwellsclauka",
-    href: null,
-    icon: SiDiscord,
   },
 ];
 
@@ -281,7 +255,7 @@ const starterPrompts = [
   "Who are you, Lunaria?",
   "Summarize Adrian",
   "Tell me about PIRA",
-  "Explain Recognition CCTV",
+  "Explain FaceGate",
   "How can I contact Adrian?",
 ];
 
@@ -296,7 +270,8 @@ const initialMessages = [
 const heroRoles = [
   "Fullstack Engineer",
   "AI R&D Builder",
-  "OpenClaw + CV Operator",
+  "Machine Learning Engineer",
+  "Computer Vision Operator",
 ];
 
 function ClawbotAvatar({ size = "h-12 w-12", className = "" }) {
@@ -470,6 +445,61 @@ function TypingIndicator({ elapsed, size = "md" }) {
       </div>
     </div>
   );
+}
+
+function renderInline(text, keyPrefix = "") {
+  const parts = text.split(/(\*\*.+?\*\*|\[[^\]]+\]\([^)]+\))/g);
+  return parts.map((part, i) => {
+    const bold = part.match(/^\*\*(.+)\*\*$/);
+    if (bold) return <strong key={`${keyPrefix}-b${i}`}>{bold[1]}</strong>;
+    const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (link) {
+      return (
+        <a
+          key={`${keyPrefix}-l${i}`}
+          href={link[2]}
+          target="_blank"
+          rel="noreferrer"
+          className="underline text-primary hover:text-primary/80"
+        >
+          {link[1]}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
+function MessageText({ text }) {
+  const blocks = [];
+  let listBuf = [];
+
+  const flushList = () => {
+    if (!listBuf.length) return;
+    blocks.push(
+      <ul key={`ul-${blocks.length}`} className="list-disc space-y-1 pl-5">
+        {listBuf.map((item, i) => (
+          <li key={i}>{renderInline(item, `li${blocks.length}-${i}`)}</li>
+        ))}
+      </ul>,
+    );
+    listBuf = [];
+  };
+
+  text.split("\n").forEach((line, idx) => {
+    const bullet = line.match(/^\s*[*-]\s+(.+)/);
+    if (bullet) {
+      listBuf.push(bullet[1]);
+      return;
+    }
+    flushList();
+    if (line.trim()) {
+      blocks.push(<p key={`p${idx}`}>{renderInline(line, `p${idx}`)}</p>);
+    }
+  });
+  flushList();
+
+  return <div className="space-y-2">{blocks}</div>;
 }
 
 function HomeToc({ sections, activeId }) {
@@ -915,11 +945,11 @@ function App() {
                   className="ml-1 inline-block h-[0.85em] w-[3px] translate-y-[2px] rounded-sm bg-primary"
                   style={{ animation: "blink 1s step-end infinite" }}
                 />
-                <br />
-                <StaggeredWords text="building AI systems" className="block mt-1" />
-                <br />
-                <StaggeredWords text="with OpenClaw + ML + CV" className="block mt-1 text-foreground" />
               </h1>
+              <StaggeredWords
+                text="From research prototypes to production-ready systems."
+                className="mt-3 block text-base font-medium text-muted-foreground md:text-lg"
+              />
               <motion.p
                 initial={reduceMotion ? undefined : { opacity: 0, y: 8, filter: "blur(4px)" }}
                 animate={reduceMotion ? undefined : { opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -932,7 +962,7 @@ function App() {
               </motion.p>
 
               <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
-                {["Fullstack", "AI R&D", "Machine Learning", "OpenClaw", "Computer Vision"].map(
+                {["Fullstack", "AI R&D", "Machine Learning", "Computer Vision"].map(
                   (label, index) => (
                     <span
                       key={label}
@@ -976,7 +1006,7 @@ function App() {
             {[
               ["Base", "Jakarta - Surabaya", MapPin],
               ["Audience", "Available for freelance", Users],
-              ["Runtime", chatSource === "website-subagent" ? "OpenClaw sub-agent" : "Fallback mode", Zap],
+              ["Runtime", chatSource === "website-subagent" ? "Live" : "Fallback mode", Zap],
             ].map(([label, value, Icon]) => (
               <div key={label} className="rounded-2xl border border-border/80 bg-card/60 p-5 backdrop-blur-sm">
                 <div className="mb-2 flex items-center gap-2">
@@ -1170,7 +1200,7 @@ function App() {
                     <Eye className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-display text-2xl font-bold text-foreground">InsightFace — Attendance System</h3>
+                    <h3 className="font-display text-2xl font-bold text-foreground">FaceGate — Attendance System</h3>
                     <p className="mt-1 text-sm text-muted-foreground">
                       Flagship private work: face recognition attendance via CCTV with anti-spoofing, dual camera, and a full web + mobile monorepo.
                     </p>
@@ -1178,7 +1208,7 @@ function App() {
                 </div>
                 <div className="grid gap-3 md:grid-cols-3">
                   {[
-                    "InsightFace 512-dim + anti-spoofing untuk deteksi foto/video palsu.",
+                    "Face embedding 512-dim + anti-spoofing untuk deteksi foto/video palsu.",
                     "Dual RTSP camera support dengan auto-reconnect watchdog.",
                     "Monorepo: FastAPI backend, React web, Expo React Native mobile.",
                   ].map((line) => (
@@ -1253,8 +1283,12 @@ function App() {
                       rel="noreferrer"
                       className="mt-4 inline-flex items-center gap-2 text-sm text-primary transition hover:text-primary/80"
                     >
-                      <FolderGit2 className="h-3.5 w-3.5" />
-                      View on GitHub
+                      {project.link.includes("/releases") ? (
+                        <Download className="h-3.5 w-3.5" />
+                      ) : (
+                        <FolderGit2 className="h-3.5 w-3.5" />
+                      )}
+                      {project.link.includes("/releases") ? "Download APK" : "View on GitHub"}
                       <ArrowUpRight className="h-3 w-3" />
                     </a>
                   )}
@@ -1323,7 +1357,7 @@ function App() {
             <SectionHeader
               icon={Bot}
               title="AI Guide"
-              body="Lunaria is the public-facing AI voice of this portfolio. The chat panel is routed through a dedicated OpenClaw website agent instead of Adrian's main private assistant."
+              body="Lunaria is the public-facing AI voice of this portfolio. The chat panel is routed through a dedicated portfolio agent instead of Adrian's main private assistant."
             />
           </AnimatedSection>
 
@@ -1341,7 +1375,7 @@ function App() {
                     </div>
                   </div>
                   <div className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                    {chatSource === "website-subagent" ? "OpenClaw sub-agent" : "Fallback mode"}
+                    {chatSource === "website-subagent" ? "Live" : "Fallback mode"}
                   </div>
                 </div>
 
@@ -1396,7 +1430,7 @@ function App() {
                               : "border border-border bg-muted text-foreground rounded-tr-none"
                           }`}
                         >
-                          <p className="whitespace-pre-line">{message.text}</p>
+                          <MessageText text={message.text} />
                         </div>
                       </motion.article>
                     ))}
@@ -1424,7 +1458,7 @@ function App() {
                       {
                         icon: Bot,
                         title: "Website sub-agent",
-                        body: "Public chat is routed into a dedicated OpenClaw website agent instead of Adrian's main private agent.",
+                        body: "Public chat is routed into a dedicated portfolio agent instead of Adrian's main private agent.",
                       },
                       {
                         icon: ShieldCheck,
@@ -1485,43 +1519,6 @@ function App() {
                 </div>
               </AnimatedSection>
 
-              <AnimatedSection delay={0.24}>
-                <div className="rounded-2xl border border-border bg-card p-5">
-                  <div className="flex items-center gap-2">
-                    <Gamepad2 className="h-4 w-4 text-accent" />
-                    <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">Beyond the keyboard</p>
-                  </div>
-                  <div className="mt-4 space-y-3">
-                    <a
-                      href="https://steamcommunity.com/id/finnngck/"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3 transition hover:border-primary/40 hover:bg-primary/5"
-                    >
-                      <SiSteam className="h-4 w-4 text-muted-foreground" />
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Steam</p>
-                        <p className="text-sm text-foreground">finnngck</p>
-                      </div>
-                      <ArrowUpRight className="ml-auto h-4 w-4 text-muted-foreground" />
-                    </a>
-                    <div className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3">
-                      <SiDiscord className="h-4 w-4 text-muted-foreground" />
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Discord</p>
-                        <p className="text-sm text-foreground">luzwellsclauka</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {["CS2", "Dota 2", "Anime"].map((tag) => (
-                      <span key={tag} className="inline-flex items-center gap-1.5 rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs text-accent">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </AnimatedSection>
             </div>
           </div>
         </div>
@@ -1553,15 +1550,6 @@ function App() {
               >
                 <FolderGit2 className="h-4 w-4" />
                 GitHub
-              </a>
-              <a
-                href="https://steamcommunity.com/id/finnngck/"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-medium text-foreground transition hover:border-primary/40 hover:bg-primary/5"
-              >
-                <SiSteam className="h-4 w-4" />
-                Steam
               </a>
             </div>
           </AnimatedSection>
@@ -1613,7 +1601,7 @@ function App() {
                           : "bg-muted text-foreground rounded-tr-none"
                       }`}
                     >
-                      <p className="whitespace-pre-line">{message.text}</p>
+                      <MessageText text={message.text} />
                     </div>
                   </div>
                 ))}

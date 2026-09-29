@@ -1,119 +1,203 @@
 #!/usr/bin/env python3
+import http.client
 import json
 import os
-import subprocess
+import ssl
 import threading
+import urllib.parse
+import urllib.request
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.error import URLError
-from urllib.request import Request, urlopen
-
 
 ROOT = Path("/home/ubuntu/portfolio")
 DIST_DIR = ROOT / "dist"
-AGENT_CONFIG = ROOT / "public" / "agents" / "portfolio-agent.json"
+AGENT_CONFIG = ROOT / "public" / "agents" / "portfolio-agent.json"   # public (display)
+AGENT_FULL_CONFIG = ROOT / "agents" / "portfolio-agent.json"          # full knowledge base
 PORT = 18891
 HOST = "127.0.0.1"
-GATEWAY_URL = "http://127.0.0.1:18789/health"
-GATEWAY_TOKEN = os.environ.get("OPENCLAW_GATEWAY_TOKEN", "")
-OPENCLAW_AGENT_ID = "portfolio-website"
-OPENCLAW_AGENT_TIMEOUT_SECONDS = 35
-OPENCLAW_NODE_BIN_DIR = "/home/ubuntu/.nvm/versions/node/v22.22.2/bin"
-OPENCLAW_BIN = f"{OPENCLAW_NODE_BIN_DIR}/openclaw"
+
+# Session history: {session_id: [{"role": ..., "content": ...}, ...]}
+_sessions: dict = {}
+_sessions_lock = threading.Lock()
+MAX_HISTORY = 8  # messages (user+assistant pairs)
 
 
-def load_agent():
-    with AGENT_CONFIG.open("r", encoding="utf-8") as handle:
-        return json.load(handle)
+# ---------------------------------------------------------------------------
+# Config & system prompt
+# ---------------------------------------------------------------------------
+
+def _load_api_config() -> dict:
+    return {
+        "router9_url": os.environ.get("ROUTER9_URL", "http://127.0.0.1:20128/v1"),
+        "router9_key": os.environ.get("ROUTER9_API_KEY", ""),
+        "moonshot_key": os.environ.get("MOONSHOT_API_KEY", ""),
+    }
 
 
-AGENT = load_agent()
+def _load_agent() -> dict:
+    # Public config (displayName, persona) — served to browser
+    with AGENT_CONFIG.open("r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-def check_gateway():
-    request = Request(
-        GATEWAY_URL,
-        headers={"Authorization": f"Bearer {GATEWAY_TOKEN}"},
-    )
-    try:
-        with urlopen(request, timeout=2) as response:
-            payload = json.loads(response.read().decode("utf-8"))
-        return {"ok": True, "payload": payload}
-    except (URLError, TimeoutError, json.JSONDecodeError, OSError) as error:
-        return {"ok": False, "error": str(error)}
+def _load_full_agent() -> dict:
+    # Full config with complete knowledge base — server-side only
+    path = AGENT_FULL_CONFIG if AGENT_FULL_CONFIG.exists() else AGENT_CONFIG
+    with path.open("r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-def run_openclaw_agent(message: str):
-    return run_openclaw_agent_with_session(message, None)
-
-
-def run_openclaw_agent_with_session(message: str, session_id: str | None):
-    command = [
-        OPENCLAW_BIN,
-        "agent",
-        "--agent",
-        OPENCLAW_AGENT_ID,
-        "--message",
-        message,
-        "--json",
-        "--timeout",
-        str(OPENCLAW_AGENT_TIMEOUT_SECONDS),
+def _build_system_prompt(agent: dict) -> str:
+    k = agent["knowledge"]
+    lines = [agent["systemPrompt"], ""]
+    lines += [
+        f"Name: {k['name']}",
+        f"Headline: {k['headline']}",
+        f"Base: {k['base']}",
+        f"Focus: {k['focus']}",
+        f"Education: {k['education']}",
+        "Strengths: " + "; ".join(k["strengths"]),
+        f"Contact: email={k['contact']['email']}, github={k['contact']['github']}",
+        "",
+        "Projects:",
     ]
-    if session_id:
-        command.extend(["--session-id", session_id])
-    try:
-        completed = subprocess.run(
-            command,
-            check=True,
-            capture_output=True,
-            text=True,
-            timeout=OPENCLAW_AGENT_TIMEOUT_SECONDS + 15,
-            env={
-                **os.environ,
-                "PATH": f"{OPENCLAW_NODE_BIN_DIR}:{os.environ.get('PATH', '')}",
-                "HOME": "/home/ubuntu",
-            },
-        )
-        payload = json.loads(completed.stdout)
-        result = payload.get("result", {})
-        meta = result.get("meta", {})
-        system_prompt_report = meta.get("systemPromptReport", {})
-        final_text = (
-            system_prompt_report.get("finalAssistantVisibleText")
-            or system_prompt_report.get("finalAssistantRawText")
-        )
-        if not final_text:
-            final_text = next(
-                (
-                    entry.get("text", "").strip()
-                    for entry in reversed(result.get("payloads", []))
-                    if entry.get("text", "").strip()
-                ),
-                "",
-            )
-        if not final_text:
-            raise ValueError("OpenClaw returned no final assistant text")
-        return {
-            "ok": True,
-            "reply": final_text,
-            "payload": payload,
-            "sessionId": meta.get("agentMeta", {}).get("sessionId"),
-            "durationMs": meta.get("durationMs"),
-            "provider": meta.get("agentMeta", {}).get("provider"),
-            "model": meta.get("agentMeta", {}).get("model"),
-        }
-    except (
-        subprocess.SubprocessError,
-        subprocess.TimeoutExpired,
-        json.JSONDecodeError,
-        ValueError,
-    ) as error:
-        return {"ok": False, "error": str(error)}
+    for repo in k.get("repositories", []):
+        line = f"- {repo['name']}: {repo.get('summary', '')}"
+        if repo.get("url"):
+            line += f" (public download/repo: {repo['url']})"
+        lines.append(line)
+    lines += ["", "Rules:"]
+    for rule in agent.get("rules", []):
+        lines.append(f"- {rule}")
+    return "\n".join(lines)
 
+
+AGENT = _load_agent()           # public display info
+_FULL_AGENT = _load_full_agent()  # full knowledge for LLM
+API_CONFIG = _load_api_config()
+SYSTEM_PROMPT = _build_system_prompt(_FULL_AGENT)
+
+
+# ---------------------------------------------------------------------------
+# LLM streaming
+# ---------------------------------------------------------------------------
+
+def _stream_provider(url: str, api_key: str, model: str, messages: list, result: dict = None):
+    """Generator: yields text chunks from an OpenAI-compatible streaming endpoint.
+
+    ``result`` (if given) receives ``finish_reason`` from the terminal chunk, so
+    callers can detect a token-budget cutoff (``length``/``max_tokens``) instead
+    of silently treating a truncated answer as complete.
+    """
+    parsed = urllib.parse.urlparse(url)
+    is_https = parsed.scheme == "https"
+    host = parsed.hostname
+    port = parsed.port or (443 if is_https else 80)
+    path = parsed.path + ("?" + parsed.query if parsed.query else "")
+
+    payload = json.dumps({
+        "model": model,
+        "messages": messages,
+        "stream": True,
+        "max_tokens": 4096,
+    }).encode("utf-8")
+
+    if is_https:
+        ctx = ssl.create_default_context()
+        conn = http.client.HTTPSConnection(host, port, timeout=30, context=ctx)
+    else:
+        conn = http.client.HTTPConnection(host, port, timeout=30)
+
+    try:
+        conn.request("POST", path, body=payload, headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+            "Content-Length": str(len(payload)),
+        })
+        resp = conn.getresponse()
+        if resp.status != 200:
+            raise ConnectionError(f"HTTP {resp.status}: {resp.read(200).decode()}")
+
+        buf = b""
+        while True:
+            chunk = resp.read(512)
+            if not chunk:
+                break
+            buf += chunk
+            while b"\n" in buf:
+                raw_line, buf = buf.split(b"\n", 1)
+                line = raw_line.decode("utf-8", errors="replace").strip()
+                if not line.startswith("data: "):
+                    continue
+                data_str = line[6:]
+                if data_str == "[DONE]":
+                    return
+                try:
+                    data = json.loads(data_str)
+                    choice = data["choices"][0]
+                    content = choice["delta"].get("content") or ""
+                    if content:
+                        yield content
+                    finish_reason = choice.get("finish_reason")
+                    if finish_reason and result is not None:
+                        result["finish_reason"] = finish_reason
+                except Exception:
+                    pass
+    finally:
+        conn.close()
+
+
+def stream_llm(messages: list, provider_used: dict = None):
+    """Try 9router then moonshot. Yields text chunks.
+
+    ``provider_used`` (if given) gets ``{"name": ...}`` set to whichever
+    provider actually produced the response, so the "done" SSE event reports
+    the real source instead of a fixed model string regardless of which
+    provider in the fallback chain answered.
+    """
+    providers = []
+    if API_CONFIG["router9_key"]:
+        providers.append({
+            "url": API_CONFIG["router9_url"] + "/chat/completions",
+            "key": API_CONFIG["router9_key"],
+            "model": "gc/gemini-2.5-flash",
+            "name": "9router:gc/gemini-2.5-flash",
+        })
+    if API_CONFIG["moonshot_key"]:
+        providers.append({
+            "url": "https://api.moonshot.ai/v1/chat/completions",
+            "key": API_CONFIG["moonshot_key"],
+            "model": "kimi-k2.5",
+            "name": "moonshot:kimi-k2.5",
+        })
+
+    last_error = None
+    for p in providers:
+        try:
+            yielded = False
+            for chunk in _stream_provider(p["url"], p["key"], p["model"], messages, result=provider_used):
+                yield chunk
+                yielded = True
+            if yielded:
+                if provider_used is not None:
+                    provider_used["name"] = p["name"]
+                return
+        except Exception as exc:
+            last_error = exc
+            continue
+
+    raise RuntimeError(f"All LLM providers failed: {last_error}")
+
+
+# ---------------------------------------------------------------------------
+# Rule-based fallback (used only when all LLM providers fail)
+# ---------------------------------------------------------------------------
 
 def build_reply(message: str) -> str:
-    normalized = "".join(ch.lower() if ch.isalnum() or ch.isspace() else " " for ch in message)
+    normalized = "".join(
+        ch.lower() if ch.isalnum() or ch.isspace() else " " for ch in message
+    )
     knowledge = AGENT["knowledge"]
     name = knowledge["name"]
     headline = knowledge["headline"]
@@ -127,56 +211,61 @@ def build_reply(message: str) -> str:
     def has_any(*terms: str) -> bool:
         return any(term in normalized for term in terms)
 
-    if has_any("lunaria", "who are you", "who is this agent", "who are u"):
-      return (
-          "I am Lady Lunaria Eldharia, the public-facing guide for Adrian's portfolio. "
-          "I keep my replies warm, clear, and limited to Adrian's work, profile, and contact context, "
-          "while the website presents me through Adrian's Clawbot visual layer."
-      )
-
+    if has_any("lunaria", "who are you", "who is this agent", "who are u", "kamu siapa", "lo siapa"):
+        return (
+            "I am Lady Lunaria Eldharia, the public-facing guide for Adrian's portfolio. "
+            "I keep my replies warm, clear, and limited to Adrian's work, profile, and contact context."
+        )
     if has_any("pira", "piramida", "customer service", "helpdesk", "chatbot"):
         return (
-            "PIRA stands for Piramida Inteligence Response Assistant. It is Adrian's AI chatbot direction "
-            "for helpdesk and customer service workflows, built around responsive support interaction, structured assistance, "
-            "and a Clawbot-based visual presentation."
+            "PIRA stands for Piramida Inteligence Response Assistant — Adrian's AI chatbot direction "
+            "for helpdesk and customer service workflows."
         )
-
-    if has_any("lunaria project", "lady lunaria", "assistant system", "discord assistant"):
-        return (
-            "Lunaria is both Adrian's AI identity layer and a real assistant-system direction. "
-            "It combines character consistency, practical utility, a warm but precise interaction style, "
-            "and a Clawbot visual shell on this public website."
-        )
-
     if has_any("project", "cctv", "recognition", "face", "vision"):
         return (
-            f"{project['name']} is a private computer vision case study focused on {project['summary'].lower()} "
-            f"The stack shown in the portfolio is {', '.join(project['stack'])}."
+            f"{project['name']} is a private computer vision case study. "
+            f"Stack: {', '.join(project['stack'])}."
         )
-
-    if has_any("strength", "skills", "adapt", "team", "solo", "good at"):
-        return f"Adrian is strongest in {', '.join(strengths).lower()}."
-
-    if has_any("contact", "email", "github", "hire", "reach"):
+    if has_any("strength", "skill", "adapt", "team", "solo", "good at", "keahlian", "kemampuan"):
+        return f"Adrian is strongest in: {', '.join(strengths).lower()}."
+    if has_any("contact", "email", "github", "hire", "reach", "kontak", "hubungi"):
         return (
-            f"You can reach Adrian at {contact['email']}. His public work is available at "
-            f"{contact['github']}, and he is based in {base}."
+            f"📩 Kontak langsung Adrian: {contact['email']}\n"
+            f"🔗 GitHub: {contact['github']}"
         )
-
-    if has_any("education", "university", "study", "background"):
-        return f"{name} studied {education}. His current professional direction combines {focus.lower()}"
-
-    if has_any("bio", "summary", "who is", "headline", "about"):
+    if has_any("education", "university", "study", "background", "kuliah", "pendidikan"):
+        return f"{name} studied {education}. Focus: {focus.lower()}"
+    if has_any("bio", "summary", "who is", "siapa", "headline", "about", "adrian itu", "tentang adrian", "cerita"):
         return (
-            f"{name} is a {headline}. He focuses on {focus.lower()} and works across research, "
-            "experimentation, and implementation."
+            f"{name} is a {headline}. He focuses on {focus.lower()} and works across "
+            "research, experimentation, and implementation."
         )
-
     return (
-        "I only handle Adrian's portfolio context. You can ask me about Adrian's profile, strengths, "
-        "Lunaria, PIRA, Recognition CCTV, education, technical focus, or contact details."
+        "I only handle Adrian's portfolio context. You can ask about his profile, "
+        "strengths, projects, education, or contact details."
     )
 
+
+# ---------------------------------------------------------------------------
+# Gateway health check
+# ---------------------------------------------------------------------------
+
+def check_gateway() -> dict:
+    req = urllib.request.Request(
+        API_CONFIG["router9_url"] + "/models",
+        headers={"Authorization": f"Bearer {API_CONFIG['router9_key']}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=8) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+        return {"ok": True, "payload": payload}
+    except Exception as error:
+        return {"ok": False, "error": str(error)}
+
+
+# ---------------------------------------------------------------------------
+# HTTP handler
+# ---------------------------------------------------------------------------
 
 class PortfolioHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -199,16 +288,14 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/api/health":
             gateway = check_gateway()
-            return self.end_json(
-                {
-                    "ok": True,
-                    "site": "live",
-                    "persona": AGENT["displayName"],
-                    "agentId": OPENCLAW_AGENT_ID,
-                    "gateway": "live" if gateway["ok"] else "unreachable",
-                    "gatewayPayload": gateway.get("payload"),
-                }
-            )
+            return self.end_json({
+                "ok": True,
+                "site": "live",
+                "persona": AGENT["displayName"],
+                "agentId": "portfolio-website",
+                "gateway": "live" if gateway["ok"] else "degraded",
+                "gatewayPayload": gateway.get("payload"),
+            })
         return super().do_GET()
 
     def do_POST(self):
@@ -226,6 +313,16 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
         if not message:
             return self.end_json({"ok": False, "error": "Message is required"}, HTTPStatus.BAD_REQUEST)
 
+        # Build messages with history
+        with _sessions_lock:
+            history = list(_sessions.get(session_id, [])) if session_id else []
+
+        messages = (
+            [{"role": "system", "content": SYSTEM_PROMPT}]
+            + history
+            + [{"role": "user", "content": message}]
+        )
+
         # SSE response headers
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", "text/event-stream; charset=utf-8")
@@ -233,43 +330,57 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
         self.send_header("X-Accel-Buffering", "no")
         self.end_headers()
 
-        # Run agent in background thread, collect result
-        result_box = {}
-        def run_agent():
-            agent_run = run_openclaw_agent_with_session(message, session_id)
-            reply = agent_run["reply"] if agent_run["ok"] else build_reply(message)
-            result_box["reply"] = reply
-            result_box["agent_run"] = agent_run
+        # True streaming: buffer until word boundary, then send to browser
+        full_text = ""
+        fallback_used = False
+        word_buf = ""
 
-        thread = threading.Thread(target=run_agent, daemon=True)
-        thread.start()
-
-        # Send heartbeat while agent is running
+        provider_used: dict = {}
         try:
-            while thread.is_alive():
-                self.send_sse("heartbeat", {"ok": True})
-                thread.join(timeout=1.0)
+            for chunk in stream_llm(messages, provider_used):
+                full_text += chunk
+                word_buf += chunk
+                # Flush on word boundary (space or newline) to avoid mid-word splits
+                if " " in word_buf or "\n" in word_buf:
+                    self.send_sse("token", {"text": word_buf})
+                    word_buf = ""
+            if word_buf:
+                self.send_sse("token", {"text": word_buf})
+
+            if provider_used.get("finish_reason") in ("length", "max_tokens"):
+                notice = "\n\n(Response truncated — ask me to continue, or email Adrian for the rest.)"
+                full_text += notice
+                self.send_sse("token", {"text": notice})
         except (BrokenPipeError, ConnectionResetError):
             return
-
-        reply = result_box.get("reply", "")
-        agent_run = result_box.get("agent_run", {})
-
-        # Stream reply word by word
-        try:
+        except Exception:
+            # All LLM providers failed — use rule-based fallback
+            fallback_used = True
+            reply = build_reply(message)
+            full_text = reply
             words = reply.split(" ")
-            for i, word in enumerate(words):
-                chunk = word if i == 0 else " " + word
-                self.send_sse("token", {"text": chunk})
+            try:
+                for i, word in enumerate(words):
+                    self.send_sse("token", {"text": word if i == 0 else " " + word})
+            except (BrokenPipeError, ConnectionResetError):
+                return
+
+        # Update session history
+        if session_id and full_text:
+            with _sessions_lock:
+                hist = _sessions.setdefault(session_id, [])
+                hist.append({"role": "user", "content": message})
+                hist.append({"role": "assistant", "content": full_text})
+                _sessions[session_id] = hist[-MAX_HISTORY:]
+
+        try:
             self.send_sse("done", {
-                "sessionId": agent_run.get("sessionId"),
-                "model": agent_run.get("model"),
-                "provider": agent_run.get("provider"),
-                "durationMs": agent_run.get("durationMs"),
-                "fallbackUsed": not agent_run.get("ok", False),
+                "sessionId": session_id,
+                "fallbackUsed": fallback_used,
+                "model": "rule-based" if fallback_used else provider_used.get("name", "unknown"),
             })
         except (BrokenPipeError, ConnectionResetError):
-            return
+            pass
 
     def log_message(self, format, *args):
         return super().log_message(format, *args)

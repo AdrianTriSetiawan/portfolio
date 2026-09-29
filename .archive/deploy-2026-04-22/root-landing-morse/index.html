@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>adriandev.online</title>
+    <meta
+      name="description"
+      content="A simple looping morse landing page for adriandev.online."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/landing.css?v=11" />
+  </head>
+  <body>
+    <main class="landing-shell" aria-labelledby="morse-label">
+      <div class="landing-noise" aria-hidden="true"></div>
+      <div class="landing-vignette" aria-hidden="true"></div>
+      <div class="landing-orbit orbit-a" aria-hidden="true"></div>
+      <div class="landing-orbit orbit-b" aria-hidden="true"></div>
+      <section class="morse-stage">
+        <p class="stage-label">adriandev.online</p>
+        <h1 id="morse-label" class="visually-hidden">I love you in morse code</h1>
+        <div class="phase-track" aria-hidden="true">
+          <span class="phase-mark is-active">I</span>
+          <span class="phase-mark">II</span>
+          <span class="phase-mark">III</span>
+          <span class="phase-mark">IV</span>
+          <span class="phase-mark">V</span>
+          <span class="phase-mark">VI</span>
+        </div>
+        <div class="morse-wrap" aria-hidden="true">
+          <div class="morse-line" id="morse-line"></div>
+        </div>
+        <span class="morse-caret" aria-hidden="true"></span>
+      </section>
+
+      <div class="audio-controls">
+        <label class="volume-control" for="volume-slider">
+          <span>Volume</span>
+          <div class="volume-rail">
+            <i class="volume-star star-left" aria-hidden="true"></i>
+            <input id="volume-slider" type="range" min="0" max="100" step="1" value="50" />
+            <i class="volume-star star-right" aria-hidden="true"></i>
+          </div>
+          <strong id="volume-readout">50%</strong>
+        </label>
+      </div>
+
+      <p class="audio-credit">Clair de Lune</p>
+    </main>
+
+    <audio
+      id="bgm"
+      preload="metadata"
+      autoplay
+      loop
+      playsinline
+      crossorigin="anonymous"
+      src="https://upload.wikimedia.org/wikipedia/commons/b/be/Clair_de_lune_%28Claude_Debussy%29_Suite_bergamasque.ogg"
+    ></audio>
+
+    <script type="module" src="/landing.js?v=11"></script>
+  </body>
+</html>
