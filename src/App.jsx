@@ -27,6 +27,13 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Clear joystick input when modal opens
+  useEffect(() => {
+    if (activeModal) {
+      setJoystickInput({ x: 0, y: 0 });
+    }
+  }, [activeModal]);
+
   const handleProximityChange = useCallback((station) => {
     setCurrentStation(station);
   }, []);
@@ -34,7 +41,7 @@ export default function App() {
   const handleOpenStation = useCallback((station) => {
     if (!station) return;
     audio.playClick();
-
+    setJoystickInput({ x: 0, y: 0 });
     switch (station.id) {
       case 'projects':
         setActiveModal('projects');

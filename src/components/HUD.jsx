@@ -41,6 +41,9 @@ export default function HUD({
 
   const handleStickDown = (e) => {
     e.preventDefault();
+    try {
+      e.target.setPointerCapture(e.pointerId);
+    } catch (_) {}
     if (!stickRef.current) return;
     const rect = stickRef.current.getBoundingClientRect();
     stickCenterRef.current = {
@@ -76,7 +79,12 @@ export default function HUD({
     }
   };
 
-  const handleStickUp = () => {
+  const handleStickUp = (e) => {
+    try {
+      if (e?.target?.releasePointerCapture && e?.pointerId !== undefined) {
+        e.target.releasePointerCapture(e.pointerId);
+      }
+    } catch (_) {}
     setIsTouchingStick(false);
     if (knobRef.current) {
       knobRef.current.style.transform = 'translate(0px, 0px)';
@@ -85,6 +93,11 @@ export default function HUD({
       onJoystickMove({ x: 0, y: 0 });
     }
   };
+
+  useEffect(() => {
+    window.addEventListener('pointerup', handleStickUp);
+    return () => window.removeEventListener('pointerup', handleStickUp);
+  }, [onJoystickMove]);
 
   const stationIcons = {
     sanctuary: Compass,
