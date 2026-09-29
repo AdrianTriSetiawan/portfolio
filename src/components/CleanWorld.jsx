@@ -165,149 +165,6 @@ function isPositionBlocked(x, z) {
   return false;
 }
 
-// --- 2. PROCEDURAL 3D ANIME GIRL HAIR & ACCESSORIES ---
-function createAnimeGirlHair() {
-  const hairGroup = new THREE.Group();
-  hairGroup.name = 'AnimeGirlHair';
-
-  const hairMat = new THREE.MeshStandardMaterial({
-    color: 0x1f1d26, // Silky dark charcoal-indigo anime hair
-    roughness: 0.42,
-    metalness: 0.15,
-  });
-
-  const ribbonMat = new THREE.MeshStandardMaterial({
-    color: 0xd62828, // Vibrant Japanese crimson red ribbon
-    roughness: 0.38,
-    metalness: 0.08,
-  });
-
-  const goldMat = new THREE.MeshStandardMaterial({
-    color: 0xf59e0b, // Warm gold kanzashi ornament
-    roughness: 0.28,
-    metalness: 0.85,
-  });
-
-  const sakuraPetalMat = new THREE.MeshStandardMaterial({
-    color: 0xffb7c5, // Sakura blossom pink
-    roughness: 0.45,
-    metalness: 0.05,
-  });
-
-  // 1. Back & Crown Hair Volume (Generous full anime hair cap)
-  const capGeo = new THREE.SphereGeometry(0.48, 24, 20, 0, Math.PI * 2, 0, Math.PI * 0.88);
-  const capMesh = new THREE.Mesh(capGeo, hairMat);
-  capMesh.position.set(0, 0.06, -0.05);
-  capMesh.scale.set(1.04, 1.08, 1.12);
-  capMesh.castShadow = true;
-  hairGroup.add(capMesh);
-
-  // 2. Front Bangs / Fringe (Curved soft anime fringe covering forehead)
-  const bangsCount = 9;
-  for (let i = 0; i < bangsCount; i++) {
-    const angle = (i - (bangsCount - 1) / 2) * 0.22;
-    const bangGeo = new THREE.ConeGeometry(0.075, 0.34, 8);
-    bangGeo.rotateX(Math.PI);
-    const bangMesh = new THREE.Mesh(bangGeo, hairMat);
-    const x = Math.sin(angle) * 0.32;
-    const z = Math.cos(angle) * 0.36;
-    bangMesh.position.set(x, 0.05, z + 0.02);
-    bangMesh.rotation.set(0.36, 0, -angle * 0.7);
-    bangMesh.castShadow = true;
-    hairGroup.add(bangMesh);
-  }
-
-  // 3. Side Locks (Hime cut bangs framing cheeks down to collar)
-  [-1, 1].forEach((side) => {
-    const lockGeo = new THREE.ConeGeometry(0.085, 0.68, 8);
-    lockGeo.rotateX(Math.PI);
-    const lockMesh = new THREE.Mesh(lockGeo, hairMat);
-    lockMesh.position.set(side * 0.36, -0.1, 0.18);
-    lockMesh.rotation.set(0.12, 0, side * 0.16);
-    lockMesh.castShadow = true;
-    hairGroup.add(lockMesh);
-
-    // Cute red ribbon tie at side
-    const tieGeo = new THREE.TorusGeometry(0.045, 0.016, 8, 16);
-    const tieMesh = new THREE.Mesh(tieGeo, ribbonMat);
-    tieMesh.position.set(side * 0.35, -0.18, 0.18);
-    hairGroup.add(tieMesh);
-  });
-
-  // 4. Twin Tails / Flowing Pigtails
-  [-1, 1].forEach((side) => {
-    const tailGroup = new THREE.Group();
-    tailGroup.position.set(side * 0.35, 0.22, -0.2);
-    tailGroup.rotation.set(-0.2, side * 0.3, side * 0.35);
-
-    // Big red ribbon bow
-    const bowCenterGeo = new THREE.SphereGeometry(0.045, 12, 12);
-    const bowCenter = new THREE.Mesh(bowCenterGeo, ribbonMat);
-    tailGroup.add(bowCenter);
-
-    [-1, 1].forEach((wing) => {
-      const wingGeo = new THREE.ConeGeometry(0.07, 0.18, 8);
-      wingGeo.rotateZ((wing * Math.PI) / 2);
-      const wingMesh = new THREE.Mesh(wingGeo, ribbonMat);
-      wingMesh.position.set(wing * 0.1, 0, 0);
-      tailGroup.add(wingMesh);
-    });
-
-    const ribbonTailGeo = new THREE.CylinderGeometry(0.018, 0.035, 0.3, 6);
-    const ribbonTail = new THREE.Mesh(ribbonTailGeo, ribbonMat);
-    ribbonTail.position.set(0, -0.16, 0);
-    ribbonTail.rotation.z = side * 0.22;
-    tailGroup.add(ribbonTail);
-
-    // Flowing hair strands of twin tail
-    const strandCount = 4;
-    for (let s = 0; s < strandCount; s++) {
-      const strandGeo = new THREE.ConeGeometry(0.075 - s * 0.01, 0.85 + s * 0.1, 8);
-      strandGeo.rotateX(Math.PI);
-      const strandMesh = new THREE.Mesh(strandGeo, hairMat);
-      strandMesh.position.set((s - 1.5) * 0.045, -0.42 - s * 0.035, -s * 0.04);
-      strandMesh.rotation.set(0.16, 0, side * (0.16 + s * 0.05));
-      strandMesh.castShadow = true;
-      tailGroup.add(strandMesh);
-    }
-
-    hairGroup.add(tailGroup);
-  });
-
-  // 5. Traditional Japanese Sakura Flower Hairpin (Kanzashi)
-  const kanzashiGroup = new THREE.Group();
-  kanzashiGroup.position.set(0.31, 0.22, 0.08);
-  kanzashiGroup.rotation.set(0.2, 0.4, -0.3);
-
-  const pinGeo = new THREE.CylinderGeometry(0.01, 0.006, 0.3, 8);
-  const pinMesh = new THREE.Mesh(pinGeo, goldMat);
-  pinMesh.rotation.z = Math.PI / 3;
-  kanzashiGroup.add(pinMesh);
-
-  for (let p = 0; p < 5; p++) {
-    const angle = (p * Math.PI * 2) / 5;
-    const petalGeo = new THREE.SphereGeometry(0.04, 8, 8);
-    petalGeo.scale(1.0, 0.38, 1.8);
-    const petalMesh = new THREE.Mesh(petalGeo, sakuraPetalMat);
-    petalMesh.position.set(Math.cos(angle) * 0.048, Math.sin(angle) * 0.048, 0.01);
-    petalMesh.rotation.z = angle;
-    kanzashiGroup.add(petalMesh);
-  }
-
-  const centerGeo = new THREE.SphereGeometry(0.02, 10, 10);
-  const centerMesh = new THREE.Mesh(centerGeo, goldMat);
-  centerMesh.position.z = 0.03;
-  kanzashiGroup.add(centerMesh);
-
-  const tasselGeo = new THREE.CylinderGeometry(0.005, 0.014, 0.15, 6);
-  const tasselMesh = new THREE.Mesh(tasselGeo, goldMat);
-  tasselMesh.position.set(0.02, -0.1, 0.02);
-  kanzashiGroup.add(tasselMesh);
-
-  hairGroup.add(kanzashiGroup);
-
-  return hairGroup;
-}
 
 export default function CleanWorld({
   onProximityChange,
@@ -604,7 +461,7 @@ export default function CleanWorld({
 
     // Load World Models (Models.glb)
     gltfLoader.load(
-      '/models/Models.glb?v=ryokan_v5',
+      '/models/Models.glb?v=clean_v1',
       (gltf) => {
         if (isDisposed) return;
         const worldScene = gltf.scene;
@@ -616,7 +473,21 @@ export default function CleanWorld({
             if (child.name.includes('_Sensor')) {
               child.visible = false;
             }
-            if (child.material) {
+
+            // Transform tree foliage into blooming Japanese Cherry Blossoms
+            const isFoliage =
+              child.name.toLowerCase().includes('tree') ||
+              child.name.toLowerCase().includes('leaf') ||
+              child.name.toLowerCase().includes('leaves') ||
+              (child.material && child.material.name && child.material.name.toLowerCase().includes('tree'));
+
+            if (isFoliage) {
+              child.material = new THREE.MeshStandardMaterial({
+                color: 0xffb7c5, // Blooming Japanese Sakura Pink (#ffb7c5)
+                roughness: 0.85,
+                metalness: 0.05,
+              });
+            } else if (child.material) {
               child.material.roughness = Math.max(0.65, child.material.roughness || 0.7);
               child.material.metalness = Math.min(0.08, child.material.metalness || 0);
             }
@@ -629,9 +500,9 @@ export default function CleanWorld({
       (err) => console.error('Failed to load Models.glb:', err)
     );
 
-    // Load Cute Japanese Anime Girl (Player.glb)
+    // Load Player Avatar (Player.glb)
     gltfLoader.load(
-      '/models/Player.glb?v=anime_girl_v5',
+      '/models/Player.glb?v=clean_v1',
       (gltf) => {
         if (isDisposed) return;
         const charScene = gltf.scene;
@@ -644,13 +515,6 @@ export default function CleanWorld({
             child.receiveShadow = true;
           }
         });
-
-        // Attach Procedural 3D Anime Girl Hair & Ribbon Bows to Head Bone
-        const headBone = charScene.getObjectByName('mixamorig:Head');
-        if (headBone) {
-          const animeHair = createAnimeGirlHair();
-          headBone.add(animeHair);
-        }
 
         player.mesh = charScene;
         player.group.add(charScene);
