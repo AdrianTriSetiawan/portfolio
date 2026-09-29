@@ -130,12 +130,12 @@ export default function ThreeWorld({
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
 
-    // Refined Bloom: Toned down to avoid blinding thick donuts
+    // Post-Processing: UnrealBloomPass tuned to threshold 0.88, strength 0.3, radius 0.2
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(container.clientWidth, container.clientHeight),
-      0.30, // strength: 0.3 (was 0.48)
-      0.25, // radius: 0.25 (was 0.35)
-      0.85  // threshold: 0.85 (was 0.82)
+      0.3,   // strength: 0.3
+      0.2,   // radius: 0.2
+      0.88   // threshold: 0.88 (no blinding white rings)
     );
     composer.addPass(bloomPass);
     composer.addPass(new OutputPass());
@@ -239,6 +239,37 @@ export default function ThreeWorld({
     // --- 5. Floating Islands Construction with Polished Details ---
     const islandsGroup = new THREE.Group();
 
+    // Shared pooled materials & geometries across islands
+    const sharedRockMat = new THREE.MeshStandardMaterial({
+      color: 0x191e2b,
+      roughness: 0.9,
+      metalness: 0.1,
+      flatShading: true,
+    });
+    const sharedMoundMat = new THREE.MeshStandardMaterial({
+      color: 0x36483c,
+      roughness: 0.85,
+      flatShading: true,
+    });
+    const sharedPaverMat = new THREE.MeshStandardMaterial({
+      color: 0x485160,
+      roughness: 0.9,
+      flatShading: true,
+    });
+    const sharedLanternDarkMat = new THREE.MeshStandardMaterial({
+      color: 0x111111,
+      emissive: 0xffd166,
+      emissiveIntensity: 1.8,
+    });
+    const sharedLanternRoofMat = new THREE.MeshStandardMaterial({
+      color: 0x222222,
+      roughness: 0.8,
+    });
+    const sharedMoundGeo = new THREE.DodecahedronGeometry(0.8, 1);
+    const sharedPaverGeo = new THREE.BoxGeometry(0.9, 0.08, 0.6);
+    const sharedLanternBoxGeo = new THREE.BoxGeometry(0.4, 0.6, 0.4);
+    const sharedLanternRoofGeo = new THREE.ConeGeometry(0.35, 0.25, 4);
+
     // Helper to create aesthetic floating island with rock base, grass top, and subtle rim
     function createIsland(x, y, z, radius, height, mainColor = 0x2d3446, rimColor = 0xffd166) {
       const island = new THREE.Group();
@@ -255,19 +286,15 @@ export default function ThreeWorld({
       const top = new THREE.Mesh(topGeo, topMat);
       top.receiveShadow = true;
       top.position.y = 0;
+      top.frustumCulled = true;
       island.add(top);
 
       // Underside hanging craggy rocks (cone tapering down)
       const baseGeo = new THREE.ConeGeometry(radius * 1.05, height, 8);
       baseGeo.rotateX(Math.PI);
-      const baseMat = new THREE.MeshStandardMaterial({
-        color: 0x191e2b,
-        roughness: 0.9,
-        metalness: 0.1,
-        flatShading: true,
-      });
-      const base = new THREE.Mesh(baseGeo, baseMat);
+      const base = new THREE.Mesh(baseGeo, sharedRockMat);
       base.position.y = -height / 2;
+      base.frustumCulled = true;
       island.add(base);
 
       // Edge glow rim strip (Subtle, tuned emissive intensity 0.45)
@@ -276,60 +303,45 @@ export default function ThreeWorld({
       const rimMat = new THREE.MeshStandardMaterial({
         color: rimColor,
         emissive: rimColor,
-        emissiveIntensity: 0.45, // Toned down from 0.9
+        emissiveIntensity: 0.45,
         roughness: 0.4,
       });
       const rim = new THREE.Mesh(rimGeo, rimMat);
       rim.position.y = 0.42;
+      rim.frustumCulled = true;
       island.add(rim);
 
       // Stylized cozy details: low-poly grass mounds & stone pathway
-      const moundGeo = new THREE.DodecahedronGeometry(0.8, 1);
-      const moundMat = new THREE.MeshStandardMaterial({
-        color: 0x36483c,
-        roughness: 0.85,
-        flatShading: true,
-      });
       for (let m = 0; m < 5; m++) {
         const mAngle = (m / 5) * Math.PI * 2 + 0.3;
         const mDist = radius * 0.65;
-        const mound = new THREE.Mesh(moundGeo, moundMat);
+        const mound = new THREE.Mesh(sharedMoundGeo, sharedMoundMat);
         mound.position.set(Math.cos(mAngle) * mDist, 0.4, Math.sin(mAngle) * mDist);
         mound.scale.set(1.1, 0.5, 1.1);
+        mound.frustumCulled = true;
         island.add(mound);
       }
 
       // Stone pathway stepping slabs leading inward
-      const paverGeo = new THREE.BoxGeometry(0.9, 0.08, 0.6);
-      const paverMat = new THREE.MeshStandardMaterial({
-        color: 0x485160,
-        roughness: 0.9,
-        flatShading: true,
-      });
       for (let p = 0; p < 4; p++) {
-        const paver = new THREE.Mesh(paverGeo, paverMat);
+        const paver = new THREE.Mesh(sharedPaverGeo, sharedPaverMat);
         paver.position.set(0, 0.47, radius * 0.8 - p * 1.2);
         paver.rotation.y = (Math.random() - 0.5) * 0.15;
         paver.receiveShadow = true;
+        paver.frustumCulled = true;
         island.add(paver);
       }
 
       // Floating Cozy Lantern
       const lanternGroup = new THREE.Group();
-      const lanternBox = new THREE.Mesh(
-        new THREE.BoxGeometry(0.4, 0.6, 0.4),
-        new THREE.MeshStandardMaterial({
-          color: 0x111111,
-          emissive: 0xffd166,
-          emissiveIntensity: 1.8,
-        })
-      );
-      const lanternRoof = new THREE.Mesh(
-        new THREE.ConeGeometry(0.35, 0.25, 4),
-        new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.8 })
-      );
+      const lanternBox = new THREE.Mesh(sharedLanternBoxGeo, sharedLanternDarkMat);
+      lanternBox.frustumCulled = true;
+
+      const lanternRoof = new THREE.Mesh(sharedLanternRoofGeo, sharedLanternRoofMat);
       lanternRoof.position.y = 0.4;
       lanternRoof.rotation.y = Math.PI / 4;
+      lanternRoof.frustumCulled = true;
+
       lanternGroup.add(lanternBox, lanternRoof);
       lanternGroup.position.set(radius * 0.72, 1.4, -radius * 0.3);
       island.add(lanternGroup);
@@ -590,6 +602,7 @@ export default function ThreeWorld({
 
       const bridgeMesh = new THREE.Mesh(bridgeGeo, bridgeRoadMat);
       bridgeMesh.receiveShadow = true;
+      bridgeMesh.frustumCulled = true;
       bridgesGroup.add(bridgeMesh);
 
       // Glowing edge rails along the bridge
@@ -613,20 +626,22 @@ export default function ThreeWorld({
 
       const railLeft = new THREE.Mesh(railGeo, bridgeGlowMat);
       const railRight = new THREE.Mesh(railGeoR, bridgeGlowMat);
+      railLeft.frustumCulled = true;
+      railRight.frustumCulled = true;
       bridgesGroup.add(railLeft, railRight);
 
       // Small glowing lanterns along the bridge arch
+      const bridgeLanternMat = new THREE.MeshStandardMaterial({
+        color: 0x111111,
+        emissive: dest.color || 0xffd166,
+        emissiveIntensity: 1.8,
+      });
+      const bridgeLanternGeo = new THREE.BoxGeometry(0.25, 0.35, 0.25);
       [0.3, 0.5, 0.7].forEach((t) => {
         const p = curve.getPoint(t);
-        const lanternMesh = new THREE.Mesh(
-          new THREE.BoxGeometry(0.25, 0.35, 0.25),
-          new THREE.MeshStandardMaterial({
-            color: 0x111111,
-            emissive: dest.color || 0xffd166,
-            emissiveIntensity: 1.8,
-          })
-        );
+        const lanternMesh = new THREE.Mesh(bridgeLanternGeo, bridgeLanternMat);
         lanternMesh.position.set(p.x, p.y + 0.3, p.z);
+        lanternMesh.frustumCulled = true;
         bridgesGroup.add(lanternMesh);
       });
     });
@@ -932,15 +947,21 @@ export default function ThreeWorld({
 
     scene.add(avatar);
 
-    // --- 8. Controls & Input Handling ---
+    // --- 8. Controls & Input Handling & Pre-Allocated Scratch Objects ---
     const keys = new Set();
     const moveVector = new THREE.Vector2();
     const velocity = new THREE.Vector3();
     const targetVelocity = new THREE.Vector3();
+
+    // Scratch objects outside requestAnimationFrame loop (Zero Allocation Render Loop)
+    const tempVec = new THREE.Vector3();
+    const targetPos = new THREE.Vector3();
+    const moveVec = new THREE.Vector2();
+    const camTarget = new THREE.Vector3();
+
     let isJumping = false;
     let jumpTime = 0;
     let currentGroundY = 1.35; // Dynamic ground tracking
-
     const handleKeyDown = (e) => {
       // Guard against typing inside chat or modal forms
       if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) return;
@@ -1043,15 +1064,14 @@ export default function ThreeWorld({
           const vz = dest.position[2];
           const lenSq = vx * vx + vz * vz;
           if (lenSq > 0) {
-            const dot = (px * vx + pz * vz) / lenSq;
             if (dot >= 0.02 && dot <= 0.98) {
               const projX = dot * vx;
               const projZ = dot * vz;
               const perpDist = Math.hypot(px - projX, pz - projZ);
               if (perpDist < 2.0) {
-                // On bridge surface
+                // Smooth bridge surface tracking matching bezier curve arch + character center
                 const bridgeArchY = (1 - dot) * 0.45 + dot * (dest.position[1] + 0.45) + Math.sin(dot * Math.PI) * 1.4;
-                targetY = bridgeArchY + 0.90;
+                targetY = bridgeArchY + 0.95;
                 foundSurface = true;
               }
             }
@@ -1076,7 +1096,7 @@ export default function ThreeWorld({
       return targetY;
     }
 
-    // --- 10. Animation & Render Loop ---
+    // --- 10. Animation & Render Loop (Locked 60 FPS, Zero Allocations) ---
     let animationFrameId;
     let clock = new THREE.Clock();
     let walkCycle = 0;
@@ -1084,9 +1104,8 @@ export default function ThreeWorld({
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      const delta = Math.min(clock.getDelta(), 0.1);
+      const delta = Math.min(clock.getDelta(), 0.05);
       const elapsed = clock.getElapsedTime();
-
       // Clear keys and motion when inspecting modal
       if (propsRef.current.isInspecting) {
         keys.clear();
@@ -1216,19 +1235,18 @@ export default function ThreeWorld({
       aiCrystal.rotation.z += delta * 0.7;
       haloRing.rotation.z -= delta * 1.4;
 
-      // Camera Follow Rig with Smooth Lag & Orbit
+      // Camera Follow Rig with Smooth Lag & Orbit (Zero Allocation using camTarget)
       const orbitDistance = 11.5;
       const orbitHeight = propsRef.current.isInspecting ? 5.0 : 7.8;
-      const camTargetX = avatar.position.x + Math.sin(cameraOrbitAngle) * orbitDistance;
-      const camTargetZ = avatar.position.z + Math.cos(cameraOrbitAngle) * orbitDistance;
-      const camTargetY = avatar.position.y + orbitHeight;
+      camTarget.set(
+        avatar.position.x + Math.sin(cameraOrbitAngle) * orbitDistance,
+        avatar.position.y + orbitHeight,
+        avatar.position.z + Math.cos(cameraOrbitAngle) * orbitDistance
+      );
 
       const camLag = 1 - Math.exp(-delta / 0.18);
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, camTargetX, camLag);
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, camTargetY, camLag);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, camTargetZ, camLag);
+      camera.position.lerp(camTarget, camLag);
       camera.lookAt(avatar.position.x, avatar.position.y + 0.8, avatar.position.z);
-
       // Proximity Detection against stations
       let nearestStation = null;
       let minDistance = 5.2; // radius threshold

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ShrineModalFrame from './ShrineModalFrame';
-import { Send, Bot, User, Sparkles, RefreshCw } from 'lucide-react';
+import { Send, Bot, User, Sparkles, RefreshCw, Terminal, CheckCircle2 } from 'lucide-react';
 import { audio } from '../../audio/LoFiAudioEngine';
 
 const STARTER_PROMPTS = [
-  'Tell me about FaceGate and how the CV pipeline works.',
-  'What is Adrian’s technical stack and background?',
-  'How was EProcMon built for BUMN tenders?',
-  'Can Adrian build a custom AI or fullstack system for me?',
+  'Explain FaceGate’s RTSP ingestion, anti-spoofing heuristics, and pgvector cosine search.',
+  'How was EProcMon designed to reliably monitor 150+ Indonesian BUMN tender portals?',
+  'What is Adrian’s technical stack for real-time computer vision and asynchronous backends?',
+  'What architecture did Adrian use for the industrial manufacturing procurement suite?',
 ];
 
 export default function AIChatModal({ onClose }) {
@@ -15,7 +15,7 @@ export default function AIChatModal({ onClose }) {
     {
       role: 'assistant',
       content:
-        'Greetings, Traveler! I am Lunaria, the Celestial AI familiar of the Sanctuary. Ask me anything about Adrian’s engineering projects, computer vision architecture, or tech stack!',
+        'Hello! I am Lunaria, the AI conversational assistant for Adrian’s portfolio. You can query me on Adrian’s computer vision pipelines (FaceGate), automated crawler architectures (EProcMon), microservices (FastAPI/Bun), or fullstack 3D systems.',
     },
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -104,13 +104,13 @@ export default function AIChatModal({ onClose }) {
 
       audio.playZoneChime();
     } catch (err) {
-      console.warn('AI Chat request error, applying fallback:', err);
+      console.warn('AI Chat request fallback:', err);
       setMessages((prev) => {
         const next = [...prev];
         next[next.length - 1] = {
           role: 'assistant',
           content:
-            "Adrian is a Fullstack & AI R&D Engineer specializing in Computer Vision (OpenCV, PyTorch), high-throughput FastAPI/Python microservices, modern React/Vue web systems, and autonomous agent systems. You can reach him directly at adriansetiawan26@gmail.com!",
+            "Adrian Tri Setiawan is a Fullstack & AI R&D Engineer specializing in Computer Vision (OpenCV, 512D ArcFace embeddings, pgvector), high-throughput FastAPI/Python & Bun/Elysia microservices, modern reactive frontends (React, SvelteKit, Vue 3, Three.js), and autonomous web crawlers. Direct inquiries can be sent to adriansetiawan26@gmail.com!",
         };
         return next;
       });
@@ -121,100 +121,94 @@ export default function AIChatModal({ onClose }) {
 
   return (
     <ShrineModalFrame
-      stationTag="AI COMPANION SHRINE // LADY LUNARIA"
+      stationTag="AI COMPANION // LUNARIA STREAMING ENGINE"
       accentColor="purple"
-      maxWidth="max-w-3xl"
+      maxWidth="max-w-4xl"
       onClose={onClose}
     >
-      <div className="flex-1 flex flex-col overflow-hidden min-h-[440px]">
-        {/* Chat History Messages */}
-        <div className="flex-1 p-5 overflow-y-auto space-y-4 bg-slate-950/40">
-          {messages.map((msg, idx) => {
-            const isUser = msg.role === 'user';
-            return (
-              <div
-                key={idx}
-                className={`flex gap-3 text-xs sm:text-sm ${
-                  isUser ? 'justify-end' : 'justify-start'
-                }`}
-              >
-                {!isUser && (
-                  <div className="w-8 h-8 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 shrink-0 shadow-md">
-                    <Bot className="w-4 h-4" />
-                  </div>
-                )}
-
-                <div
-                  className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed ${
-                    isUser
-                      ? 'bg-purple-600 text-white rounded-br-sm shadow-md font-sans'
-                      : 'bg-slate-900/90 border border-slate-800 text-slate-200 rounded-bl-sm font-sans'
-                  }`}
-                >
-                  {!isUser && !msg.content && isStreaming ? (
-                    <div className="flex items-center gap-1.5 text-xs text-purple-300 font-mono py-1">
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      <span>Channeling neural response from Lunaria...</span>
-                    </div>
-                  ) : (
-                    <div className="whitespace-pre-wrap">{msg.content}</div>
-                  )}
-                </div>
-
-                {isUser && (
-                  <div className="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 shrink-0">
-                    <User className="w-4 h-4" />
-                  </div>
-                )}
-              </div>
-            );
-          })}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Starter Prompts */}
-        {messages.length <= 2 && (
-          <div className="px-5 py-2 flex flex-wrap gap-1.5 border-t border-slate-800/60 bg-slate-950/60">
-            {STARTER_PROMPTS.map((prompt) => (
+      <div className="flex-1 flex flex-col overflow-hidden bg-slate-950/70 min-h-[500px]">
+        {/* Curated Technical Prompt Chips */}
+        <div className="p-3 border-b border-slate-800/80 bg-slate-900/40">
+          <div className="text-[11px] font-mono text-slate-400 mb-2 flex items-center gap-1.5">
+            <Terminal className="w-3 h-3 text-purple-400" />
+            <span>Curated Engineering Queries:</span>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
+            {STARTER_PROMPTS.map((prompt, idx) => (
               <button
-                key={prompt}
+                key={idx}
                 onClick={() => handleSend(prompt)}
                 disabled={isStreaming}
-                className="text-[11px] font-mono px-3 py-1.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-purple-300 hover:text-white border border-purple-500/30 transition text-left"
+                className="shrink-0 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-purple-950/40 border border-slate-800 hover:border-purple-500/40 text-xs font-mono text-slate-300 hover:text-purple-200 transition-colors disabled:opacity-50 text-left"
               >
-                ✦ {prompt}
+                {prompt}
               </button>
             ))}
           </div>
-        )}
+        </div>
 
-        {/* Chat Input Bar */}
+        {/* Message Log */}
+        <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-4 font-mono text-xs sm:text-sm">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex gap-3 ${
+                msg.role === 'user' ? 'justify-end' : 'justify-start'
+              }`}
+            >
+              {msg.role === 'assistant' && (
+                <div className="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-400/40 flex items-center justify-center shrink-0 text-purple-300">
+                  <Bot className="w-4 h-4" />
+                </div>
+              )}
+
+              <div
+                className={`max-w-[85%] sm:max-w-[75%] p-3.5 rounded-xl border leading-relaxed ${
+                  msg.role === 'user'
+                    ? 'bg-purple-600/20 border-purple-500/40 text-purple-100'
+                    : 'bg-slate-900/80 border-slate-800 text-slate-200 shadow-sm'
+                }`}
+              >
+                {msg.content || (
+                  <span className="flex items-center gap-1.5 text-purple-300 animate-pulse font-mono text-xs">
+                    <RefreshCw className="w-3 h-3 animate-spin" /> Streaming response...
+                  </span>
+                )}
+              </div>
+
+              {msg.role === 'user' && (
+                <div className="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 text-slate-300">
+                  <User className="w-4 h-4" />
+                </div>
+              )}
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Input Bar */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSend();
           }}
-          className="p-3 sm:p-4 border-t border-slate-800 bg-slate-950/80 flex items-center gap-2"
+          className="p-3 border-t border-slate-800/80 bg-slate-900/60 flex items-center gap-2"
         >
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder={
-              isStreaming
-                ? 'Lunaria is channeling thoughts...'
-                : 'Ask Lunaria about Adrian’s engineering, stack, or experience...'
-            }
+            placeholder="Query technical details, system architecture, or tech stack..."
             disabled={isStreaming}
-            className="flex-1 bg-slate-900 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-purple-400 transition font-sans"
+            className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-400 font-mono transition-colors"
           />
           <button
             type="submit"
             disabled={!inputValue.trim() || isStreaming}
-            className="p-2.5 sm:px-4 sm:py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white font-mono text-xs font-bold shadow-md transition-transform active:scale-95 flex items-center gap-1.5"
+            className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:bg-slate-800 text-white font-mono text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-50"
           >
-            <Send className="w-4 h-4" />
-            <span className="hidden sm:inline">Send</span>
+            <span>Send</span>
+            <Send className="w-3.5 h-3.5" />
           </button>
         </form>
       </div>

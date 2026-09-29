@@ -1,146 +1,153 @@
 import React from 'react';
 import ShrineModalFrame from './ShrineModalFrame';
 import {
-  Compass,
+  Briefcase,
   MapPin,
-  Sparkles,
-  Milestone,
-  ShieldCheck,
   Calendar,
-  Flame,
-  Star,
+  Layers,
+  CheckCircle2,
+  Terminal,
+  Activity,
+  Award,
 } from 'lucide-react';
 import profileData from '../../../content/profile.json';
 
-const CHRONICLES = [
+const CAREER_TRACK = [
   {
     period: '2024 — Present',
-    level: 'Lv. 90 → Lv. 99',
-    title: 'Fullstack Engineer & AI R&D Specialist',
-    realm: 'Independent Engineering & Institutional Systems',
-    description:
-      'Engineered FaceGate (automated RTSP CCTV face recognition attendance with 512-d embeddings), EProcMon (24/7 BUMN tender monitoring with automated scrapers & AI classification), and custom assistant systems.',
-    loot: ['FastAPI', 'OpenCV', 'Bun', 'SvelteKit', 'PostgreSQL', 'AI Agents'],
-    achievement: 'Engineered multi-tenant enterprise biometric & monitoring systems',
+    role: 'Lead Systems & AI R&D Engineer',
+    organization: 'Independent Engineering & Institutional Systems',
+    location: 'Surabaya / Jakarta, Indonesia',
+    summary:
+      'Architected mission-critical enterprise systems spanning distributed computer vision, autonomous crawlers, and high-concurrency microservices.',
+    deliverables: [
+      'Engineered FaceGate biometric attendance engine: Sub-280ms p95 latency, 512D ArcFace embeddings, pgvector cosine search, multi-camera RTSP ingestion watchdog.',
+      'Developed EProcMon: 24/7 scraping pipeline across 150+ Indonesian BUMN and LPSE portals, utilizing Bun, Elysia.js, Supabase Realtime, and Discord event dispatchers.',
+      'Constructed Lunaria AI assistant framework with structured token streaming and dynamic tool execution.',
+    ],
+    technologies: ['FastAPI', 'Python', 'OpenCV', 'Bun', 'Elysia.js', 'PostgreSQL', 'pgvector', 'SvelteKit', 'React'],
   },
   {
     period: '2023 — 2024',
-    level: 'Lv. 75 → Lv. 90',
-    title: 'Enterprise Web & Dashboard Architect',
-    realm: 'Industrial Manufacturing Systems',
-    description:
-      'Designed and deployed the Procurement Charting Suite for sugar factory operations, managing multi-tier data visualization, automated exports, and internal analytics tools.',
-    loot: ['Vue 3', 'Vite', 'Node.js', 'Express', 'PostgreSQL', 'Analytics'],
-    achievement: 'Optimized real-time factory procurement telemetry & exports',
+    role: 'Fullstack Systems Architect',
+    organization: 'Industrial Manufacturing Systems',
+    location: 'East Java, Indonesia',
+    summary:
+      'Spearheaded enterprise web dashboards and telemetry pipelines for industrial agro-manufacturing and factory procurement operations.',
+    deliverables: [
+      'Architected Procurement Charting Suite for sugar factory operations, unifying disparate supply chain intakes and yield metrics.',
+      'Engineered high-performance charting primitives with multi-format export engines (vector PNG, Excel/CSV pipelines).',
+      'Implemented role-based access control and audited logging pipelines for internal operational governance.',
+    ],
+    technologies: ['Vue 3', 'Vite', 'Node.js', 'Express', 'PostgreSQL', 'Apache ECharts', 'Docker'],
   },
   {
     period: '2021 — 2023',
-    level: 'Lv. 40 → Lv. 75',
-    title: 'Applied AI & Computer Science Foundations',
-    realm: 'Research & Applied Development',
-    description:
-      'Deep exploration in machine learning algorithms, deep learning models (YOLO, custom CNNs), desktop automation with Python and OpenCV, and distributed systems fundamentals.',
-    loot: ['Python', 'Deep Learning', 'PyTorch', 'IoT / RTSP', 'Computer Vision'],
-    achievement: 'Mastered computer vision pipelines & algorithmic problem solving',
+    role: 'Applied AI & Computer Science Foundations',
+    organization: 'Research & Applied Engineering',
+    location: 'Indonesia',
+    summary:
+      'Rigorous research and implementation of deep learning architectures, embedded camera automation, and distributed Linux environments.',
+    deliverables: [
+      'Developed desktop automation suites and camera monitoring tools utilizing OpenCV and custom socket protocols.',
+      'Conducted benchmarking and optimization of convolutional neural networks for object detection and face alignment.',
+      'Authored automated data processing pipelines for high-volume unstructured datasets.',
+    ],
+    technologies: ['Python 3', 'PyTorch', 'OpenCV', 'Linux', 'Git', 'AsyncIO'],
   },
 ];
 
 export default function ExperienceModal({ onClose }) {
   return (
     <ShrineModalFrame
-      stationTag="JOURNEY LOOKOUT // CAREER CHRONICLES"
+      stationTag="TRACK RECORD // CAREER MILESTONES"
       accentColor="orange"
+      maxWidth="max-w-5xl"
       onClose={onClose}
     >
-      <div className="p-5 sm:p-6 overflow-y-auto space-y-6">
-        {/* Archmage Character Card */}
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900/90 to-amber-950/30 border border-amber-500/30 space-y-3">
+      <div className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-6 bg-slate-900/40">
+        {/* Profile Summary Card */}
+        <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/90 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
-                <span>Adrian Tri Setiawan</span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono border border-amber-500/30">
-                  Lv.99 Archmage
-                </span>
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                Adrian Tri Setiawan
               </h2>
               <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-0.5 font-mono">
                 <MapPin className="w-3.5 h-3.5 text-rose-400" />
-                <span>{profileData.base || 'Surabaya / Jakarta, Indonesia'}</span>
+                <span>Surabaya / Jakarta, Indonesia</span>
+                <span className="text-slate-600">•</span>
+                <span className="text-emerald-400">Available for Contract & High-Impact Roles</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-700/80 text-xs font-mono text-emerald-300">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Available for High-Impact Projects</span>
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-300">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>Full-Lifecycle Production Track Record</span>
             </div>
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-            {profileData.intro ||
-              'Fullstack engineer moving at the intersection of web architecture, computer vision, deep learning, and practical R&D. Committed to building systems that feel alive, durable, and clean.'}
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Fullstack systems engineer operating at the convergence of high-throughput web architecture, distributed backends, computer vision, and autonomous agent systems. Known for rapid domain assimilation, uncompromising performance standards, and building resilient production software.
           </p>
-
-          <div className="pt-1 flex flex-wrap gap-2 text-xs font-mono">
-            <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
-              ✦ Fullstack Architecture
-            </span>
-            <span className="px-2.5 py-0.5 rounded-lg bg-purple-500/10 text-purple-300 border border-purple-500/20">
-              ✦ Deep Learning & Vision
-            </span>
-            <span className="px-2.5 py-0.5 rounded-lg bg-sky-500/10 text-sky-300 border border-sky-500/20">
-              ✦ Systems Engineering
-            </span>
-          </div>
         </div>
 
-        {/* Career Timeline Milestones */}
+        {/* Milestones Timeline */}
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-            <Milestone className="w-3.5 h-3.5 text-amber-400" />
-            <span>Chronological Campaign Quest Log</span>
+          <div className="flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-wider text-slate-400">
+            <Briefcase className="w-3.5 h-3.5 text-amber-400" />
+            <span>Career Milestones & Engineering Deployments</span>
           </div>
 
-          <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-amber-400 before:via-orange-500 before:to-slate-800">
-            {CHRONICLES.map((item, idx) => (
-              <div key={idx} className="relative group">
-                {/* Glowing Milestone Marker */}
-                <div className="absolute -left-[22px] top-1.5 w-3.5 h-3.5 rounded-full bg-amber-400 border-2 border-slate-900 shadow-[0_0_10px_#f59e0b] group-hover:scale-125 transition-transform" />
-
-                <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition space-y-2.5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-amber-300 px-2 py-0.5 rounded bg-amber-500/15 border border-amber-400/30">
-                        {item.period}
-                      </span>
-                      <span className="text-[11px] font-mono text-emerald-400 font-bold">
-                        [{item.level}]
-                      </span>
-                    </div>
-                    <span className="text-xs font-mono text-slate-400">{item.realm}</span>
-                  </div>
-
+          <div className="space-y-4">
+            {CAREER_TRACK.map((exp, idx) => (
+              <div
+                key={idx}
+                className="p-5 rounded-xl bg-slate-950/60 border border-slate-800/80 hover:border-slate-700/90 transition-colors space-y-3"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <div>
-                    <h3 className="font-bold text-sm text-white tracking-wide">{item.title}</h3>
-                    <p className="text-xs text-slate-300 leading-relaxed mt-1">{item.description}</p>
+                    <span className="text-xs font-mono font-bold text-amber-300 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-400/30">
+                      {exp.period}
+                    </span>
+                    <h3 className="font-bold text-base text-white mt-1">
+                      {exp.role}
+                    </h3>
+                    <div className="text-xs font-mono text-slate-400">
+                      {exp.organization} — {exp.location}
+                    </div>
                   </div>
+                </div>
 
-                  {/* Achievement Banner */}
-                  <div className="p-2 rounded-xl bg-slate-950/60 border border-slate-800 flex items-center gap-2 text-xs font-mono text-amber-200">
-                    <Star className="w-3 h-3 text-amber-400 fill-current shrink-0" />
-                    <span><b>Achievement:</b> {item.achievement}</span>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  {exp.summary}
+                </p>
+
+                {/* Key Deliverables Bullet Points */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-400">
+                    Key Deliverables & Verified Impact:
                   </div>
-
-                  {/* Loot Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {item.loot.map((t) => (
-                      <span
-                        key={t}
-                        className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800/80 border border-slate-700 text-slate-300"
-                      >
-                        {t}
-                      </span>
+                  <ul className="space-y-1 pl-1">
+                    {exp.deliverables.map((item, dIdx) => (
+                      <li key={dIdx} className="text-xs text-slate-300 flex items-start gap-2">
+                        <span className="text-emerald-400 font-bold mt-0.5">›</span>
+                        <span>{item}</span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
+                </div>
+
+                {/* Technologies */}
+                <div className="pt-2 flex flex-wrap gap-1.5 border-t border-slate-800/80">
+                  {exp.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800/50 text-slate-300 border border-slate-700/60"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
