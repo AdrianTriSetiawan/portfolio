@@ -409,3 +409,38 @@ section[id], footer[id] {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 1);
 }
+
+/* Japanese Sakura Theme Animations */
+@keyframes petalDrift {
+  0% {
+    transform: translateY(0vh) translateX(0vw) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(115vh) translateX(25vw) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-petal-drift {
+  animation: petalDrift 8s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 20s linear infinite;
+}

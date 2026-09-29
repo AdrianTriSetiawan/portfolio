@@ -1,0 +1,72 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="160" y1="88" x2="1094" y2="728" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E1512"/>
+      <stop offset="0.52" stop-color="#101614"/>
+      <stop offset="1" stop-color="#090B0C"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="224" y1="140" x2="1002" y2="668" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8F7EE" stop-opacity="0.84"/>
+      <stop offset="0.34" stop-color="#7CE0B2" stop-opacity="0.84"/>
+      <stop offset="0.7" stop-color="#D1B35D" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#FFF1C2" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="440" y1="256" x2="842" y2="544" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E2320"/>
+      <stop offset="1" stop-color="#0B1214"/>
+    </linearGradient>
+    <radialGradient id="eyeGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(639.5 401.5) rotate(90) scale(184 314)">
+      <stop stop-color="#93F5C9" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#93F5C9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="800" rx="32" fill="url(#bg)"/>
+  <rect x="40" y="40" width="1200" height="720" rx="28" stroke="white" stroke-opacity="0.08"/>
+  <rect x="68" y="68" width="1144" height="664" rx="24" stroke="url(#edge)" stroke-opacity="0.18"/>
+
+  <g opacity="0.18">
+    <path d="M108 164H1172" stroke="white" stroke-opacity="0.08"/>
+    <path d="M108 636H1172" stroke="white" stroke-opacity="0.08"/>
+    <path d="M236 120V680" stroke="white" stroke-opacity="0.06"/>
+    <path d="M1044 120V680" stroke="white" stroke-opacity="0.06"/>
+  </g>
+
+  <path d="M536 160L576 118H704L744 160" stroke="url(#edge)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="352" y="160" width="576" height="400" rx="88" fill="#0C1112" stroke="url(#edge)" stroke-width="6"/>
+  <rect x="422" y="232" width="436" height="256" rx="48" fill="url(#screen)"/>
+  <rect x="422" y="232" width="436" height="256" rx="48" fill="url(#eyeGlow)"/>
+
+  <circle cx="530" cy="360" r="28" fill="#A6F6D1"/>
+  <circle cx="750" cy="360" r="28" fill="#A6F6D1"/>
+  <circle cx="530" cy="360" r="14" fill="#0B1111"/>
+  <circle cx="750" cy="360" r="14" fill="#0B1111"/>
+
+  <path d="M524 446C556 464 596 474 640 474C684 474 724 464 756 446" stroke="url(#edge)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M382 286L314 320V408L382 440" stroke="url(#edge)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M898 286L966 320V408L898 440" stroke="url(#edge)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M460 584L422 656" stroke="url(#edge)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M820 584L858 656" stroke="url(#edge)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M502 584V678" stroke="url(#edge)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M778 584V678" stroke="url(#edge)" stroke-width="8" stroke-linecap="round"/>
+
+  <rect x="514" y="96" width="252" height="34" rx="17" fill="#0F1515" stroke="white" stroke-opacity="0.08"/>
+  <circle cx="542" cy="113" r="5" fill="#93F5C9"/>
+  <path d="M566 113H726" stroke="url(#edge)" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/>
+
+  <g opacity="0.9">
+    <path d="M182 160L198 194L232 210L198 226L182 260L166 226L132 210L166 194L182 160Z" fill="#F6E7B4" fill-opacity="0.72"/>
+    <path d="M1098 540L1112 570L1142 584L1112 598L1098 628L1084 598L1054 584L1084 570L1098 540Z" fill="#F6E7B4" fill-opacity="0.6"/>
+  </g>
+
+  <text x="126" y="106" fill="#D1D5DB" fill-opacity="0.52" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" letter-spacing="0.28em">
+    OPENCLAW VISUAL LAYER
+  </text>
+  <text x="126" y="694" fill="#F3F4F6" fill-opacity="0.92" font-family="system-ui, sans-serif" font-size="52" font-weight="700" letter-spacing="-0.04em">
+    Clawbot
+  </text>
+  <text x="126" y="734" fill="#D4D4D8" fill-opacity="0.68" font-family="system-ui, sans-serif" font-size="24" letter-spacing="0.04em">
+    used as the visual shell for Lunaria and PIRA
+  </text>
+</svg>

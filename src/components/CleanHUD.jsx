@@ -3,6 +3,11 @@ import {
   HelpCircle,
   Volume2,
   VolumeX,
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Music,
   FileText,
   Compass,
   Sparkles,
@@ -16,7 +21,6 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { audio } from '../audio/LoFiAudioEngine';
-
 export default function CleanHUD({
   currentStation,
   onInspect,
@@ -26,23 +30,16 @@ export default function CleanHUD({
   onJoystickMove,
 }) {
   const [showHelp, setShowHelp] = useState(false);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [audioStatus, setAudioStatus] = useState(audio.getStatus());
   const joystickRef = useRef(null);
   const [joystickActive, setJoystickActive] = useState(false);
   const [touchPos, setTouchPos] = useState({ x: 0, y: 0 });
 
-  // Toggle Audio
-  const handleToggleAudio = () => {
-    audio.playClick();
-    if (!isPlayingAudio) {
-      audio.start();
-      setIsPlayingAudio(true);
-    } else {
-      audio.stop();
-      setIsPlayingAudio(false);
-    }
-  };
-
+  useEffect(() => {
+    return audio.subscribe((status) => {
+      setAudioStatus({ ...status });
+    });
+  }, []);
   // Mobile Joystick Touch Handling
   const handleTouchStart = (e) => {
     setJoystickActive(true);
@@ -108,23 +105,89 @@ export default function CleanHUD({
         </button>
       </div>
 
-      {/* Top Right: Audio / Ambient Music Toggle */}
-      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 pointer-events-auto">
-        <button
-          onClick={handleToggleAudio}
-          className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 shadow-md flex items-center justify-center transition hover:scale-105 active:scale-95 ${
-            isPlayingAudio
-              ? 'bg-[#FFFDF9] border-[#D27D46] text-[#D27D46]'
-              : 'bg-[#FFFDF9]/90 border-[#e5dcd3] text-[#8a7260]'
-          }`}
-          title={isPlayingAudio ? 'Mute Ambient Music' : 'Play Lo-Fi Music'}
-        >
-          {isPlayingAudio ? (
-            <Volume2 className="w-5 h-5 text-[#D27D46] animate-pulse" />
-          ) : (
-            <VolumeX className="w-5 h-5 text-[#8a7260]" />
-          )}
-        </button>
+      {/* Top Right: Multi-Track Japanese Lo-Fi Audio Controller */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 pointer-events-auto flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-[#FFFDF9]/90 hover:bg-[#FFFDF9] backdrop-blur-md border-2 border-[#e5dcd3] shadow-md transition text-[#5c4432]">
+          {/* Play/Pause Button */}
+          <button
+            onClick={() => {
+              audio.playClick();
+              audio.toggle();
+            }}
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FAF3EC] hover:bg-[#F3E7DC] flex items-center justify-center text-[#BE123C] transition hover:scale-105 active:scale-95"
+            title={audioStatus.isPlaying ? 'Pause Music' : 'Play Japanese Lo-Fi'}
+          >
+            {audioStatus.isPlaying ? (
+              <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
+            ) : (
+              <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current ml-0.5" />
+            )}
+          </button>
+
+          {/* Track Title & Counter */}
+          <div className="flex flex-col text-left max-w-[110px] sm:max-w-[190px] px-1 overflow-hidden">
+            <span className="text-[10px] sm:text-[11px] font-bold text-[#37281D] truncate leading-tight">
+              {audioStatus.trackName || 'Sakura Rain // 桜の雨 [1/4]'}
+            </span>
+            <span className="text-[8px] sm:text-[9px] text-[#BE123C] font-mono tracking-wider font-semibold">
+              JAPANESE LO-FI
+            </span>
+          </div>
+
+          {/* Previous Track [⏮] */}
+          <button
+            onClick={() => {
+              audio.playClick();
+              audio.prevTrack();
+            }}
+            className="w-6 h-6 sm:w-7 sm:h-7 rounded-full hover:bg-[#F4ECE2] flex items-center justify-center text-[#7C6652] transition hover:scale-105 active:scale-95"
+            title="Previous Track [⏮]"
+          >
+            <SkipBack className="w-3.5 h-3.5 fill-current" />
+          </button>
+
+          {/* Next Track [⏭] */}
+          <button
+            onClick={() => {
+              audio.playClick();
+              audio.nextTrack();
+            }}
+            className="w-6 h-6 sm:w-7 sm:h-7 rounded-full hover:bg-[#F4ECE2] flex items-center justify-center text-[#7C6652] transition hover:scale-105 active:scale-95"
+            title="Next Track [⏭]"
+          >
+            <SkipForward className="w-3.5 h-3.5 fill-current" />
+          </button>
+
+          {/* Mute Toggle Button */}
+          <button
+            onClick={() => {
+              audio.playClick();
+              audio.toggleMute();
+            }}
+            className="w-6 h-6 sm:w-7 sm:h-7 rounded-full hover:bg-[#F4ECE2] flex items-center justify-center text-[#7C6652] transition hover:scale-105 active:scale-95 ml-0.5"
+            title={audioStatus.isMuted ? 'Unmute' : 'Mute'}
+          >
+            {audioStatus.isMuted ? (
+              <VolumeX className="w-4 h-4 text-[#A89685]" />
+            ) : (
+              <Volume2 className="w-4 h-4 text-[#BE123C]" />
+            )}
+          </button>
+
+          {/* Inline Volume Slider */}
+          <div className="hidden sm:flex items-center pl-1 pr-1">
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={audioStatus.isMuted ? 0 : audioStatus.volume}
+              onChange={(e) => audio.setVolume(parseFloat(e.target.value))}
+              className="w-16 h-1.5 accent-[#BE123C] bg-[#E8DEC8] rounded-lg cursor-pointer"
+              title={`Volume: ${Math.round((audioStatus.isMuted ? 0 : audioStatus.volume) * 100)}%`}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Proximity Station Floating Interaction Banner */}

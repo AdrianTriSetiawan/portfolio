@@ -1,0 +1,148 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" font-family="'Space Grotesk', 'DM Sans', system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bgEp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#090e18"/>
+      <stop offset="100%" stop-color="#0a0f1a"/>
+    </linearGradient>
+    <linearGradient id="tealBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#20d6ee" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="greenBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bgEp)"/>
+  <!-- Subtle grid -->
+  <line x1="0" y1="0" x2="800" y2="500" stroke="#131c2e" stroke-width="0.5"/>
+  <line x1="800" y1="0" x2="0" y2="500" stroke="#131c2e" stroke-width="0.5"/>
+  <line x1="400" y1="0" x2="400" y2="500" stroke="#111928" stroke-width="0.5"/>
+  <line x1="0" y1="250" x2="800" y2="250" stroke="#111928" stroke-width="0.5"/>
+
+  <!-- Top nav -->
+  <rect x="0" y="0" width="800" height="48" fill="#0c1220" opacity="0.98"/>
+  <line x1="0" y1="48" x2="800" y2="48" stroke="#1a2540" stroke-width="1"/>
+  <!-- Logo -->
+  <circle cx="28" cy="24" r="8" fill="#00d4ff" opacity="0.15" stroke="#00d4ff" stroke-width="1"/>
+  <text x="28" y="29" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="800">E</text>
+  <text x="44" y="30" fill="#e5e7eb" font-size="14" font-weight="700" letter-spacing="-0.5">EProcMon</text>
+  <text x="144" y="30" fill="#4a5568" font-size="11">BUMN Tender Intelligence</text>
+  <!-- Status pill -->
+  <rect x="620" y="14" width="80" height="22" rx="11" fill="#0a2218" stroke="#22c55e" stroke-width="1"/>
+  <circle cx="634" cy="25" r="3.5" fill="#22c55e"/>
+  <text x="656" y="29" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="600">LIVE 24/7</text>
+  <!-- Discord notif pill -->
+  <rect x="710" y="14" width="72" height="22" rx="11" fill="#1a1a3a" stroke="#5865f2" stroke-width="1"/>
+  <text x="746" y="29" text-anchor="middle" fill="#7c84fa" font-size="10" font-weight="600">Discord</text>
+
+  <!-- Stats row -->
+  <rect x="24" y="62" width="164" height="68" rx="10" fill="#0d1525" stroke="#1a2540" stroke-width="1"/>
+  <text x="40" y="86" fill="#6b7280" font-size="10" letter-spacing="1">PORTALS SCRAPED</text>
+  <text x="40" y="112" fill="#e5e7eb" font-size="26" font-weight="800">247</text>
+  <text x="105" y="112" fill="#22c55e" font-size="10">BUMN</text>
+
+  <rect x="200" y="62" width="164" height="68" rx="10" fill="#0d1525" stroke="#1a2540" stroke-width="1"/>
+  <text x="216" y="86" fill="#6b7280" font-size="10" letter-spacing="1">IT TENDERS TODAY</text>
+  <text x="216" y="112" fill="#00d4ff" font-size="26" font-weight="800">18</text>
+  <text x="265" y="112" fill="#00d4ff" font-size="10" opacity="0.7">new</text>
+
+  <rect x="376" y="62" width="164" height="68" rx="10" fill="#0d1525" stroke="#1a2540" stroke-width="1"/>
+  <text x="392" y="86" fill="#6b7280" font-size="10" letter-spacing="1">ALERTS SENT</text>
+  <text x="392" y="112" fill="#e5e7eb" font-size="26" font-weight="800">1,204</text>
+
+  <rect x="552" y="62" width="224" height="68" rx="10" fill="#0d1525" stroke="#1a2540" stroke-width="1"/>
+  <text x="568" y="86" fill="#6b7280" font-size="10" letter-spacing="1">LAST SCRAPE</text>
+  <text x="568" y="108" fill="#e5e7eb" font-size="13" font-weight="600">PLN Persero</text>
+  <text x="568" y="124" fill="#4a5568" font-size="10">lpse.pln.co.id · 2m ago</text>
+
+  <!-- Tender list panel -->
+  <rect x="24" y="144" width="496" height="316" rx="10" fill="#0d1525" stroke="#1a2540" stroke-width="1"/>
+  <rect x="24" y="144" width="496" height="36" rx="10" fill="#111928"/>
+  <rect x="24" y="164" width="496" height="16" fill="#111928"/>
+  <text x="44" y="167" fill="#9ca3af" font-size="11" font-weight="600">Tender IT Terbaru</text>
+  <rect x="440" y="152" width="64" height="20" rx="10" fill="#00d4ff" opacity="0.15" stroke="#00d4ff" stroke-width="0.8"/>
+  <text x="472" y="166" text-anchor="middle" fill="#00d4ff" font-size="9" font-weight="700">REALTIME</text>
+
+  <!-- Tender rows -->
+  <!-- Row 1 - new -->
+  <rect x="34" y="190" width="476" height="52" rx="8" fill="#0a1e14" stroke="#22c55e" stroke-width="0.8" opacity="0.9"/>
+  <rect x="44" y="202" width="26" height="14" rx="7" fill="#22c55e" opacity="0.2" stroke="#22c55e" stroke-width="0.8"/>
+  <text x="57" y="213" text-anchor="middle" fill="#22c55e" font-size="8" font-weight="700">IT</text>
+  <text x="80" y="210" fill="#e5e7eb" font-size="11" font-weight="600">Pengadaan Server dan Storage Data Center</text>
+  <text x="80" y="226" fill="#6b7280" font-size="10">PLN Persero · Rp 2.4M · Deadline: 15 Jun 2026</text>
+  <rect x="448" y="202" width="52" height="16" rx="8" fill="#0a2218" stroke="#22c55e" stroke-width="0.8"/>
+  <text x="474" y="214" text-anchor="middle" fill="#22c55e" font-size="9">NEW</text>
+
+  <!-- Row 2 -->
+  <rect x="34" y="250" width="476" height="52" rx="8" fill="#0d1525" stroke="#1a2540" stroke-width="0.8"/>
+  <rect x="44" y="262" width="26" height="14" rx="7" fill="#00d4ff" opacity="0.15" stroke="#00d4ff" stroke-width="0.8"/>
+  <text x="57" y="273" text-anchor="middle" fill="#00d4ff" font-size="8" font-weight="700">IT</text>
+  <text x="80" y="270" fill="#9ca3af" font-size="11">Jasa Pengembangan Sistem Informasi Manajemen</text>
+  <text x="80" y="286" fill="#4a5568" font-size="10">Pertamina · Rp 890jt · Deadline: 20 Jun 2026</text>
+  <text x="474" y="274" text-anchor="middle" fill="#4a5568" font-size="9">1h ago</text>
+
+  <!-- Row 3 -->
+  <rect x="34" y="310" width="476" height="52" rx="8" fill="#0d1525" stroke="#1a2540" stroke-width="0.8"/>
+  <rect x="44" y="322" width="26" height="14" rx="7" fill="#00d4ff" opacity="0.15" stroke="#00d4ff" stroke-width="0.8"/>
+  <text x="57" y="333" text-anchor="middle" fill="#00d4ff" font-size="8" font-weight="700">IT</text>
+  <text x="80" y="330" fill="#9ca3af" font-size="11">Lisensi Software ERP dan Maintenance</text>
+  <text x="80" y="346" fill="#4a5568" font-size="10">Telkom · Rp 3.1M · Deadline: 25 Jun 2026</text>
+  <text x="474" y="334" text-anchor="middle" fill="#4a5568" font-size="9">3h ago</text>
+
+  <!-- Row 4 -->
+  <rect x="34" y="370" width="476" height="52" rx="8" fill="#0d1525" stroke="#1a2540" stroke-width="0.8"/>
+  <rect x="44" y="382" width="26" height="14" rx="7" fill="#00d4ff" opacity="0.15" stroke="#00d4ff" stroke-width="0.8"/>
+  <text x="57" y="393" text-anchor="middle" fill="#00d4ff" font-size="8" font-weight="700">IT</text>
+  <text x="80" y="390" fill="#9ca3af" font-size="11">Pengadaan Perangkat Jaringan dan Keamanan Siber</text>
+  <text x="80" y="406" fill="#4a5568" font-size="10">Bank BRI · Rp 1.7M · Deadline: 1 Jul 2026</text>
+  <text x="474" y="394" text-anchor="middle" fill="#4a5568" font-size="9">5h ago</text>
+
+  <!-- Pagination -->
+  <text x="264" y="450" text-anchor="middle" fill="#4a5568" font-size="10">1 — 4 of 18 IT tenders today</text>
+
+  <!-- Right panel: Discord notification -->
+  <rect x="532" y="144" width="244" height="316" rx="10" fill="#0d1525" stroke="#1a2540" stroke-width="1"/>
+  <rect x="532" y="144" width="244" height="36" rx="10" fill="#111928"/>
+  <rect x="532" y="164" width="244" height="16" fill="#111928"/>
+  <text x="552" y="167" fill="#9ca3af" font-size="11" font-weight="600">Discord Notifications</text>
+
+  <!-- Discord message card -->
+  <rect x="542" y="192" width="224" height="110" rx="8" fill="#1a1a3a" stroke="#5865f2" stroke-width="1" opacity="0.9"/>
+  <!-- Bot avatar -->
+  <circle cx="562" cy="212" r="12" fill="#5865f2" opacity="0.3" stroke="#5865f2" stroke-width="1"/>
+  <text x="562" y="217" text-anchor="middle" fill="#7c84fa" font-size="11" font-weight="800">E</text>
+  <text x="582" y="210" fill="#e5e7eb" font-size="11" font-weight="700">EProcMon</text>
+  <text x="640" y="210" fill="#4a5568" font-size="9">Today at 08:42</text>
+  <!-- Message content -->
+  <rect x="555" y="220" width="200" height="3" rx="2" fill="#5865f2" opacity="0.8"/>
+  <text x="555" y="238" fill="#22c55e" font-size="10" font-weight="700">🔔 IT Tender Baru Ditemukan</text>
+  <text x="555" y="252" fill="#9ca3af" font-size="10">Pengadaan Server &amp; Storage</text>
+  <text x="555" y="265" fill="#4a5568" font-size="9">PLN Persero · Rp 2.4M</text>
+  <text x="555" y="279" fill="#4a5568" font-size="9">Deadline: 15 Jun 2026</text>
+  <text x="555" y="293" fill="#5865f2" font-size="9">lpse.pln.co.id</text>
+
+  <!-- Stack tags -->
+  <text x="552" y="326" fill="#6b7280" font-size="10" letter-spacing="1">STACK</text>
+  <rect x="552" y="334" width="38" height="18" rx="9" fill="#00d4ff" opacity="0.1" stroke="#00d4ff" stroke-width="0.7"/>
+  <text x="571" y="347" text-anchor="middle" fill="#00d4ff" font-size="9">Bun</text>
+  <rect x="596" y="334" width="52" height="18" rx="9" fill="#00d4ff" opacity="0.1" stroke="#00d4ff" stroke-width="0.7"/>
+  <text x="622" y="347" text-anchor="middle" fill="#00d4ff" font-size="9">SvelteKit</text>
+  <rect x="654" y="334" width="50" height="18" rx="9" fill="#00d4ff" opacity="0.1" stroke="#00d4ff" stroke-width="0.7"/>
+  <text x="679" y="347" text-anchor="middle" fill="#00d4ff" font-size="9">Supabase</text>
+  <rect x="552" y="358" width="60" height="18" rx="9" fill="#00d4ff" opacity="0.1" stroke="#00d4ff" stroke-width="0.7"/>
+  <text x="582" y="371" text-anchor="middle" fill="#00d4ff" font-size="9">PostgreSQL</text>
+  <rect x="618" y="358" width="72" height="18" rx="9" fill="#00d4ff" opacity="0.1" stroke="#00d4ff" stroke-width="0.7"/>
+  <text x="654" y="371" text-anchor="middle" fill="#00d4ff" font-size="9">CF Workers</text>
+
+  <!-- Live URL badge -->
+  <rect x="542" y="388" width="224" height="36" rx="8" fill="#0a1525" stroke="#00d4ff" stroke-width="0.8" opacity="0.8"/>
+  <circle cx="560" cy="406" r="4" fill="#22c55e"/>
+  <text x="572" y="410" fill="#9ca3af" font-size="10">ai.adriandev.online/tender-ai</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="487" width="800" height="13" fill="#0c1220"/>
+  <text x="400" y="497" text-anchor="middle" fill="#1a2540" font-size="9" letter-spacing="3">BUN · ELYSIA.JS · SVELTEKIT · SUPABASE · REALTIME · DISCORD · CLOUDFLARE</text>
+</svg>

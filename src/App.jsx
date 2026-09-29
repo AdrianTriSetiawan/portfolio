@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import CleanWorld from './components/CleanWorld';
 import CleanHUD from './components/CleanHUD';
+import LoadingScreen from './components/LoadingScreen';
 import ClassicView from './components/ClassicView';
 import CleanProjectModal from './components/CleanModals/CleanProjectModal';
 import CleanSkillModal from './components/CleanModals/CleanSkillModal';
@@ -15,7 +16,10 @@ export default function App() {
   const [activeModal, setActiveModal] = useState(null);
   const [teleportTarget, setTeleportTarget] = useState(null);
   const [joystickInput, setJoystickInput] = useState({ x: 0, y: 0 });
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [loadStatus, setLoadStatus] = useState('Entering Sakura Garden...');
+  const [isLoadComplete, setIsLoadComplete] = useState(false);
   // Escape key closes open modal
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -80,6 +84,13 @@ export default function App() {
             teleportTarget={teleportTarget}
             joystickInput={joystickInput}
             isInspecting={!!activeModal}
+            onLoadProgress={(p, status) => {
+              setLoadProgress(p);
+              setLoadStatus(status);
+            }}
+            onLoadComplete={() => {
+              setIsLoadComplete(true);
+            }}
           />
           <CleanHUD
             currentStation={currentStation}
@@ -117,6 +128,16 @@ export default function App() {
       )}
       {activeModal === 'ai' && (
         <CleanAIModal onClose={() => setActiveModal(null)} />
+      )}
+
+      {/* Sleek Japanese Loading Screen */}
+      {isLoading && (
+        <LoadingScreen
+          progress={loadProgress}
+          statusText={loadStatus}
+          isComplete={isLoadComplete}
+          onDismiss={() => setIsLoading(false)}
+        />
       )}
     </div>
   );
