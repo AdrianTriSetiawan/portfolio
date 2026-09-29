@@ -299,7 +299,7 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
-        if self.path != "/api/portfolio-chat":
+        if self.path not in ("/api/portfolio-chat", "/api/chat"):
             return self.end_json({"ok": False, "error": "Not found"}, HTTPStatus.NOT_FOUND)
 
         try:
