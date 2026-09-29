@@ -1,44 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ExternalLink,
-  Lock,
   Mail,
   Copy,
   Check,
-  Terminal,
   Cpu,
-  BrainCircuit,
-  Database,
-  Code2,
+  Server,
+  Globe,
   Sparkles,
   Bot,
   MapPin,
-  Play,
-  Pause,
-  Volume2,
-  VolumeX,
-  Tv,
-  Gamepad2,
   CheckCircle2,
   Layers,
   Activity,
   Boxes,
+  Compass,
+  ArrowLeft,
+  FileDown,
+  Calendar,
 } from 'lucide-react';
-import { FaGithub as Github, FaLinkedin as Linkedin } from 'react-icons/fa6';
+import { FaGithub as Github, FaLinkedin as Linkedin, FaTelegram as Telegram } from 'react-icons/fa6';
 import projectsData from '../../content/projects.json';
-import profileData from '../../content/profile.json';
 import { audio } from '../audio/LoFiAudioEngine';
 
 export default function ClassicView({ onOpenAIChat, onToggle3D }) {
   const [copied, setCopied] = useState(false);
-  const [audioState, setAudioState] = useState(audio.getStatus());
-  const email = 'adriansetiawan26@gmail.com';
-
-  useEffect(() => {
-    return audio.subscribe((status) => {
-      setAudioState(status);
-    });
-  }, []);
+  const email = 'adrian.tri.setiawan@gmail.com';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);
@@ -48,301 +35,302 @@ export default function ClassicView({ onOpenAIChat, onToggle3D }) {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden">
-      {/* Background Subtle Gradient & Grid */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-32 -left-32 w-[550px] h-[550px] bg-indigo-600/10 rounded-full blur-[120px]" />
-        <div className="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[140px]" />
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:32px_32px]" />
-      </div>
+    <div className="min-h-screen bg-[#FAF6F0] text-[#37281D] font-sans selection:bg-[#D27D46]/20 selection:text-[#D27D46] pb-24">
+      {/* Sticky Top Navigation Bar */}
+      <header className="sticky top-0 z-40 bg-[#FAF6F0]/90 backdrop-blur-md border-b border-[#e5dcd3] px-4 sm:px-8 py-3.5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              audio.playClick();
+              onToggle3D();
+            }}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#D27D46] hover:bg-[#b86633] text-white text-xs font-bold shadow-sm transition hover:scale-105 active:scale-95"
+          >
+            <Compass className="w-4 h-4" />
+            <span>Return to 3D World</span>
+          </button>
+          <span className="hidden sm:inline-block text-xs font-mono font-bold text-[#8a7260]">
+            Adrian Tri Setiawan · Engineering CV
+          </span>
+        </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-        {/* Navigation Bar */}
-        <header className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-slate-800 shadow-xl">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[2px] flex items-center justify-center shadow-md">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-sm font-black font-mono text-emerald-300">
-                AD
-              </div>
-            </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onOpenAIChat}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-[#F4ECE2] border border-[#decbb8] text-xs font-bold text-[#8B5CF6] transition shadow-xs"
+          >
+            <Bot className="w-3.5 h-3.5" />
+            <span>Lady Lunaria AI</span>
+          </button>
+
+          <button
+            onClick={handleCopy}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-[#F4ECE2] border border-[#decbb8] text-xs font-bold text-[#37281D] transition shadow-xs"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-[#10B981]" />
+                <span className="text-[#10B981]">Copied</span>
+              </>
+            ) : (
+              <>
+                <Mail className="w-3.5 h-3.5 text-[#D27D46]" />
+                <span>Contact</span>
+              </>
+            )}
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content Container */}
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 space-y-12">
+        {/* Hero Section */}
+        <section className="p-7 sm:p-9 rounded-3xl bg-[#FFFDF9] border-2 border-[#e5dcd3] shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono font-bold text-white text-sm tracking-wide">
-                  ADRIAN TRI SETIAWAN
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-mono border border-emerald-500/30">
-                  SYSTEMS ENGINEER
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 font-mono">
-                Computer Vision · Distributed Backends · Autonomous Crawlers
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#F4ECE2] text-[#D27D46] border border-[#decbb8] inline-block mb-3">
+                Senior Software Engineer & AI Specialist
+              </span>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#37281D] tracking-tight">
+                Adrian Tri Setiawan
+              </h1>
+              <p className="text-sm sm:text-base text-[#6b4e36] mt-1.5 font-medium flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[#D27D46]" />
+                <span>Indonesia · Available for Senior & Staff Engineering Roles</span>
               </p>
             </div>
+
+            {/* Social Pills */}
+            <div className="flex items-center gap-2">
+              <a
+                href="https://github.com/adriansetiawan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#FAF6F0] hover:bg-[#F4ECE2] border border-[#decbb8] flex items-center justify-center text-[#37281D] transition"
+                title="GitHub"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+              <a
+                href="https://linkedin.com/in/adrian-tri-setiawan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#FAF6F0] hover:bg-[#F4ECE2] border border-[#decbb8] flex items-center justify-center text-[#3B82F6] transition"
+                title="LinkedIn"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <a
+                href="https://t.me/adriansetiawan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#FAF6F0] hover:bg-[#F4ECE2] border border-[#decbb8] flex items-center justify-center text-[#10B981] transition"
+                title="Telegram"
+              >
+                <Telegram className="w-4 h-4" />
+              </a>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Audio Toggle */}
-            <button
-              onClick={() => {
-                audio.togglePlay();
-              }}
-              className="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-300 flex items-center gap-1.5 transition-colors"
-              title="Toggle Lo-Fi Music"
-            >
-              {audioState.isPlaying ? (
-                <>
-                  <Pause className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Lo-Fi Music</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Play Lo-Fi</span>
-                </>
-              )}
-            </button>
-
-            {/* Launch 3D World Button */}
-            <button
-              onClick={() => {
-                audio.playClick();
-                onToggle3D();
-              }}
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95"
-            >
-              <Gamepad2 className="w-3.5 h-3.5" />
-              <span>Enter 3D World</span>
-            </button>
-          </div>
-        </header>
-
-        {/* Hero Section */}
-        <section className="p-6 sm:p-8 rounded-3xl bg-slate-900/60 border border-slate-800/90 shadow-xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-mono">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Available for Contract Engineering & High-Impact Roles</span>
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-            Building high-throughput computer vision, resilient crawler architectures, and production distributed systems.
-          </h1>
-
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
-            I am a fullstack systems engineer based in Indonesia. I design and ship production infrastructure across real-time RTSP CCTV biometrics (512D ArcFace embeddings), high-concurrency microservices (FastAPI, Bun, Elysia), autonomous web crawlers (150+ BUMN portals), and interactive 3D WebGL experiences.
+          <p className="text-sm sm:text-base text-[#4a3b30] leading-relaxed">
+            Specializing in mission-critical computer vision (ArcFace 512D biometric models with &lt;280ms latency), high-throughput distributed backends (Go, Python AsyncIO), and large-scale web scraping orchestrators (150+ BUMN/Gov procurement portals). Proven background delivering enterprise infrastructure under stringent latency and reliability constraints.
           </p>
 
-          <div className="pt-2 flex flex-wrap items-center gap-3">
-            <a
-              href={`mailto:${email}`}
-              className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs flex items-center gap-1.5 transition-colors"
-            >
-              <Mail className="w-4 h-4" />
-              <span>Direct Email</span>
-            </a>
-
-            <button
-              onClick={handleCopy}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-mono text-xs flex items-center gap-1.5 transition-colors"
-            >
-              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-              <span>{copied ? 'Copied to Clipboard' : email}</span>
-            </button>
-
-            <a
-              href="https://github.com/AdrianTriSetiawan"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition-colors"
-              title="GitHub Profile"
-            >
-              <Github className="w-4 h-4" />
-            </a>
-
-            <button
-              onClick={onOpenAIChat}
-              className="px-4 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 font-mono text-xs flex items-center gap-1.5 transition-colors ml-auto"
-            >
-              <Bot className="w-4 h-4" />
-              <span>Ask AI Companion</span>
-            </button>
+          {/* Metric Highlights */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            <div className="p-3.5 rounded-2xl bg-[#FAF6F0] border border-[#ede3d7] flex flex-col">
+              <span className="text-[10px] font-mono text-[#8a7260] uppercase tracking-wider">Vision Latency</span>
+              <span className="text-xl font-bold font-mono text-[#D27D46]">&lt; 280ms</span>
+              <span className="text-[10px] text-[#7d6756] mt-0.5">ArcFace Edge Match</span>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-[#FAF6F0] border border-[#ede3d7] flex flex-col">
+              <span className="text-[10px] font-mono text-[#8a7260] uppercase tracking-wider">Accuracy</span>
+              <span className="text-xl font-bold font-mono text-[#37281D]">99.82%</span>
+              <span className="text-[10px] text-[#7d6756] mt-0.5">Top-1 Verification</span>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-[#FAF6F0] border border-[#ede3d7] flex flex-col">
+              <span className="text-[10px] font-mono text-[#8a7260] uppercase tracking-wider">Scraper Scale</span>
+              <span className="text-xl font-bold font-mono text-[#10B981]">150+ Portals</span>
+              <span className="text-[10px] text-[#7d6756] mt-0.5">BUMN & Gov Tenders</span>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-[#FAF6F0] border border-[#ede3d7] flex flex-col">
+              <span className="text-[10px] font-mono text-[#8a7260] uppercase tracking-wider">Availability</span>
+              <span className="text-xl font-bold font-mono text-[#3B82F6]">99.9%</span>
+              <span className="text-[10px] text-[#7d6756] mt-0.5">Production SLA</span>
+            </div>
           </div>
         </section>
 
-        {/* Featured Projects Dossier */}
+        {/* Featured Projects Section */}
         <section className="space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2 text-sm font-mono font-bold uppercase tracking-wider text-slate-300">
-              <Layers className="w-4 h-4 text-emerald-400" />
-              <span>Featured Engineering Systems</span>
-            </div>
-            <span className="text-xs font-mono text-slate-500">
-              Verified Production Deployments
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-[#37281D] flex items-center gap-2">
+              <Layers className="w-5 h-5 text-[#D27D46]" />
+              <span>Production Engineering Systems</span>
+            </h2>
+            <span className="text-xs font-mono font-bold text-[#8a7260]">
+              {projectsData.length} Deployed
             </span>
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-5">
             {projectsData.map((project) => (
               <div
                 key={project.id}
-                className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 transition space-y-4"
+                className="p-6 sm:p-7 rounded-3xl bg-[#FFFDF9] border-2 border-[#e5dcd3] shadow-xs space-y-4"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        {project.tag}
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#F4ECE2] text-[#D27D46] border border-[#decbb8]">
+                        {project.category || 'Production'}
                       </span>
-                      {project.private ? (
-                        <span className="text-[10px] font-mono text-amber-300/90 flex items-center gap-1">
-                          <Lock className="w-3 h-3" /> Private System
-                        </span>
-                      ) : (
-                        <span className="text-[10px] font-mono text-emerald-300">
-                          Open Source
+                      {Array.isArray(project.metrics) && project.metrics[0] && (
+                        <span className="text-xs font-mono text-[#10B981] font-semibold">
+                          {project.metrics[0].value}
                         </span>
                       )}
                     </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-white">
-                      {project.name}
+                    <h3 className="text-xl font-bold text-[#37281D]">
+                      {project.title}
                     </h3>
+                    <p className="text-xs sm:text-sm text-[#6b4e36] font-medium">
+                      {project.tagline || project.subtitle}
+                    </p>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    {project.link && (
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs flex items-center gap-1 transition-colors"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span>Live Site</span>
-                      </a>
-                    )}
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     {project.github && (
                       <a
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-mono text-xs flex items-center gap-1 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF6F0] hover:bg-[#F4ECE2] text-[#37281D] border border-[#decbb8] text-xs font-semibold transition"
                       >
                         <Github className="w-3.5 h-3.5" />
-                        <span>GitHub</span>
+                        <span>Source</span>
+                      </a>
+                    )}
+                    {project.demoUrl && (
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#D27D46] hover:bg-[#b86633] text-white text-xs font-semibold shadow-xs transition"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Live Demo</span>
                       </a>
                     )}
                   </div>
                 </div>
 
-                {/* Key Metrics */}
-                {project.metrics && (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <p className="text-xs sm:text-sm text-[#4a3b30] leading-relaxed">
+                  {project.description}
+                </p>
+
+                {project.highlights && (
+                  <ul className="space-y-1.5 pt-1">
+                    {project.highlights.map((h, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-[#4a3b30]">
+                        <CheckCircle2 className="w-4 h-4 text-[#10B981] flex-shrink-0 mt-0.5" />
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {Array.isArray(project.metrics) && (
+                  <div className="flex flex-wrap gap-2 pt-1">
                     {project.metrics.map((m, idx) => (
-                      <div
-                        key={idx}
-                        className="p-2.5 rounded-lg bg-slate-950 border border-slate-850 flex flex-col"
-                      >
-                        <span className="text-[10px] font-mono text-slate-400 uppercase">
-                          {m.label}
-                        </span>
-                        <span className="text-xs font-bold font-mono text-emerald-300 mt-0.5">
-                          {m.value}
-                        </span>
-                      </div>
+                      <span key={idx} className="text-xs font-mono bg-[#FAF6F0] text-[#6b4e36] px-2.5 py-1 rounded-lg border border-[#ede3d7]">
+                        <strong className="text-[#37281D]">{m.label}:</strong> {m.value}
+                      </span>
                     ))}
                   </div>
                 )}
 
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  {project.summary}
-                </p>
-
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  {project.detail}
-                </p>
-
-                {/* Architecture Diagram */}
-                {project.architecture && (
-                  <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] sm:text-xs text-slate-300 overflow-x-auto leading-relaxed">
-                    <code>{project.architecture}</code>
+                {project.tags && (
+                  <div className="flex flex-wrap gap-1.5 pt-2 border-t border-[#f0e7dd]">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-[#FAF6F0] text-[#6b4e36] border border-[#ede3d7]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 )}
-
-                {/* Stack */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {project.stack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2.5 py-0.5 rounded text-[11px] font-mono bg-slate-800/60 text-slate-300 border border-slate-700/60"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Technical Capabilities Matrix */}
+        {/* Technical Arsenal Section */}
         <section className="space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2 text-sm font-mono font-bold uppercase tracking-wider text-slate-300">
-              <Cpu className="w-4 h-4 text-sky-400" />
-              <span>Core Technical Capabilities</span>
-            </div>
-            <span className="text-xs font-mono text-slate-500">
-              Battle-Tested Competencies
-            </span>
-          </div>
+          <h2 className="text-2xl font-bold text-[#37281D] flex items-center gap-2">
+            <Cpu className="w-5 h-5 text-[#3B82F6]" />
+            <span>Technical Competencies</span>
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-2.5">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <BrainCircuit className="w-4 h-4 text-emerald-400" />
-                <span>Computer Vision & Biometrics</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                ArcFace 512D facial embedding extraction, cosine similarity indexing with PostgreSQL pgvector, OpenCV multi-stream RTSP frame decoders, and anti-spoofing heuristics.
+            <div className="p-5 rounded-3xl bg-[#FFFDF9] border-2 border-[#e5dcd3] space-y-3">
+              <h3 className="font-bold text-base text-[#D27D46] flex items-center gap-2">
+                <Cpu className="w-4 h-4" /> Computer Vision & AI
+              </h3>
+              <p className="text-xs text-[#6b4e36] leading-relaxed">
+                PyTorch, ArcFace 512D embeddings, OpenCV, TensorRT, YOLOv8, MediaPipe, video buffer streaming.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-2.5">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <Cpu className="w-4 h-4 text-sky-400" />
-                <span>Distributed Backends & Microservices</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Asynchronous Python (FastAPI/AsyncIO), ultra-fast TypeScript microservices (Bun/Elysia.js), Server-Sent Events (SSE) streaming, and real-time WebSockets.
+            <div className="p-5 rounded-3xl bg-[#FFFDF9] border-2 border-[#e5dcd3] space-y-3">
+              <h3 className="font-bold text-base text-[#3B82F6] flex items-center gap-2">
+                <Server className="w-4 h-4" /> High-Concurrency Backends
+              </h3>
+              <p className="text-xs text-[#6b4e36] leading-relaxed">
+                Go (Golang), Python (AsyncIO/FastAPI), Node.js, PostgreSQL, TimescaleDB, Redis, RabbitMQ.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-2.5">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <Database className="w-4 h-4 text-amber-400" />
-                <span>Autonomous Crawlers & Data Engineering</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Headless distributed scraping pipelines monitoring 150+ Indonesian BUMN tender portals, Supabase CDC event streams, and relational PostgreSQL optimization.
+            <div className="p-5 rounded-3xl bg-[#FFFDF9] border-2 border-[#e5dcd3] space-y-3">
+              <h3 className="font-bold text-base text-[#10B981] flex items-center gap-2">
+                <Globe className="w-4 h-4" /> Crawling & Anti-Bot
+              </h3>
+              <p className="text-xs text-[#6b4e36] leading-relaxed">
+                Playwright, Scrapy, Headless Chromium, TLS fingerprinting, stealth proxy rotation, schema normalization.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-2.5">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <Code2 className="w-4 h-4 text-purple-400" />
-                <span>Modern Frontends & 3D WebGL</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                React, Next.js, SvelteKit, Vue 3, Three.js 60 FPS zero-allocation render loops, shader tuning, and responsive UI ergonomics with Tailwind CSS.
+            <div className="p-5 rounded-3xl bg-[#FFFDF9] border-2 border-[#e5dcd3] space-y-3">
+              <h3 className="font-bold text-base text-[#8B5CF6] flex items-center gap-2">
+                <Sparkles className="w-4 h-4" /> 3D & Creative Web
+              </h3>
+              <p className="text-xs text-[#6b4e36] leading-relaxed">
+                Three.js, WebGL, GLTF/GLB models, React, Tailwind CSS, Web Audio API procedural Lo-Fi.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="pt-8 border-t border-slate-800 text-center text-xs font-mono text-slate-500">
-          <p>© {new Date().getFullYear()} Adrian Tri Setiawan. Engineered for performance and clarity.</p>
-        </footer>
-      </div>
+        {/* Contact Footer */}
+        <section className="p-7 sm:p-9 rounded-3xl bg-[#FFFDF9] border-2 border-[#e5dcd3] text-center space-y-4">
+          <h2 className="text-2xl font-bold text-[#37281D]">
+            Let's Build Something High-Impact Together
+          </h2>
+          <p className="text-sm text-[#6b4e36] max-w-lg mx-auto">
+            Available for Senior Software Engineer, Lead AI Engineer, and High-Scale Architecture contracts and roles.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={handleCopy}
+              className="px-6 py-3 rounded-full bg-[#D27D46] hover:bg-[#b86633] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2 hover:scale-105"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Mail className="w-4 h-4" />}
+              <span>{copied ? 'Copied to Clipboard!' : 'Copy adrian.tri.setiawan@gmail.com'}</span>
+            </button>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

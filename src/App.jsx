@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import ThreeWorld, { STATIONS } from './components/ThreeWorld';
-import HUD from './components/HUD';
+import CleanWorld from './components/CleanWorld';
+import CleanHUD from './components/CleanHUD';
 import ClassicView from './components/ClassicView';
-import ProjectModal from './components/Modals/ProjectModal';
-import SkillModal from './components/Modals/SkillModal';
-import ExperienceModal from './components/Modals/ExperienceModal';
-import ContactModal from './components/Modals/ContactModal';
-import AIChatModal from './components/Modals/AIChatModal';
+import CleanProjectModal from './components/CleanModals/CleanProjectModal';
+import CleanSkillModal from './components/CleanModals/CleanSkillModal';
+import CleanExperienceModal from './components/CleanModals/CleanExperienceModal';
+import CleanContactModal from './components/CleanModals/CleanContactModal';
+import CleanAIModal from './components/CleanModals/CleanAIModal';
 import { audio } from './audio/LoFiAudioEngine';
 
 export default function App() {
@@ -60,29 +60,28 @@ export default function App() {
         setActiveModal('ai');
         break;
       default:
-        setActiveModal('journey');
+        setActiveModal('projects');
     }
   }, []);
 
   const handleTeleport = useCallback((stationId) => {
     setTeleportTarget(stationId);
-    // Reset after trigger so subsequent clicks work
     setTimeout(() => setTeleportTarget(null), 100);
   }, []);
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-slate-950 select-none">
-      {/* 3D Game World */}
+    <div className="relative w-screen h-screen overflow-hidden bg-[#FAF6F0] select-none font-sans">
+      {/* 3D Clean Diorama World */}
       {!is2DMode && (
         <>
-          <ThreeWorld
+          <CleanWorld
             onProximityChange={handleProximityChange}
             onOpenStation={handleOpenStation}
             teleportTarget={teleportTarget}
             joystickInput={joystickInput}
             isInspecting={!!activeModal}
           />
-          <HUD
+          <CleanHUD
             currentStation={currentStation}
             onInspect={handleOpenStation}
             onTeleport={handleTeleport}
@@ -93,7 +92,7 @@ export default function App() {
         </>
       )}
 
-      {/* 2D Classic Portfolio Fallback */}
+      {/* 2D Classic Portfolio Recruiter View */}
       {is2DMode && (
         <div className="w-full h-full overflow-y-auto">
           <ClassicView
@@ -103,21 +102,21 @@ export default function App() {
         </div>
       )}
 
-      {/* Interactive Station Modals */}
+      {/* Station Modals */}
       {activeModal === 'projects' && (
-        <ProjectModal onClose={() => setActiveModal(null)} />
+        <CleanProjectModal onClose={() => setActiveModal(null)} />
       )}
       {activeModal === 'skills' && (
-        <SkillModal onClose={() => setActiveModal(null)} />
+        <CleanSkillModal onClose={() => setActiveModal(null)} />
       )}
       {activeModal === 'journey' && (
-        <ExperienceModal onClose={() => setActiveModal(null)} />
+        <CleanExperienceModal onClose={() => setActiveModal(null)} />
       )}
       {activeModal === 'contact' && (
-        <ContactModal onClose={() => setActiveModal(null)} />
+        <CleanContactModal onClose={() => setActiveModal(null)} />
       )}
       {activeModal === 'ai' && (
-        <AIChatModal onClose={() => setActiveModal(null)} />
+        <CleanAIModal onClose={() => setActiveModal(null)} />
       )}
     </div>
   );
