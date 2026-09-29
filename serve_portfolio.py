@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+import datetime
+import email.utils
+import gzip
 import http.client
+import io
 import json
+import mimetypes
 import os
 import ssl
 import threading
@@ -10,11 +15,14 @@ from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-ROOT = Path("/home/ubuntu/portfolio")
+mimetypes.add_type("model/gltf-binary", ".glb")
+mimetypes.add_type("application/javascript", ".js")
+
+ROOT = Path(os.environ.get("PORTFOLIO_ROOT", "/home/ubuntu/portfolio"))
 DIST_DIR = ROOT / "dist"
 AGENT_CONFIG = ROOT / "public" / "agents" / "portfolio-agent.json"   # public (display)
 AGENT_FULL_CONFIG = ROOT / "agents" / "portfolio-agent.json"          # full knowledge base
-PORT = 18891
+PORT = int(os.environ.get("PORTFOLIO_PORT", 18891))
 HOST = "127.0.0.1"
 
 # Session history: {session_id: [{"role": ..., "content": ...}, ...]}
@@ -267,23 +275,175 @@ def check_gateway() -> dict:
 # HTTP handler
 # ---------------------------------------------------------------------------
 
+_gzip_cache: dict = {}
+_gzip_lock = threading.Lock()
+
+COMPRESSIBLE_TYPES = {
+    "application/javascript",
+    "application/json",
+    "image/svg+xml",
+    "model/gltf-binary",
+}
+
+
+def is_compressible(ctype: str, path: str = "") -> bool:
+    if not ctype:
+        ctype = ""
+    base_type = ctype.split(";")[0].strip().lower()
+    if base_type.startswith("text/"):
+        return True
+    if base_type in COMPRESSIBLE_TYPES:
+        return True
+    if base_type == "application/octet-stream" and path.lower().endswith(".glb"):
+        return True
+    if path.lower().endswith(".glb"):
+        return True
+    return False
+
+
+def get_compressed_data(file_path: str, mtime: float) -> bytes:
+    key = (file_path, mtime)
+    with _gzip_lock:
+        if key in _gzip_cache:
+            return _gzip_cache[key]
+    with open(file_path, "rb") as f_in:
+        raw = f_in.read()
+    compressed = gzip.compress(raw, compresslevel=6)
+    with _gzip_lock:
+        _gzip_cache[key] = compressed
+    return compressed
+
+
 class PortfolioHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(DIST_DIR), **kwargs)
 
     def end_json(self, payload: dict, status: int = HTTPStatus.OK):
         body = json.dumps(payload).encode("utf-8")
+        encoding = self.headers.get("Accept-Encoding", "")
+        use_gzip = "gzip" in encoding.lower()
+        if use_gzip:
+            body = gzip.compress(body)
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
+        if use_gzip:
+            self.send_header("Content-Encoding", "gzip")
+            self.send_header("Vary", "Accept-Encoding")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
-        self.wfile.write(body)
+        if self.command != "HEAD":
+            self.wfile.write(body)
 
     def send_sse(self, event: str, data: dict):
         line = f"event: {event}\ndata: {json.dumps(data)}\n\n"
         self.wfile.write(line.encode("utf-8"))
         self.wfile.flush()
+
+    def send_head(self):
+        path = self.translate_path(self.path)
+        if os.path.isdir(path):
+            parts = urllib.parse.urlsplit(self.path)
+            if not parts.path.endswith('/'):
+                self.send_response(HTTPStatus.MOVED_PERMANENTLY)
+                new_parts = (parts[0], parts[1], parts[2] + '/',
+                             parts[3], parts[4])
+                new_url = urllib.parse.urlunsplit(new_parts)
+                self.send_header("Location", new_url)
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return None
+            for index in "index.html", "index.htm":
+                index = os.path.join(path, index)
+                if os.path.isfile(index):
+                    path = index
+                    break
+            else:
+                return self.list_directory(path)
+
+        ctype = self.guess_type(path)
+        if path.endswith("/"):
+            self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+            return None
+
+        try:
+            fs = os.stat(path)
+        except OSError:
+            self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+            return None
+
+        # Determine caching header
+        clean_url_path = urllib.parse.urlsplit(self.path).path
+        cache_control = None
+        if clean_url_path in ("/", "/index.html") or os.path.basename(path) == "index.html":
+            cache_control = "no-cache, must-revalidate"
+        elif clean_url_path.startswith(("/assets/", "/models/", "/sounds/")):
+            cache_control = "public, max-age=31536000, immutable"
+
+        # Check If-Modified-Since
+        if "If-Modified-Since" in self.headers and "If-None-Match" not in self.headers:
+            try:
+                ims = email.utils.parsedate_to_datetime(self.headers["If-Modified-Since"])
+            except (TypeError, IndexError, OverflowError, ValueError):
+                pass
+            else:
+                if ims.tzinfo is None:
+                    ims = ims.replace(tzinfo=datetime.timezone.utc)
+                if ims.tzinfo is datetime.timezone.utc:
+                    last_modif = datetime.datetime.fromtimestamp(fs.st_mtime, datetime.timezone.utc)
+                    last_modif = last_modif.replace(microsecond=0)
+                    if last_modif <= ims:
+                        self.send_response(HTTPStatus.NOT_MODIFIED)
+                        if cache_control:
+                            self.send_header("Cache-Control", cache_control)
+                        self.end_headers()
+                        return None
+
+        # Check gzip compression
+        accept_encoding = self.headers.get("Accept-Encoding", "")
+        supports_gzip = "gzip" in accept_encoding.lower()
+        should_compress = supports_gzip and is_compressible(ctype, path)
+
+        if should_compress:
+            try:
+                compressed = get_compressed_data(path, fs.st_mtime)
+            except OSError:
+                self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+                return None
+            f = io.BytesIO(compressed)
+            content_length = len(compressed)
+        else:
+            try:
+                f = open(path, "rb")
+            except OSError:
+                self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+                return None
+            content_length = fs.st_size
+
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", ctype)
+        if should_compress:
+            self.send_header("Content-Encoding", "gzip")
+            self.send_header("Vary", "Accept-Encoding")
+        self.send_header("Content-Length", str(content_length))
+        self.send_header("Last-Modified", self.date_time_string(fs.st_mtime))
+        if cache_control:
+            self.send_header("Cache-Control", cache_control)
+        self.end_headers()
+        return f
+
+    def do_HEAD(self):
+        if self.path == "/api/health":
+            gateway = check_gateway()
+            return self.end_json({
+                "ok": True,
+                "site": "live",
+                "persona": AGENT["displayName"],
+                "agentId": "portfolio-website",
+                "gateway": "live" if gateway["ok"] else "degraded",
+                "gatewayPayload": gateway.get("payload"),
+            })
+        return super().do_HEAD()
 
     def do_GET(self):
         if self.path == "/api/health":
