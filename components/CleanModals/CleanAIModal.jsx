@@ -33,7 +33,7 @@ Key architectural highlights:
 • Infrastructure: Docker, Linux VPS, Nginx, CI/CD, Systemd.`,
 
   contact: `You can reach Adrian directly via:
-• Email: adrian.tri.setiawan@gmail.com
+• Email: adriansetiawan26@gmail.com
 • GitHub: https://github.com/adriansetiawan
 • LinkedIn: https://linkedin.com/in/adrian-tri-setiawan
 • Telegram: https://t.me/adriansetiawan`,

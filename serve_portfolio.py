@@ -7,6 +7,7 @@ import io
 import json
 import mimetypes
 import os
+import re
 import ssl
 import threading
 import urllib.parse
@@ -17,8 +18,9 @@ from pathlib import Path
 
 mimetypes.add_type("model/gltf-binary", ".glb")
 mimetypes.add_type("application/javascript", ".js")
+mimetypes.add_type("text/css", ".css")
 
-ROOT = Path(os.environ.get("PORTFOLIO_ROOT", "/home/ubuntu/portfolio"))
+ROOT = Path(os.environ.get("PORTFOLIO_ROOT", "/home/ubuntu/portfolio" if Path("/home/ubuntu/portfolio").exists() else str(Path(__file__).resolve().parent)))
 DIST_DIR = ROOT / "dist"
 AGENT_CONFIG = ROOT / "public" / "agents" / "portfolio-agent.json"   # public (display)
 AGENT_FULL_CONFIG = ROOT / "agents" / "portfolio-agent.json"          # full knowledge base
@@ -37,6 +39,7 @@ MAX_HISTORY = 8  # messages (user+assistant pairs)
 
 def _load_api_config() -> dict:
     return {
+        "lunaria_url": os.environ.get("LUNARIA_URL", "http://127.0.0.1:8080/v1"),
         "router9_url": os.environ.get("ROUTER9_URL", "http://127.0.0.1:20128/v1"),
         "router9_key": os.environ.get("ROUTER9_API_KEY", ""),
         "moonshot_key": os.environ.get("MOONSHOT_API_KEY", ""),
@@ -165,6 +168,13 @@ def stream_llm(messages: list, provider_used: dict = None):
     provider in the fallback chain answered.
     """
     providers = []
+    if API_CONFIG.get("lunaria_url"):
+        providers.append({
+            "url": API_CONFIG["lunaria_url"].rstrip("/") + "/chat/completions",
+            "key": "no-key",
+            "model": "lunaria-0.5b",
+            "name": "lunaria:0.5b-q4_k_m",
+        })
     if API_CONFIG["router9_key"]:
         providers.append({
             "url": API_CONFIG["router9_url"] + "/chat/completions",
@@ -179,7 +189,6 @@ def stream_llm(messages: list, provider_used: dict = None):
             "model": "kimi-k2.5",
             "name": "moonshot:kimi-k2.5",
         })
-
     last_error = None
     for p in providers:
         try:
@@ -278,23 +287,29 @@ def check_gateway() -> dict:
 _gzip_cache: dict = {}
 _gzip_lock = threading.Lock()
 
+COMPRESSIBLE_EXTENSIONS = {
+    ".html", ".htm", ".css", ".js", ".mjs", ".json", ".glb", ".gltf", ".svg", ".xml", ".txt", ".webmanifest",
+}
+
 COMPRESSIBLE_TYPES = {
     "application/javascript",
     "application/json",
     "image/svg+xml",
     "model/gltf-binary",
+    "application/octet-stream",
 }
 
 
 def is_compressible(ctype: str, path: str = "") -> bool:
+    ext = os.path.splitext(path)[1].lower()
+    if ext in COMPRESSIBLE_EXTENSIONS:
+        return True
     if not ctype:
         ctype = ""
     base_type = ctype.split(";")[0].strip().lower()
     if base_type.startswith("text/"):
         return True
     if base_type in COMPRESSIBLE_TYPES:
-        return True
-    if base_type == "application/octet-stream" and path.lower().endswith(".glb"):
         return True
     if path.lower().endswith(".glb"):
         return True
@@ -374,11 +389,34 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
 
         # Determine caching header
         clean_url_path = urllib.parse.urlsplit(self.path).path
+        filename = os.path.basename(path)
         cache_control = None
-        if clean_url_path in ("/", "/index.html") or os.path.basename(path) == "index.html":
+
+        # Check if asset has fingerprint hash or is in /assets/
+        is_hashed_asset = (
+            clean_url_path.startswith("/assets/") or
+            bool(re.search(r"[-_.][a-zA-Z0-9_-]{8,}\.(js|css|woff2?|png|jpe?g|webp|svg|glb)$", filename))
+        )
+
+        if clean_url_path in ("/", "/index.html") or filename in ("index.html", "index.htm"):
             cache_control = "no-cache, must-revalidate"
-        elif clean_url_path.startswith(("/assets/", "/models/", "/sounds/")):
+        elif is_hashed_asset:
             cache_control = "public, max-age=31536000, immutable"
+        elif clean_url_path.startswith(("/models/", "/sounds/", "/fonts/", "/icons/", "/branding/", "/profile/", "/projects/")):
+            cache_control = "public, max-age=31536000, immutable"
+        else:
+            cache_control = "public, max-age=86400"
+
+        etag = f'"{int(fs.st_mtime):x}-{fs.st_size:x}"'
+
+        # Check ETag (If-None-Match)
+        if "If-None-Match" in self.headers and self.headers["If-None-Match"].strip() == etag:
+            self.send_response(HTTPStatus.NOT_MODIFIED)
+            if cache_control:
+                self.send_header("Cache-Control", cache_control)
+            self.send_header("ETag", etag)
+            self.end_headers()
+            return None
 
         # Check If-Modified-Since
         if "If-Modified-Since" in self.headers and "If-None-Match" not in self.headers:
@@ -396,9 +434,9 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
                         self.send_response(HTTPStatus.NOT_MODIFIED)
                         if cache_control:
                             self.send_header("Cache-Control", cache_control)
+                        self.send_header("ETag", etag)
                         self.end_headers()
                         return None
-
         # Check gzip compression
         accept_encoding = self.headers.get("Accept-Encoding", "")
         supports_gzip = "gzip" in accept_encoding.lower()
@@ -427,6 +465,7 @@ class PortfolioHandler(SimpleHTTPRequestHandler):
             self.send_header("Vary", "Accept-Encoding")
         self.send_header("Content-Length", str(content_length))
         self.send_header("Last-Modified", self.date_time_string(fs.st_mtime))
+        self.send_header("ETag", etag)
         if cache_control:
             self.send_header("Cache-Control", cache_control)
         self.end_headers()

@@ -1,6 +1,6 @@
 # Adrian Tri Setiawan — Portfolio
 
-Personal portfolio website built with React, Vite, and Tailwind CSS. Features an AI chatbot persona (Lady Lunaria Eldharia) powered by the OpenClaw agent runtime.
+Personal portfolio website built with React, Vite, and Tailwind CSS. Includes a 3D portfolio, a 2D profile view, and a local Lady Lunaria guide.
 
 **Live site:** [adriandev.online](https://adriandev.online)
 
@@ -13,7 +13,7 @@ Personal portfolio website built with React, Vite, and Tailwind CSS. Features an
 | Frontend | React 19, Vite 8, Tailwind CSS v4 |
 | Animations | Motion (Framer Motion) |
 | Icons | react-icons (Simple Icons) |
-| AI chatbot | OpenClaw agent runtime |
+| Portfolio guide | Local profile and project data |
 | Backend | Python `http.server` (serve_portfolio.py) |
 | Hosting | Self-hosted / Cloudflare Pages compatible |
 
@@ -24,14 +24,16 @@ Personal portfolio website built with React, Vite, and Tailwind CSS. Features an
 ```
 portfolio/
 ├── src/
-│   ├── App.jsx          # All components and page logic
+│   ├── App.jsx          # React app entry point
 │   └── index.css        # Tailwind config, CSS custom properties, themes
 ├── public/
-│   ├── projects/        # Project preview SVGs
-│   └── agents/          # OpenClaw agent config (portfolio-agent.json)
+│   ├── profile/        # Adrian's portrait
+│   ├── projects/       # Project images
+│   └── agents/         # Public agent profile
 ├── content/
-│   └── projects.json    # Project data
-├── serve_portfolio.py   # Local dev server + /api/portfolio-chat endpoint
+│   ├── profile.json    # Profile and technical stack
+│   └── projects.json   # Project data
+├── serve_portfolio.py  # Local dev server + /api/portfolio-chat endpoint
 └── vite.config.js
 ```
 
@@ -47,7 +49,7 @@ npm install
 npm run dev
 ```
 
-The app runs at `http://localhost:5173`. The AI chatbot requires the OpenClaw gateway to be running separately (see below).
+The app runs at `http://localhost:5173`. The in-page guide reads the local profile and project records; it does not require an OpenClaw gateway.
 
 ---
 
@@ -80,11 +82,9 @@ OPENCLAW_GATEWAY_TOKEN=your_openclaw_gateway_token_here
 
 ---
 
-## AI chatbot
+## Portfolio guide
 
-The chatbot uses the **OpenClaw** agent runtime with the config at `public/agents/portfolio-agent.json`. The agent is named `portfolio-website` and presents as Lady Lunaria Eldharia.
-
-When the OpenClaw gateway is unreachable, `serve_portfolio.py` falls back to a local keyword-based reply function so the chat always responds.
+Lady Lunaria uses `content/profile.json` and `content/projects.json` for profile, stack, and project answers. `public/agents/portfolio-agent.json` stores the public agent profile.
 
 ---
 

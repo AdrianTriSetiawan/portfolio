@@ -21,6 +21,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { audio } from '../audio/LoFiAudioEngine';
+
 export default function CleanHUD({
   currentStation,
   onInspect,
@@ -103,6 +104,18 @@ export default function CleanHUD({
           <FileText className="w-4 h-4 text-[#D27D46]" />
           <span>2D Recruiter CV</span>
         </button>
+      </div>
+
+      <div className="absolute top-16 left-4 sm:top-20 sm:left-6 flex items-center gap-2.5 max-w-[calc(100vw-2rem)] px-2.5 py-2 rounded-2xl bg-[#FFFDF9] border-2 border-[#e5dcd3] shadow-md text-[#5c4432]">
+        <img
+          src="/profile/adrian-portrait.jpg"
+          alt=""
+          className="w-9 h-9 rounded-full object-cover border border-[#e5dcd3]"
+        />
+        <div className="min-w-0">
+          <p className="text-xs font-bold leading-tight">Adrian Tri Setiawan</p>
+          <p className="text-[11px] leading-tight text-[#6b4e36]">Fullstack Engineer & AI R&D Builder</p>
+        </div>
       </div>
 
       {/* Top Right: Multi-Track Japanese Lo-Fi Audio Controller */}
@@ -225,7 +238,7 @@ export default function CleanHUD({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-[#F4ECE2] text-[#5c4432] text-xs font-bold transition whitespace-nowrap"
           >
             <Cpu className="w-3.5 h-3.5 text-[#3B82F6]" />
-            <span>Arsenal</span>
+            <span>Tech Stack</span>
           </button>
 
           <button
@@ -233,7 +246,7 @@ export default function CleanHUD({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-[#F4ECE2] text-[#5c4432] text-xs font-bold transition whitespace-nowrap"
           >
             <Milestone className="w-3.5 h-3.5 text-[#10B981]" />
-            <span>Journey</span>
+            <span>Profile</span>
           </button>
 
           <button
@@ -249,7 +262,7 @@ export default function CleanHUD({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-[#F4ECE2] text-[#5c4432] text-xs font-bold transition whitespace-nowrap"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#8B5CF6]" />
-            <span>AI Shrine</span>
+            <span>AI Guide</span>
           </button>
         </div>
       </div>

@@ -25,7 +25,7 @@ import { audio } from '../audio/LoFiAudioEngine';
 
 export default function ClassicView({ onOpenAIChat, onToggle3D }) {
   const [copied, setCopied] = useState(false);
-  const email = 'adrian.tri.setiawan@gmail.com';
+  const email = 'adriansetiawan26@gmail.com';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);
@@ -326,7 +326,7 @@ export default function ClassicView({ onOpenAIChat, onToggle3D }) {
               className="px-6 py-3 rounded-full bg-[#D27D46] hover:bg-[#b86633] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2 hover:scale-105"
             >
               {copied ? <Check className="w-4 h-4" /> : <Mail className="w-4 h-4" />}
-              <span>{copied ? 'Copied to Clipboard!' : 'Copy adrian.tri.setiawan@gmail.com'}</span>
+              <span>{copied ? 'Copied to Clipboard!' : 'Copy adriansetiawan26@gmail.com'}</span>
             </button>
           </div>
         </section>

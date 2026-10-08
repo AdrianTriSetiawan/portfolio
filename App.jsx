@@ -1,25 +1,37 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import CleanWorld from './components/CleanWorld';
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import CleanHUD from './components/CleanHUD';
 import LoadingScreen from './components/LoadingScreen';
 import ClassicView from './components/ClassicView';
-import CleanProjectModal from './components/CleanModals/CleanProjectModal';
-import CleanSkillModal from './components/CleanModals/CleanSkillModal';
-import CleanExperienceModal from './components/CleanModals/CleanExperienceModal';
-import CleanContactModal from './components/CleanModals/CleanContactModal';
-import CleanAIModal from './components/CleanModals/CleanAIModal';
+import CharacterDialogue from './components/CharacterDialogue';
 import { audio } from './audio/LoFiAudioEngine';
 
+// Lazy load heavy 3D worlds and modals for instant initial load (sub-second FCP)
+const CleanWorld = lazy(() => import('./components/CleanWorld'));
+const ThreeWorld = lazy(() => import('./components/ThreeWorld'));
+const CleanProjectModal = lazy(() => import('./components/CleanModals/CleanProjectModal'));
+const CleanSkillModal = lazy(() => import('./components/CleanModals/CleanSkillModal'));
+const CleanExperienceModal = lazy(() => import('./components/CleanModals/CleanExperienceModal'));
+const CleanContactModal = lazy(() => import('./components/CleanModals/CleanContactModal'));
+const CleanAIModal = lazy(() => import('./components/CleanModals/CleanAIModal'));
+
 export default function App() {
-  const [is2DMode, setIs2DMode] = useState(false);
+  const [is2DMode, setIs2DMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('view') === '2d' || params.get('mode') === '2d' || params.get('classic') === 'true';
+    }
+    return false;
+  });
   const [currentStation, setCurrentStation] = useState(null);
   const [activeModal, setActiveModal] = useState(null);
   const [teleportTarget, setTeleportTarget] = useState(null);
   const [joystickInput, setJoystickInput] = useState({ x: 0, y: 0 });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!is2DMode);
   const [loadProgress, setLoadProgress] = useState(0);
   const [loadStatus, setLoadStatus] = useState('Entering Sakura Garden...');
   const [isLoadComplete, setIsLoadComplete] = useState(false);
+  const [isDialogueOpen, setIsDialogueOpen] = useState(true);
+
   // Escape key closes open modal
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -37,6 +49,13 @@ export default function App() {
       setJoystickInput({ x: 0, y: 0 });
     }
   }, [activeModal]);
+
+  // If in 2D mode, dismiss loading screen immediately
+  useEffect(() => {
+    if (is2DMode) {
+      setIsLoading(false);
+    }
+  }, [is2DMode]);
 
   const handleProximityChange = useCallback((station) => {
     setCurrentStation(station);
@@ -78,20 +97,32 @@ export default function App() {
       {/* 3D Clean Diorama World */}
       {!is2DMode && (
         <>
-          <CleanWorld
-            onProximityChange={handleProximityChange}
-            onOpenStation={handleOpenStation}
-            teleportTarget={teleportTarget}
-            joystickInput={joystickInput}
-            isInspecting={!!activeModal}
-            onLoadProgress={(p, status) => {
-              setLoadProgress(p);
-              setLoadStatus(status);
-            }}
-            onLoadComplete={() => {
-              setIsLoadComplete(true);
-            }}
-          />
+          <Suspense
+            fallback={
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#FAF6F0] z-10">
+                <div className="w-10 h-10 border-3 border-[#D27D46]/20 border-t-[#D27D46] rounded-full animate-spin" />
+                <p className="mt-3 text-xs font-mono tracking-widest text-[#7C6652] uppercase">
+                  Entering Garden...
+                </p>
+              </div>
+            }
+          >
+            <CleanWorld
+              onProximityChange={handleProximityChange}
+              onOpenStation={handleOpenStation}
+              teleportTarget={teleportTarget}
+              joystickInput={joystickInput}
+              isInspecting={!!activeModal}
+              isMovementLocked={isDialogueOpen}
+              onLoadProgress={(p, status) => {
+                setLoadProgress(p);
+                setLoadStatus(status);
+              }}
+              onLoadComplete={() => {
+                setIsLoadComplete(true);
+              }}
+            />
+          </Suspense>
           <CleanHUD
             currentStation={currentStation}
             onInspect={handleOpenStation}
@@ -100,6 +131,12 @@ export default function App() {
             onToggle2D={() => setIs2DMode(true)}
             onJoystickMove={setJoystickInput}
           />
+          {/* Initial Character Greeting Dialogue (WoraWork style onboarding) */}
+          {!isLoading && isDialogueOpen && (
+            <CharacterDialogue
+              onComplete={() => setIsDialogueOpen(false)}
+            />
+          )}
         </>
       )}
 
@@ -114,21 +151,23 @@ export default function App() {
       )}
 
       {/* Station Modals */}
-      {activeModal === 'projects' && (
-        <CleanProjectModal onClose={() => setActiveModal(null)} />
-      )}
-      {activeModal === 'skills' && (
-        <CleanSkillModal onClose={() => setActiveModal(null)} />
-      )}
-      {activeModal === 'journey' && (
-        <CleanExperienceModal onClose={() => setActiveModal(null)} />
-      )}
-      {activeModal === 'contact' && (
-        <CleanContactModal onClose={() => setActiveModal(null)} />
-      )}
-      {activeModal === 'ai' && (
-        <CleanAIModal onClose={() => setActiveModal(null)} />
-      )}
+      <Suspense fallback={null}>
+        {activeModal === 'projects' && (
+          <CleanProjectModal onClose={() => setActiveModal(null)} />
+        )}
+        {activeModal === 'skills' && (
+          <CleanSkillModal onClose={() => setActiveModal(null)} />
+        )}
+        {activeModal === 'journey' && (
+          <CleanExperienceModal onClose={() => setActiveModal(null)} />
+        )}
+        {activeModal === 'contact' && (
+          <CleanContactModal onClose={() => setActiveModal(null)} />
+        )}
+        {activeModal === 'ai' && (
+          <CleanAIModal onClose={() => setActiveModal(null)} />
+        )}
+      </Suspense>
 
       {/* Sleek Japanese Loading Screen */}
       {isLoading && (

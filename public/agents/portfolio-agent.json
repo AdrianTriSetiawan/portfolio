@@ -38,21 +38,26 @@
   "knowledge": {
     "headline": "Fullstack Engineer and AI R&D Builder",
     "name": "Adrian Tri Setiawan",
-    "base": "Jakarta - Surabaya",
-    "focus": "AI research and development, machine learning, deep learning, fullstack web systems, and applied computer vision.",
+    "base": "Jakarta / Surabaya",
+    "focus": "Assistant systems, internal tools, monitoring flow, dan web yang punya karakter",
     "strengths": [
-      "Fast adaptation to new domains and problem spaces",
-      "Able to work solo or within a team",
-      "Interested in turning AI exploration into usable systems",
-      "Comfortable moving from prototype to implementation"
+      "Bisa bekerja fullstack secara solo maupun dalam tim",
+      "Mudah beradaptasi dan cepat masuk ke domain problem yang baru",
+      "Terbuka belajar hal-hal baru, termasuk requirement yang aneh sekalipun"
     ],
     "featuredProject": {
-      "name": "FaceGate",
-      "summary": "Private face recognition project using CCTV-based input.",
+      "name": "InsightFace — Attendance & Recognition System",
+      "summary": "Sistem absensi otomatis berbasis face recognition menggunakan CCTV dan InsightFace (512-dimensi). Anti-spoofing, dual camera RTSP, auto-reconnect watchdog, attendance logging otomatis, dan web interface realtime.",
+      "detail": "Versi PTI-Absensi adalah monorepo mencakup backend FastAPI, web React + Vite, dan mobile Expo React Native — digunakan operasional nyata di lingkungan institutional.",
       "stack": [
         "Python",
+        "InsightFace",
         "FastAPI",
-        "Computer Vision"
+        "Flask",
+        "OpenCV",
+        "React",
+        "Expo",
+        "PostgreSQL"
       ]
     },
     "education": "Informatics - Universitas Nasional",

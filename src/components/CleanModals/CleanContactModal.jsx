@@ -8,7 +8,7 @@ export default function CleanContactModal({ onClose }) {
   const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
-  const email = 'adrian.tri.setiawan@gmail.com';
+  const email = 'adriansetiawan26@gmail.com';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);

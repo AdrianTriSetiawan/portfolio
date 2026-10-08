@@ -1,50 +1,45 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CleanModalFrame from './CleanModalFrame';
-import { Sparkles, Send, Bot, User, ArrowRight } from 'lucide-react';
+import { Sparkles, Send, Bot, User } from 'lucide-react';
 import { audio } from '../../audio/LoFiAudioEngine';
-
+import projectsData from '../../../content/projects.json';
+import profileData from '../../../content/profile.json';
 const QUICK_PROMPTS = [
-  'Explain the FaceGate ArcFace architecture & latency',
-  'How does EProcMon scrape 150+ BUMN portals reliably?',
-  'What is Adrian\'s primary tech stack and experience?',
-  'How do I contact Adrian for senior engineering roles?',
+  'Tell me about the InsightFace attendance project',
+  'Which projects are in the portfolio?',
+  "Which technologies are in Adrian's profile?",
+  'How can I contact Adrian for freelance work?',
 ];
 
 const KNOWLEDGE_BASE = {
-  facegate: `FaceGate is Adrian's production biometric access control system. It utilizes ArcFace 512-dimensional embeddings with cosine similarity search across a 10,000+ identity gallery. 
-Key architectural highlights:
-• Latency: <280ms end-to-end inference per frame.
-• Accuracy: 99.82% Top-1 verification rate on benchmark datasets.
-• Video Pipeline: Asynchronous RTSP stream decoding using OpenCV and custom ring-buffers.
-• Deployment: Containerized with Docker and optimized with TensorRT on NVIDIA Jetson / GPU edge servers.`,
-
-  eprocmon: `EProcMon is an enterprise tender monitoring orchestrator monitoring 150+ Indonesian BUMN and state procurement portals.
-Key architectural highlights:
-• Resilient Scraping: Playwright headless browser pool with TLS fingerprinting and stealth anti-bot bypass.
-• Distributed Workers: Celery/Redis queue distributing scrape tasks across rotating IP proxies.
-• Data Normalization: Automated deduplication and schema normalization into PostgreSQL with TimescaleDB indexing.
-• Alerting: Real-time Telegram and email notifications for high-value tenders.`,
-
-  stack: `Adrian is a Senior Software Engineer specializing in:
-• AI & Computer Vision: PyTorch, ArcFace, OpenCV, TensorRT, YOLOv8, MediaPipe.
-• High-Concurrency Backends: Go (Golang), Python (AsyncIO/FastAPI), Node.js.
-• Databases & Queues: PostgreSQL, Redis, RabbitMQ, TimescaleDB.
-• 3D & Creative Web: Three.js, WebGL, React, Tailwind CSS.
-• Infrastructure: Docker, Linux VPS, Nginx, CI/CD, Systemd.`,
-
-  contact: `You can reach Adrian directly via:
-• Email: adrian.tri.setiawan@gmail.com
-• GitHub: https://github.com/adriansetiawan
+  profile: `Adrian is a ${profileData.role}. Based in ${profileData.base}, Indonesia. ${profileData.intro}`,
+  stack: `Technologies listed in Adrian's profile: ${profileData.stack.join(', ')}.`,
+  contact: `For freelance inquiries, contact Adrian at:
+• Email: adriansetiawan26@gmail.com
+• GitHub: https://github.com/AdrianTriSetiawan/
 • LinkedIn: https://linkedin.com/in/adrian-tri-setiawan
 • Telegram: https://t.me/adriansetiawan`,
 };
+
+const normalize = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+
+const findProject = (text) => {
+  const queryTokens = normalize(text).split(' ').filter((token) => token.length > 3);
+  return projectsData.find((project) => {
+    const projectTokens = normalize(`${project.id} ${project.name} ${project.tag}`).split(' ');
+    return queryTokens.some((token) => projectTokens.includes(token));
+  });
+};
+
+const listProjects = () =>
+  projectsData.map((project) => `${project.name}\n${project.summary}`).join('\n\n');
 
 export default function CleanAIModal({ onClose }) {
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'bot',
-      text: 'Greetings traveler! I am Lady Lunaria, Adrian\'s autonomous AI companion. Ask me anything about Adrian\'s systems architecture, computer vision models, or backend engineering.',
+      text: "I'm Lady Lunaria, the guide to Adrian's portfolio. Ask me about his profile, projects, technical stack, or contact details.",
     },
   ]);
   const [input, setInput] = useState('');
@@ -69,16 +64,25 @@ export default function CleanAIModal({ onClose }) {
       let reply = '';
       const lower = text.toLowerCase();
 
-      if (lower.includes('facegate') || lower.includes('arcface') || lower.includes('latency') || lower.includes('vision')) {
-        reply = KNOWLEDGE_BASE.facegate;
-      } else if (lower.includes('eprocmon') || lower.includes('bumn') || lower.includes('scrap') || lower.includes('tender')) {
-        reply = KNOWLEDGE_BASE.eprocmon;
-      } else if (lower.includes('stack') || lower.includes('skill') || lower.includes('tech') || lower.includes('experience')) {
+      const project = findProject(text);
+
+      if (project) {
+        reply = [
+          project.name,
+          project.summary,
+          project.detail,
+          project.stack?.length ? `Stack: ${project.stack.join(', ')}` : '',
+        ].filter(Boolean).join('\n\n');
+      } else if (lower.includes('architecture') || lower.includes('system') || lower.includes('scrap') || lower.includes('tender') || lower.includes('bumn')) {
+        reply = `I couldn't match that to a current project. Projects listed here:\n\n${listProjects()}`;
+      } else if (lower.includes('project') || lower.includes('portfolio')) {
+        reply = listProjects();
+      } else if (lower.includes('stack') || lower.includes('skill') || lower.includes('tech')) {
         reply = KNOWLEDGE_BASE.stack;
       } else if (lower.includes('contact') || lower.includes('reach') || lower.includes('hire') || lower.includes('email')) {
         reply = KNOWLEDGE_BASE.contact;
       } else {
-        reply = `Adrian is a Senior Software Engineer & AI Specialist with extensive production experience building high-performance systems like FaceGate (ArcFace biometric vision) and EProcMon (150+ tender scrapers). Feel free to ask specifically about his computer vision pipelines, Go/Python backends, or contact details!`;
+        reply = KNOWLEDGE_BASE.profile;
       }
 
       setMessages((prev) => [...prev, { id: Date.now() + 1, sender: 'bot', text: reply }]);
@@ -134,7 +138,7 @@ export default function CleanAIModal({ onClose }) {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse" />
                 <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse delay-100" />
                 <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse delay-200" />
-                <span className="font-mono ml-1">Consulting knowledge graph...</span>
+                <span className="font-mono ml-1">Checking portfolio data...</span>
               </div>
             </div>
           )}
@@ -159,7 +163,7 @@ export default function CleanAIModal({ onClose }) {
         <div className="p-4 border-t border-[#f0e7dd] bg-[#FFFDF9] flex items-center gap-2.5">
           <input
             type="text"
-            placeholder="Ask Lady Lunaria about Adrian's systems..."
+            placeholder="Ask about Adrian's profile, projects, or contact details..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}

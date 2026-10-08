@@ -1,43 +1,24 @@
 import React from 'react';
 import CleanModalFrame from './CleanModalFrame';
-import { Briefcase, Calendar, MapPin, CheckCircle2, Award } from 'lucide-react';
+import { MapPin, CheckCircle2 } from 'lucide-react';
+import profileData from '../../../content/profile.json';
 
 const EXPERIENCES = [
   {
-    role: 'Lead Systems & AI Engineer',
-    company: 'Enterprise AI & Procurement Systems',
-    period: '2023 - Present',
-    location: 'Surabaya / Remote',
-    color: '#D27D46',
-    summary: 'Spearheaded end-to-end architecture of computer vision pipelines, multi-agent AI ecosystems, and distributed tender intelligence.',
-    achievements: [
-      'Architected FaceGate ArcFace 512D biometric access pipeline achieving <280ms inference latency and 99.82% Top-1 accuracy.',
-      'Engineered EProcMon distributed scraping orchestrator spanning 150+ BUMN and governmental procurement portals with 99.9% uptime.',
-      'Designed Lunaria AI: autonomous agent orchestration platform with streaming SSE, vector memory indexing, and tool execution.',
-    ],
-    tech: ['Python', 'PyTorch', 'Go', 'FastAPI', 'PostgreSQL', 'Docker', 'Three.js'],
-  },
-  {
-    role: 'Fullstack & Backend Engineer',
-    company: 'Enterprise Web & Surveillance Infrastructure',
-    period: '2021 - 2023',
-    location: 'Indonesia',
-    color: '#3B82F6',
-    summary: 'Built high-throughput hardware surveillance integrations, automated ETL engines, and robust client portals.',
-    achievements: [
-      'Integrated EZVIZ surveillance SDK and RTSP hardware decoders for real-time video monitoring and multi-camera event alerts.',
-      'Implemented distributed PostgreSQL query optimization, connection pooling, and Redis caching layers for high concurrent traffic.',
-      'Authored automated data cleaning and normalization pipelines processing tens of thousands of tender records weekly.',
-    ],
-    tech: ['Go', 'Node.js', 'React', 'Redis', 'PostgreSQL', 'RabbitMQ', 'Nginx'],
+    role: 'Fullstack Engineer and AI R&D Builder',
+    company: 'PT Piramida Teknologi Informasi (PTI)',
+    location: 'Jakarta / Surabaya, Indonesia',
+    summary: 'Currently employed at PTI — not open to work, but available for freelance.',
+    highlights: profileData.highlights,
+    tech: profileData.stack,
   },
 ];
 
 export default function CleanExperienceModal({ onClose }) {
   return (
     <CleanModalFrame
-      stationTag="MILESTONES & JOURNEY"
-      title="Engineering Experience & Impact"
+      stationTag="CURRENT ROLE"
+      title="Current Role & Profile"
       accentColor="#10B981"
       maxWidth="max-w-4xl"
       onClose={onClose}
@@ -45,10 +26,10 @@ export default function CleanExperienceModal({ onClose }) {
       <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 bg-[#FFFDF9]">
         <div className="border-b border-[#f0e7dd] pb-4">
           <h3 className="text-2xl font-extrabold text-[#37281D] tracking-tight">
-            Career Journey & Milestones
+            Current Role & Profile
           </h3>
           <p className="text-sm text-[#6b4e36] mt-1">
-            Track record of shipping production-critical software, biometric vision models, and distributed data systems.
+            {profileData.intro}
           </p>
         </div>
 
@@ -65,10 +46,6 @@ export default function CleanExperienceModal({ onClose }) {
                 </div>
                 <div className="flex items-center gap-3 text-xs font-mono text-[#8a7260]">
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5 text-[#10B981]" />
-                    {exp.period}
-                  </span>
-                  <span className="flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5 text-[#3B82F6]" />
                     {exp.location}
                   </span>
@@ -81,10 +58,10 @@ export default function CleanExperienceModal({ onClose }) {
 
               <div className="space-y-2">
                 <span className="text-[11px] font-mono font-bold text-[#8a7260] uppercase tracking-wider">
-                  Key Achievements
+                  Profile Highlights
                 </span>
                 <ul className="space-y-2">
-                  {exp.achievements.map((item, i) => (
+                  {exp.highlights.map((item, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#4a3b30]">
                       <CheckCircle2 className="w-4 h-4 text-[#10B981] flex-shrink-0 mt-0.5" />
                       <span>{item}</span>

@@ -1,137 +1,74 @@
 [
   {
-    "id": "facegate",
-    "name": "FaceGate — Enterprise Biometric Attendance & CCTV Recognition",
-    "tag": "Computer Vision · Distributed Systems",
-    "summary": "High-throughput automated attendance & access control engine utilizing multi-camera RTSP surveillance feeds. Delivers sub-280ms inference across thousands of registered identities with 99.82% top-1 verification accuracy, dynamic anti-spoofing liveness filters, and automated attendance state-machines.",
-    "detail": "Monorepo architecture featuring an asynchronous FastAPI Python microservice running TensorRT/ONNX-accelerated face detection and 512-dimensional facial embedding extraction. Employs pgvector cosine index search in PostgreSQL for millisecond matching against large employee rosters. Frontends include a real-time reactive Vite/React operations console and an Expo React Native mobile scanner with offline cryptographic sync.",
-    "metrics": [
-      { "label": "Embeddings", "value": "512-dim ArcFace" },
-      { "label": "Latency", "value": "<280ms p95" },
-      { "label": "Accuracy", "value": "99.82% Top-1" },
-      { "label": "Deployment", "value": "Institutional Live" }
-    ],
-    "architecture": "RTSP Multi-Stream ──> GStreamer/FFmpeg ──> YOLOv8 Face Align ──> 512D ArcFace Feature Net\n                                                                          │\nPostgreSQL pgvector <── REST / SSE Event Bus <── Cosine Nearest Neighbor <┘\n        │\n        └──> React Vite Live Console (WebSockets) + Expo Mobile App",
-    "stack": [
-      "Python",
-      "FastAPI",
-      "OpenCV",
-      "TensorRT",
-      "PostgreSQL",
-      "pgvector",
-      "React",
-      "Expo React Native"
-    ],
+    "id": "insightface",
+    "name": "InsightFace — Attendance & Recognition System",
+    "tag": "Computer Vision · Private",
+    "summary": "Sistem absensi otomatis berbasis face recognition menggunakan CCTV dan InsightFace (512-dimensi). Anti-spoofing, dual camera RTSP, auto-reconnect watchdog, attendance logging otomatis, dan web interface realtime.",
+    "detail": "Versi PTI-Absensi adalah monorepo mencakup backend FastAPI, web React + Vite, dan mobile Expo React Native — digunakan operasional nyata di lingkungan institutional.",
+    "stack": ["Python", "InsightFace", "FastAPI", "Flask", "OpenCV", "React", "Expo", "PostgreSQL"],
     "image": "/projects/testing1.jpg",
     "highlight": true,
     "link": null,
-    "github": null,
-    "private": true
-  },
-  {
-    "id": "eprocmon",
-    "name": "EProcMon — Autonomous BUMN Tender Intelligence & Scraper Engine",
-    "tag": "Distributed Scraping · Event Stream",
-    "summary": "24/7 high-resilience autonomous monitoring platform scraping over 150+ Indonesian BUMN, LPSE, and SPSE procurement portals. Implements adaptive DOM parsers, automatic session rotation, and keyword classification pipelines to alert bidding teams in real-time.",
-    "detail": "Engineered as an ultra-low-overhead monorepo powered by Bun runtime and Elysia.js. Scheduled distributed scraper workers cycle through multi-source government endpoints, normalizing disparate HTML payloads into structured JSON entities. Real-time updates dispatch via Supabase CDC (Change Data Capture) WebSockets to a reactive SvelteKit analytical dashboard and instant Discord webhook webhooks with priority filtering.",
-    "metrics": [
-      { "label": "Coverage", "value": "150+ Portals" },
-      { "label": "Uptime", "value": "99.9% 24/7" },
-      { "label": "Cycle", "value": "5-min sync cadence" },
-      { "label": "Engine", "value": "Bun + Elysia.js" }
-    ],
-    "architecture": "150+ LPSE/SPSE Portals ──> Distributed Bun Headless Workers ──> Normalizer & Classifier\n                                                                      │\nDiscord Webhooks <── Realtime SSE Pipeline <── Supabase Postgres DB <┘\n                                                      │\n                                         SvelteKit Analytical GUI",
-    "stack": [
-      "Bun",
-      "Elysia.js",
-      "TypeScript",
-      "SvelteKit",
-      "Supabase",
-      "PostgreSQL",
-      "Tailwind CSS",
-      "Discord Webhooks"
-    ],
-    "image": "/projects/testing1.jpg",
-    "highlight": true,
-    "link": "https://ai.adriandev.online/tender-ai",
-    "github": null,
     "private": true
   },
   {
     "id": "lunaria",
-    "name": "Lunaria AI — Autonomous Multi-Agent Personality & Tool Engine",
-    "tag": "AI Agents · LLM Orchestration",
-    "summary": "Interactive autonomous assistant framework uniting persistent identity memory, deterministic tool-calling schemas, and SSE streaming token generation. Powers operator workflows and user-facing interactive conversational shims.",
-    "detail": "Built atop modern LLM runtime architectures with structured JSON function calling, context compression buffers, and automated session state tracking. Includes custom prompt injection protections and dynamic domain knowledge retrieval.",
-    "metrics": [
-      { "label": "Protocol", "value": "SSE Stream" },
-      { "label": "Memory", "value": "Sliding Context" },
-      { "label": "Tools", "value": "Dynamic Schemas" }
-    ],
-    "architecture": "User Message / Prompt ──> Tokenizer / Context Window ──> LLM Completion Stream\n                                     │                             │\n                          Function Tool Execution ◄────────────────┘\n                                     │\n                       SSE Stream Response to UI",
-    "stack": [
-      "TypeScript",
-      "Python",
-      "OpenAI / Anthropic APIs",
-      "Server-Sent Events",
-      "FastAPI",
-      "Vector Memory"
-    ],
+    "name": "Lady Lunaria Eldharia",
+    "tag": "AI Identity System",
+    "summary": "A personality-driven assistant system that combines identity consistency, practical utility, and operator-facing interaction.",
+    "detail": "Presented here through the Clawbot visual layer, Lunaria is the public AI face that turns assistant behavior into something memorable and usable.",
+    "stack": ["OpenClaw", "Assistant Design", "Automation", "Discord"],
     "image": "/projects/clawbot-avatar.svg",
     "highlight": false,
     "link": null,
-    "github": null,
     "private": false
   },
   {
     "id": "ezviz",
-    "name": "EZVIZ RTSP Telemetry & Camera Automation Suite",
-    "tag": "Open Source · Systems Tooling",
-    "summary": "Cross-platform desktop application and hardware control suite for remote EZVIZ surveillance cameras. Supports multi-stream RTSP decoding, pan-tilt-zoom (PTZ) velocity control, IR-night mode switching, local cryptographic session caching, and alarm event webhooks.",
-    "detail": "Eliminates proprietary vendor cloud lock-in by executing direct encrypted socket and HTTP API sessions against EZVIZ device endpoints. Combines OpenCV frame acquisition with CustomTkinter hardware acceleration for rock-solid stability in production factory monitoring.",
-    "metrics": [
-      { "label": "Format", "value": "H.264 / RTSP" },
-      { "label": "GUI", "value": "CustomTkinter" },
-      { "label": "Source", "value": "Open Source (GitHub)" }
-    ],
-    "architecture": "Hardware Camera ──> RTSP Video Feed ──> OpenCV Frame Processor ──> Desktop Canvas GUI\n        │\nDevice API Session ──> pyezvizapi Encrypted Channel ──> Pan/Tilt/Zoom Controller",
-    "stack": [
-      "Python 3",
-      "OpenCV",
-      "CustomTkinter",
-      "pyezvizapi",
-      "RTSP / FFmpeg"
-    ],
+    "name": "EZVIZ Camera Monitoring & Controlling",
+    "tag": "Python Desktop · CCTV",
+    "summary": "Aplikasi desktop Python untuk monitoring dan controlling kamera EZVIZ dengan live RTSP streaming, PTZ, alarm, snapshot, IR LED, dan privacy mode.",
+    "detail": "Dibangun dengan pyezvizapi, customtkinter, dan opencv-python. Cross-platform dan mengutamakan keamanan lewat login sesi tanpa hardcoded credentials.",
+    "stack": ["Python", "OpenCV", "customtkinter", "pyezvizapi"],
     "image": "/projects/testing1.jpg",
     "highlight": false,
     "link": "https://github.com/AdrianTriSetiawan/EZVIZ-Camera-Controling-and-Monitoring",
-    "github": "https://github.com/AdrianTriSetiawan/EZVIZ-Camera-Controling-and-Monitoring",
     "private": false
   },
   {
     "id": "procurement",
-    "name": "Industrial Sugar Manufacturing Procurement Suite",
-    "tag": "Manufacturing Systems · Data Engineering",
-    "summary": "Mission-critical analytical dashboard suite deployed for industrial sugar factory operations. Consolidates disparate sugarcane supply chain intakes, procurement logistics, yield analytics, and multi-tier operational telemetry into interactive dashboards.",
-    "detail": "Architected with Vue 3 Composition API, Vite, and high-performance charting primitives backed by Node.js Express and PostgreSQL. Features automated export engines (PNG vector rendering and multi-tier CSV/Excel pipelines), custom report builders, and strict role-based access control.",
-    "metrics": [
-      { "label": "Industry", "value": "Agro-Manufacturing" },
-      { "label": "Stack", "value": "Vue 3 + Node.js" },
-      { "label": "Database", "value": "PostgreSQL" }
-    ],
-    "architecture": "Factory Logistics DB ──> Node.js Express ORM ──> Aggregation & Cache Layer\n                                                         │\nVector PDF / CSV Exporter ◄── Vue 3 Analytical Dashboard ◄┘",
-    "stack": [
-      "Vue 3",
-      "Vite",
-      "Node.js",
-      "Express",
-      "PostgreSQL",
-      "Apache ECharts"
-    ],
+    "name": "Procurement Charting Suite",
+    "tag": "Vue 3 · Private Dashboard",
+    "summary": "Suite charting untuk visualisasi data procurement pabrik gula (manufaktur). Frontend Vue 3 + Vite, backend Node.js + Express + PostgreSQL.",
+    "detail": "Mencakup dashboard builder, procurement charting, data source manager, export PNG/CSV, dan template. Digunakan internal untuk kebutuhan pabrik gula.",
+    "stack": ["Vue 3", "Vite", "Node.js", "Express", "PostgreSQL"],
     "image": "/projects/testing1.jpg",
     "highlight": false,
     "link": null,
-    "github": null,
     "private": true
+  },
+  {
+    "id": "astream",
+    "name": "ASTREAM — Anime Streaming",
+    "tag": "Web App · Public",
+    "summary": "Website streaming anime tanpa iklan menggunakan Consumet API dan gogoanime provider. Dihosting di Cloudflare Pages.",
+    "detail": "Dibangun hanya dengan HTML, CSS, dan JavaScript murni tanpa framework. Live di astream.pages.dev.",
+    "stack": ["HTML", "CSS", "JavaScript", "Consumet API"],
+    "image": "/projects/testing1.jpg",
+    "highlight": false,
+    "link": "https://github.com/AdrianTriSetiawan/Anime-Stream",
+    "private": false
+  },
+  {
+    "id": "vscode",
+    "name": "VS Code Extensions",
+    "tag": "Developer Tools · TypeScript",
+    "summary": "Koleksi 4 VS Code extensions: env-bridge, k8s-port-forward-profiles, trustlens, dan Bubblegums theme — semuanya tersedia publik.",
+    "detail": "env-bridge sync .env ke launch.json/tasks.json otomatis. k8s-port-forward-profiles manage kubectl port-forward dari sidebar. trustlens scan risk level extension yang terinstall. Bubblegums adalah dark theme pink/purple.",
+    "stack": ["TypeScript", "VS Code API", "Node.js"],
+    "image": "/projects/clawbot-avatar.svg",
+    "highlight": false,
+    "link": "https://github.com/AdrianTriSetiawan/",
+    "private": false
   }
 ]

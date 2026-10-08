@@ -444,3 +444,84 @@ section[id], footer[id] {
 .animate-spin-slow {
   animation: spinSlow 20s linear infinite;
 }
+
+/* =============================================
+   WoraWork UI Styles (Speech Bubble & Screen Fade)
+   ============================================= */
+
+.screen-fade-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #181414;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 99999;
+}
+
+.screen-fade-overlay.fade-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.playerSay-ui {
+  position: relative;
+  background: #ffc57dcc;
+  backdrop-filter: blur(8px);
+  border: 4px dashed rgba(118, 55, 0, 0.7);
+  color: #5c3511;
+  padding: 12px 18px;
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  max-width: 290px;
+  width: max-content;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(92, 53, 17, 0.25);
+  user-select: none;
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .playerSay-ui {
+    font-size: 18px;
+    max-width: 340px;
+    padding: 14px 22px;
+  }
+}
+
+@keyframes iconPulse {
+  0% { transform: scale(1); }
+  80% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes upAndDown {
+  0% { transform: translate(25%, 50%); }
+  30% { transform: translate(25%, 30%); }
+  60% { transform: translate(25%, 50%); }
+  80% { transform: translate(25%, 30%); }
+  100% { transform: translate(25%, 50%); }
+}
+
+.playerSay-interact {
+  width: 52px;
+  height: 52px;
+  animation: iconPulse 1s infinite;
+}
+
+.playerSay-ui-interact {
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  width: 1.8em;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  opacity: 1;
+  animation: upAndDown 1.8s infinite;
+}
